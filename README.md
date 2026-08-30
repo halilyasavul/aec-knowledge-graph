@@ -103,7 +103,7 @@ Python dependencies (see `requirements.txt`): `neo4j`, `google-genai`,
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/halilujah/aec-knowledge-graph.git
+git clone https://github.com/halilyasavul/aec-knowledge-graph.git
 cd aec-knowledge-graph
 pip install -r requirements.txt
 
