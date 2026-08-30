@@ -6,7 +6,7 @@ serializer then converts them to IDS XML.
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 # ---------------------------------------------------------------------------
@@ -64,6 +64,17 @@ class IdsValue(BaseModel):
 # Facets
 # ---------------------------------------------------------------------------
 
+def _uppercase_ids_value(value: IdsValue | None) -> None:
+    """Uppercase a value in place — IFC entity names and predefined types are
+    uppercase by convention, enforced here rather than trusted to the LLM."""
+    if value is None:
+        return
+    if value.simpleValue is not None:
+        value.simpleValue = value.simpleValue.upper()
+    if value.restriction is not None and value.restriction.enumerations:
+        value.restriction.enumerations = [e.upper() for e in value.restriction.enumerations]
+
+
 class EntityFacet(BaseModel):
     """IDS entity facet — filters by IFC entity type."""
     name: IdsValue = Field(description="Entity name, UPPERCASE (e.g. 'IFCWALL')")
@@ -71,6 +82,12 @@ class EntityFacet(BaseModel):
         default=None,
         description="Optional predefined type filter",
     )
+
+    @model_validator(mode="after")
+    def _normalize_case(self) -> "EntityFacet":
+        _uppercase_ids_value(self.name)
+        _uppercase_ids_value(self.predefinedType)
+        return self
 
 
 class PropertyFacet(BaseModel):
@@ -87,6 +104,13 @@ class PropertyFacet(BaseModel):
         description="'required', 'prohibited', or 'optional' (only for requirements)",
     )
     instructions: str | None = Field(default=None)
+
+    @field_validator("dataType")
+    @classmethod
+    def _uppercase_datatype(cls, v: str | None) -> str | None:
+        # IFC data types (IFCLENGTHMEASURE, IFCLABEL, ...) are uppercase by
+        # definition — normalize whatever case the LLM produced
+        return v.upper() if isinstance(v, str) else v
 
 
 class AttributeFacet(BaseModel):
@@ -131,6 +155,11 @@ class Specification(BaseModel):
         default="IFC4X3_ADD2",
         description="Space-separated IFC versions (e.g. 'IFC4X3_ADD2', 'IFC2X3 IFC4')",
     )
+
+    @field_validator("ifcVersion")
+    @classmethod
+    def _uppercase_ifc_version(cls, v: str) -> str:
+        return v.upper() if isinstance(v, str) else v
     description: str | None = Field(default=None)
     instructions: str | None = Field(default=None)
     applicability: Applicability

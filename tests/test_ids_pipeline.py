@@ -68,6 +68,45 @@ def test_value_requires_exactly_one_variant():
     assert "validation_errors" in result
 
 
+def test_case_is_normalized_algorithmically():
+    """IFC identifiers must come out UPPERCASE regardless of what the LLM
+    produced (e.g. 'IFCLENGTHMEasure' seen in the wild)."""
+    doc = {
+        "info": {"title": "Case test"},
+        "specifications": [
+            {
+                "name": "Case normalization",
+                "ifcVersion": "ifc4",
+                "applicability": {
+                    "entity": {
+                        "name": {"simpleValue": "IfcWall"},
+                        "predefinedType": {"simpleValue": "solidwall"},
+                    }
+                },
+                "requirements": {
+                    "properties": [
+                        {
+                            "propertySet": {"simpleValue": "Pset_WallCommon"},
+                            "baseName": {"simpleValue": "FireRating"},
+                            "dataType": "IFCLENGTHMEasure",
+                        }
+                    ]
+                },
+            }
+        ],
+    }
+    result = generate_ids_from_json(doc)
+    assert result.get("success") is True, result
+    xml = result["ids_xml"]
+    assert 'dataType="IFCLENGTHMEASURE"' in xml
+    assert "<ids:simpleValue>IFCWALL</ids:simpleValue>" in xml
+    assert "<ids:simpleValue>SOLIDWALL</ids:simpleValue>" in xml
+    assert 'ifcVersion="IFC4"' in xml
+    # Property set / property names keep their original case
+    assert "Pset_WallCommon" in xml
+    assert "FireRating" in xml
+
+
 def test_restriction_enumeration_round_trips():
     doc = {
         "info": {"title": "Enum restriction"},
