@@ -21,7 +21,8 @@ from flask import Flask, jsonify, render_template, request
 
 from config import (
     NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, PROJECT_ROOT,
-    API_SECRET_KEY, UI_ACCESS_TOKEN, ALLOWED_ORIGINS, RATE_LIMIT_PER_MINUTE,
+    API_SECRET_KEY, UI_ACCESS_TOKEN, ADMIN_TOKEN, ALLOWED_ORIGINS,
+    RATE_LIMIT_PER_MINUTE, CHAT_RATE_LIMIT_PER_MINUTE, CHAT_DAILY_CAP,
     MAX_CHAT_MESSAGE_LENGTH, PORT,
 )
 from main_orchestrator import run_agent
@@ -41,18 +42,38 @@ app = Flask(__name__)
 
 # Simple in-memory rate limiter (per IP, sliding window)
 _rate_log: dict[str, list[float]] = defaultdict(list)
+_chat_rate_log: dict[str, list[float]] = defaultdict(list)
+_chat_daily = {"date": "", "count": 0}
 
 
-def _check_rate_limit() -> bool:
-    """Return True if request is within rate limit."""
-    ip = request.remote_addr or "unknown"
+def _client_ip() -> str:
+    """Client IP, honoring the proxy chain (Cloud Run sits behind a load balancer)."""
+    forwarded = request.headers.get("X-Forwarded-For", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.remote_addr or "unknown"
+
+
+def _check_rate_limit(log: dict[str, list[float]], limit: int) -> bool:
+    """Return True if request is within the per-IP sliding-window limit."""
+    ip = _client_ip()
     now = time.time()
-    window = _rate_log[ip]
-    # Prune entries older than 60s
-    _rate_log[ip] = [t for t in window if now - t < 60]
-    if len(_rate_log[ip]) >= RATE_LIMIT_PER_MINUTE:
+    log[ip] = [t for t in log[ip] if now - t < 60]
+    if len(log[ip]) >= limit:
         return False
-    _rate_log[ip].append(now)
+    log[ip].append(now)
+    return True
+
+
+def _check_chat_daily_cap() -> bool:
+    """Global daily cap on chat requests — protects the LLM API quota/budget."""
+    today = datetime.now().strftime("%Y-%m-%d")
+    if _chat_daily["date"] != today:
+        _chat_daily["date"] = today
+        _chat_daily["count"] = 0
+    if _chat_daily["count"] >= CHAT_DAILY_CAP:
+        return False
+    _chat_daily["count"] += 1
     return True
 
 
@@ -75,9 +96,16 @@ def _security_checks():
         if provided != API_SECRET_KEY:
             return jsonify({"error": "Invalid or missing API key"}), 401
 
-    # 2. Rate limiting
-    if not _check_rate_limit():
+    # 3. Rate limiting (general, per IP)
+    if not _check_rate_limit(_rate_log, RATE_LIMIT_PER_MINUTE):
         return jsonify({"error": "Rate limit exceeded. Try again in a minute."}), 429
+
+    # 4. Stricter limits for the LLM-backed chat endpoint
+    if request.path == "/api/chat" and request.method == "POST":
+        if not _check_rate_limit(_chat_rate_log, CHAT_RATE_LIMIT_PER_MINUTE):
+            return jsonify({"error": "Chat rate limit exceeded. Try again in a minute."}), 429
+        if not _check_chat_daily_cap():
+            return jsonify({"error": "The demo has reached its daily usage cap. Please try again tomorrow."}), 429
 
 
 @app.after_request
@@ -557,7 +585,15 @@ def api_ucks_entities():
 
 @app.route("/api/ucks/clear", methods=["POST"])
 def api_ucks_clear():
-    """Delete all UCKS entities from Neo4j and remove YAML files."""
+    """Delete all UCKS entities from Neo4j and remove YAML files.
+
+    Destructive — requires the separate ADMIN_TOKEN (never exposed to the
+    frontend). Disabled entirely when ADMIN_TOKEN is not configured.
+    """
+    if not ADMIN_TOKEN:
+        return jsonify({"error": "Admin endpoints are disabled on this deployment."}), 403
+    if request.headers.get("X-Admin-Token", "") != ADMIN_TOKEN:
+        return jsonify({"error": "Invalid or missing admin token."}), 401
     try:
         from ucks_pipeline import _get_driver
         driver = _get_driver()
