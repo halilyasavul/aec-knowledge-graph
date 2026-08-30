@@ -644,13 +644,44 @@ def api_chat():
             ucks_entity = t["ucks_entity"]
             ucks_yaml = t.get("ucks_yaml")
 
-    # Guard against the model claiming an attachment that doesn't exist:
-    # if generation failed, correct the answer text server-side.
-    if not ids_xml and ids_error and re.search(r"attach", answer or "", re.IGNORECASE):
+    # Self-heal: the model sometimes CLAIMS an IDS file was generated without
+    # actually calling the generate_ids tool (or after it failed). Detect the
+    # claim, force one corrective tool call, and if that also yields nothing,
+    # rewrite the answer so no false "attached" claim ever reaches the user.
+    def _claims_ids_attachment(text: str) -> bool:
+        t = (text or "").lower()
+        return "ids" in t and ("attach" in t or "download" in t)
+
+    if not ids_xml and _claims_ids_attachment(answer):
+        logger.warning(
+            "Answer claims an IDS attachment but no XML was produced — forcing a corrective generate_ids call."
+        )
+        try:
+            fix_prompt = (
+                "SYSTEM CHECK: Your previous reply claims an IDS file was generated and "
+                "attached, but the generate_ids tool did not return a successful result "
+                "this turn, so NOTHING is attached. Call generate_ids NOW with the "
+                "complete specification JSON for exactly what you described. Do not "
+                "answer with text alone."
+            )
+            _fix_answer, updated_history, fix_log = run_agent(fix_prompt, updated_history)
+            _chat_sessions[session_id] = updated_history
+            for t in fix_log:
+                if t.get("ids_xml"):
+                    ids_xml = t["ids_xml"]
+                    ids_error = None
+                elif t.get("ids_error"):
+                    ids_error = t["ids_error"]
+            tool_log.extend(fix_log)
+        except Exception as e:
+            logger.error("Corrective generate_ids pass failed: %s", e)
+
+    if not ids_xml and _claims_ids_attachment(answer):
+        detail = f" Generation failed with: {ids_error}." if ids_error else ""
         answer = (
             (answer or "")
-            + "\n\n**Correction:** the IDS file was NOT generated — generation "
-            + f"failed with: {ids_error}. Please try again."
+            + "\n\n**Correction:** no IDS file is attached — generation did not "
+            + f"complete.{detail} Please try again."
         )
 
     # Save IDS file to data/ids_output/
