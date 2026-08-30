@@ -509,7 +509,7 @@
             <div class="library-panel" id="libraryContent" style="flex:1; overflow-y:auto;">
                 <div class="library-empty">
                     <p>No entities defined yet</p>
-                    <p class="hint">Switch to the Define tab and describe a civil engineering concept to get started.</p>
+                    <p class="hint">Switch to the Define tab and describe an AEC concept to get started.</p>
                 </div>
             </div>
         </div>
@@ -543,7 +543,7 @@
             <div class="chat-messages" id="defineMessages">
                 <div class="msg msg-assistant">
                     <p><strong>Welcome!</strong> This is a three-step workflow:</p>
-                    <p><strong>1 · Define</strong> — describe a civil engineering concept in plain English and it becomes a structured UCKS entity.<br>
+                    <p><strong>1 · Define</strong> — describe an AEC concept in plain English and it becomes a structured UCKS entity.<br>
                        <strong>2 · Library</strong> — browse the entities you've defined and inspect their graphs.<br>
                        <strong>3 · Query</strong> — ask about IFC 4.3 or export your entities to IDS specifications.</p>
                     <p>Start here. Try: <span class="class-link" onclick="sendChat('define','A bridge pier is a vertical support that transfers deck loads to the foundation. It has height, cross-section shape (circular or rectangular), number of columns, and design load capacity in kN.')">Define a bridge pier</span></p>
@@ -551,7 +551,7 @@
                 </div>
             </div>
             <div class="chat-input-area">
-                <textarea id="defineInput" rows="1" placeholder="Describe a civil engineering concept... (Shift+Enter for a new line)"></textarea>
+                <textarea id="defineInput" rows="1" placeholder="Describe an AEC concept... (Shift+Enter for a new line)"></textarea>
                 <button class="send-btn define-mode" id="defineSendBtn">Define</button>
             </div>
         </div>
@@ -716,7 +716,7 @@ function loadLibrary() {
                 container.innerHTML =
                     '<div class="library-empty">' +
                     '<p>No entities defined yet</p>' +
-                    '<p class="hint">Switch to the <strong>Define</strong> tab and describe a civil engineering concept to get started.</p>' +
+                    '<p class="hint">Switch to the <strong>Define</strong> tab and describe an AEC concept to get started.</p>' +
                     '</div>';
                 return;
             }
@@ -1226,7 +1226,7 @@ document.getElementById('resetDefineChat').addEventListener('click', function() 
     }
     defineSessionId = '';
     document.getElementById('defineMessages').innerHTML =
-        '<div class="msg msg-assistant"><p>Chat reset. Describe a civil engineering concept to define it!</p></div>';
+        '<div class="msg msg-assistant"><p>Chat reset. Describe an AEC concept to define it!</p></div>';
 });
 
 // ============================

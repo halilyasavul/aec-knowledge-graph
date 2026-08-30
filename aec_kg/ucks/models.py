@@ -1,7 +1,7 @@
 """
-UCKS (Universal Civil Knowledge Schema) — Pydantic models.
+UCKS knowledge schema — Pydantic models.
 
-These models define the canonical format for civil engineering domain knowledge.
+These models define the canonical format for AEC domain knowledge.
 The LLM produces JSON matching these models; a pipeline then serializes to YAML
 and ingests into Neo4j.
 """
@@ -82,7 +82,7 @@ VALID_DATA_TYPES = {"string", "real", "integer", "boolean", "enum", "date"}
 
 class EntityDef(BaseModel):
     """
-    A civil engineering concept — the core UCKS primitive.
+    An AEC concept — the core UCKS primitive.
 
     Examples: Wall, Bridge, Pump, Road, AirHandlingUnit, Tunnel
     """

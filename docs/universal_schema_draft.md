@@ -1,7 +1,7 @@
 # Universal Civil Knowledge Schema (UCKS) — Draft v0.1
 
 > The goal: a clean, minimal format to capture domain knowledge across
-> the entire civil engineering spectrum — buildings, infrastructure, facilities — independent
+> the entire AEC spectrum — buildings, infrastructure, facilities — independent
 > of any existing standard, that can be exported to IFC, COBie, gbXML, CityGML, LandXML, and others.
 
 ## Scope
@@ -23,7 +23,7 @@ captures the essence of each concept, then exports to whichever format is needed
 
 1. **Domain-first** — model what things *are*, not how a file format represents them
 2. **Sector-agnostic** — same primitives work for a wall, a bridge pier, or a pump
-3. **Minimal** — only the primitives needed to express civil engineering knowledge
+3. **Minimal** — only the primitives needed to express AEC knowledge
 4. **Graph-native** — maps directly to nodes and edges in a knowledge graph
 5. **Human-readable** — YAML as the authoring format, JSON as the interchange format
 6. **Export-agnostic** — no IFC-isms, no COBie-isms; exporters handle the translation
@@ -34,13 +34,13 @@ captures the essence of each concept, then exports to whichever format is needed
 
 | Primitive         | What it represents                              | Example                          |
 |-------------------|------------------------------------------------|----------------------------------|
-| **Entity**        | A civil engineering concept / element type     | Wall, BridgeDeck, Pump, Road     |
+| **Entity**        | An AEC concept / element type                  | Wall, BridgeDeck, Pump, Road     |
 | **PropertyGroup** | A logical cluster of related properties        | CommonProperties, ThermalProperties, LoadProperties |
 | **Property**      | A single measurable/describable attribute      | Thickness, SpanLength, FlowRate  |
 | **Relationship**  | How entities relate to each other              | contains, bounds, connects, serves |
 | **DataType**      | Value type for a property                      | Real, String, Boolean, Enum      |
 | **Enumeration**   | A fixed set of allowed values                  | {INTERNAL, EXTERNAL, NOTDEFINED} |
-| **Sector**        | The civil engineering sector                   | Building, Infrastructure, Facility |
+| **Sector**        | The AEC sector                                 | Building, Infrastructure, Facility |
 | **Domain**        | A knowledge area / discipline within a sector  | Structural, Mechanical, Geotechnical |
 
 ---

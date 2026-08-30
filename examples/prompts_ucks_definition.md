@@ -1,6 +1,6 @@
 # UCKS Define Examples
 
-Example prompts for the **Define** tab — describing civil engineering concepts
+Example prompts for the **Define** tab — describing AEC concepts
 in natural language so the system structures them into UCKS entities.
 
 ---

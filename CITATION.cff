@@ -6,8 +6,8 @@ abstract: >-
   A GraphRAG-powered knowledge engine for the built environment: it ingests
   the buildingSMART IFC 4.3 schema (bSDD + EXPRESS) into a Neo4j knowledge
   graph, answers natural-language questions about it through an LLM agent
-  with graph-query tools, lets domain experts define new civil engineering
-  concepts in the Universal Civil Knowledge Schema (UCKS), and exports
+  with graph-query tools, lets domain experts define new AEC
+  concepts in the UCKS knowledge schema, and exports
   buildingSMART IDS specifications.
 authors:
   - family-names: "Yasavul"

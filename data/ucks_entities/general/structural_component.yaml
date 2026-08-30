@@ -4,4 +4,4 @@ domain: structural
 entity:
   id: structural_component
   name: Structural Component
-  description: A generic civil engineering structural component.
+  description: A generic structural component for the built environment.

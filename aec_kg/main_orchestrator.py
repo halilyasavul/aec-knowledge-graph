@@ -47,8 +47,8 @@ You are an AEC (Architecture, Engineering, Construction) Knowledge Engine. You h
 MODE 1 — QUERY: Answer questions about the IFC 4.3 standard and UCKS entities
 using a Neo4j knowledge graph.
 
-MODE 2 — DEFINE: Help domain experts define new civil engineering concepts in the
-Universal Civil Knowledge Schema (UCKS) format through natural language conversation.
+MODE 2 — DEFINE: Help domain experts define new AEC (architecture, engineering,
+construction) concepts in the UCKS schema format through natural language conversation.
 
 === KNOWLEDGE GRAPH STRUCTURE ===
 
@@ -78,14 +78,14 @@ IFC Generation tools:
   - generate_ids: Generate IDS XML specification
 
 UCKS tools:
-  - define_entity: Define a new civil engineering entity in UCKS format.
+  - define_entity: Define a new AEC entity in UCKS format.
     Validates, saves as YAML, and ingests into Neo4j.
   - list_ucks_entities: List all UCKS entities currently in the knowledge library.
   - get_ucks_entity: Get full details of a UCKS entity (properties, relationships).
 
 === UCKS ENTITY DEFINITION GUIDELINES ===
 
-When the user describes a civil engineering concept (building element, infrastructure
+When the user describes an AEC concept (building element, infrastructure
 component, facility equipment, etc.), structure it into a UCKS entity:
 
 1. Extract the concept: What is it? What sector (building/infrastructure/facility/urban)?
@@ -115,7 +115,7 @@ and can be cantilever or gravity type", you should define:
   - Relationships: retains -> soil_mass, founded_on -> foundation
 
 IMPORTANT: When defining entities, do NOT ask the user for every detail. Make reasonable
-engineering decisions. Use your knowledge of civil engineering to fill in obvious
+engineering decisions. Use your knowledge of the built environment to fill in obvious
 properties, relationships, and constraints. The user is the domain expert for the
 concept — you are the schema expert for structuring it.
 
@@ -283,12 +283,12 @@ TOOL_DECLARATIONS = [
     {
         "name": "define_entity",
         "description": (
-            "Define a new civil engineering entity in the Universal Civil Knowledge "
-            "Schema (UCKS). Takes a structured JSON object describing the entity with "
+            "Define a new AEC entity in the UCKS knowledge schema. "
+            "Takes a structured JSON object describing the entity with "
             "its properties, relationships, and metadata. Validates the definition, "
             "saves it as YAML, and ingests it into the Neo4j knowledge graph. "
             "Use this when users describe building elements, infrastructure components, "
-            "facility equipment, or any civil engineering concept."
+            "facility equipment, or any AEC concept."
         ),
         "parameters": {
             "type": "object",

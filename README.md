@@ -3,8 +3,8 @@
 A GraphRAG-powered knowledge engine for the built environment. It ingests the
 official **IFC 4.3** schema into a **Neo4j** knowledge graph, answers
 natural-language questions about it through an LLM agent grounded in graph
-queries, lets domain experts define new civil engineering concepts in the
-**Universal Civil Knowledge Schema (UCKS)**, and exports machine-readable
+queries, lets domain experts define new AEC concepts in the
+**UCKS knowledge schema**, and exports machine-readable
 **IDS** (Information Delivery Specification) requirements.
 
 **Live demo:** https://ifc-query-engine-16881077631.us-central1.run.app
@@ -36,8 +36,8 @@ knowledge *conversational and computable*:
   WHERE rules, enumerations, and select types.
 - **Read-only Cypher analytics** — aggregations and comparisons across the
   schema ("which property sets are shared by the most classes?").
-- **UCKS entity definition** — conversational capture of new civil
-  engineering concepts into a validated YAML + graph representation.
+- **UCKS entity definition** — conversational capture of new AEC
+  concepts into a validated YAML + graph representation.
 - **UCKS → IFC mapping and IDS export** — generate XSD-validated
   buildingSMART IDS XML from graph knowledge.
 - **Interactive graph UI** — vis.js force-directed visualization with node
@@ -178,8 +178,8 @@ aec-knowledge-graph/
   specification.
 - **Exchange-requirement authoring** — conversational generation of IDS
   specifications grounded in exact IFC property set / property names.
-- **Domain knowledge capture** — structuring expert knowledge of civil
-  infrastructure (bridge piers, precast girders, railings) into a versioned,
+- **Domain knowledge capture** — structuring expert knowledge of the built
+  environment (bridge piers, precast girders, railings) into a versioned,
   machine-readable schema (UCKS) with IFC mappings.
 - **NSF PESOSE / STC-DT** — semantic backbone use case for an open-source
   digital-twin ecosystem.

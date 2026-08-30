@@ -2,5 +2,5 @@
 
 Subpackages:
     aec_kg.ids   — IDS (Information Delivery Specification) generation
-    aec_kg.ucks  — Universal Civil Knowledge Schema models and pipeline
+    aec_kg.ucks  — UCKS knowledge schema models and pipeline
 """
