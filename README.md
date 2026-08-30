@@ -25,8 +25,8 @@ knowledge *conversational and computable*:
 - An LLM agent answers questions by **retrieving facts from the graph**
   (GraphRAG), not by guessing from training data.
 - Domain experts describe new concepts in plain English; the system
-  structures them into validated, versioned UCKS entities stored in the same
-  graph — and can map them back to IFC and export IDS specifications.
+  structures them into validated, versioned UCKS entities kept in a personal
+  library — and can map them back to IFC and export IDS specifications.
 
 ## Key Capabilities
 
@@ -43,7 +43,29 @@ knowledge *conversational and computable*:
 - **UCKS → IFC mapping and IDS export** — generate XSD-validated
   buildingSMART IDS XML from graph knowledge.
 - **Interactive graph UI** — vis.js force-directed visualization with node
-  details, class search, and a three-tab workflow (Query / Define / Library).
+  details, class search, and a three-step workflow (Define → Library → Query).
+
+## Using the Live Demo
+
+Open the [live demo](https://aec-knowledge-engine-16881077631.us-central1.run.app)
+— no account or setup needed. The app walks you through three steps, in tab
+order:
+
+1. **Define** — describe an AEC concept in plain English (or click the
+   built-in *"Define a culvert"* suggestion). The agent structures it into a
+   UCKS entity with properties, relationships, and constraints, and renders
+   its graph.
+2. **Library** — browse your entities. Three examples come pre-loaded
+   (railing, structural component, precast concrete girder). Click a card to
+   see its graph, view or download its YAML, or press **Export to IFC**.
+3. **Query** — ask anything about IFC 4.3 ("What properties does IfcBridge
+   need?", "Compare IfcWall and IfcCurtainWall"). Exporting a library entity
+   here maps it to the closest IFC class and returns a downloadable,
+   XSD-validated IDS file.
+
+Your library is private: it lives only in your browser (localStorage) —
+nothing you define is shared with other visitors. The demo runs on free-tier
+services, so chat is rate-limited (5 messages per minute per user).
 
 ## Role in the STC-DT Ecosystem
 
@@ -78,10 +100,17 @@ flowchart LR
     U[Web UI<br/>chat + graph viz] --> Agent
     A -->|ingest_graph.py| G
     B -->|ingest_graph.py| G
-    C -->|reingest_ucks.py| G
+    C -->|reingest_ucks.py · shared mode| G
+    C -->|seeds examples| L
+    T4 --> L[Personal library<br/>browser localStorage]
     Agent <-->|Cypher| G
-    T5 --> X[IDS XML<br/>XSD-validated]
+    T5 --> X[IDS XML<br/>downloadable, XSD-validated]
 ```
+
+Defined entities go to the visitor's **personal library** (browser
+localStorage) by default; self-hosted deployments can set
+`UCKS_STORAGE=graph` to ingest them into the shared Neo4j UCKS layer
+instead.
 
 The agent never answers from memory alone: every factual claim is retrieved
 through one of its graph tools, and the `run_cypher` tool rejects all write
@@ -144,7 +173,7 @@ python -m aec_kg.main_orchestrator -q "What property sets does IfcRailing requir
 > pipe, box, or arch type, with a design flow capacity in m3/s.
 
 **Output**: the agent structures this into a validated UCKS entity (YAML +
-graph nodes) and ingests it into the knowledge graph. See
+graph view) and saves it to your personal library. See
 [data/ucks_entities/general/railing.yaml](data/ucks_entities/general/railing.yaml)
 for a bundled example of the stored format, and
 [examples/sample_output_railing.ids](examples/sample_output_railing.ids)
