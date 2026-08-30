@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ids:ids xmlns:ids="http://standards.buildingsmart.org/IDS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://standards.buildingsmart.org/IDS http://standards.buildingsmart.org/IDS/1.0/ids.xsd">
+	<ids:info>
+		<ids:title>Railing IDS Specification</ids:title>
+	</ids:info>
+	<ids:specifications>
+		<ids:specification name="Railing Requirements" ifcVersion="IFC4">
+			<ids:applicability>
+				<ids:entity>
+					<ids:name>
+						<ids:simpleValue>IFCRAILING</ids:simpleValue>
+					</ids:name>
+				</ids:entity>
+			</ids:applicability>
+			<ids:requirements>
+				<ids:property dataType="IFCBOOLEAN">
+					<ids:propertySet>
+						<ids:simpleValue>Pset_RailingCustom</ids:simpleValue>
+					</ids:propertySet>
+					<ids:baseName>
+						<ids:simpleValue>BicycleRailingFeatures</ids:simpleValue>
+					</ids:baseName>
+					<ids:value>
+						<ids:simpleValue>true</ids:simpleValue>
+					</ids:value>
+				</ids:property>
+				<ids:property dataType="IFCBOOLEAN">
+					<ids:propertySet>
+						<ids:simpleValue>Pset_RailingCustom</ids:simpleValue>
+					</ids:propertySet>
+					<ids:baseName>
+						<ids:simpleValue>MASHCompliant</ids:simpleValue>
+					</ids:baseName>
+					<ids:value>
+						<ids:simpleValue>true</ids:simpleValue>
+					</ids:value>
+				</ids:property>
+				<ids:property dataType="IFCLABEL">
+					<ids:propertySet>
+						<ids:simpleValue>Pset_RailingCustom</ids:simpleValue>
+					</ids:propertySet>
+					<ids:baseName>
+						<ids:simpleValue>RailingType</ids:simpleValue>
+					</ids:baseName>
+				</ids:property>
+				<ids:property dataType="IFCLENGTHMEASURE">
+					<ids:propertySet>
+						<ids:simpleValue>Pset_RailingCustom</ids:simpleValue>
+					</ids:propertySet>
+					<ids:baseName>
+						<ids:simpleValue>Height</ids:simpleValue>
+					</ids:baseName>
+				</ids:property>
+				<ids:property dataType="IFCLENGTHMEASURE">
+					<ids:propertySet>
+						<ids:simpleValue>Pset_RailingCustom</ids:simpleValue>
+					</ids:propertySet>
+					<ids:baseName>
+						<ids:simpleValue>Length</ids:simpleValue>
+					</ids:baseName>
+				</ids:property>
+				<ids:property dataType="IFCTEXT">
+					<ids:propertySet>
+						<ids:simpleValue>Pset_RailingCustom</ids:simpleValue>
+					</ids:propertySet>
+					<ids:baseName>
+						<ids:simpleValue>SectionType</ids:simpleValue>
+					</ids:baseName>
+				</ids:property>
+				<ids:property dataType="IFCTEXT">
+					<ids:propertySet>
+						<ids:simpleValue>Pset_RailingCustom</ids:simpleValue>
+					</ids:propertySet>
+					<ids:baseName>
+						<ids:simpleValue>Material</ids:simpleValue>
+					</ids:baseName>
+				</ids:property>
+				<ids:property dataType="IFCTEXT">
+					<ids:propertySet>
+						<ids:simpleValue>Pset_RailingCustom</ids:simpleValue>
+					</ids:propertySet>
+					<ids:baseName>
+						<ids:simpleValue>SurfaceTexture</ids:simpleValue>
+					</ids:baseName>
+				</ids:property>
+			</ids:requirements>
+		</ids:specification>
+	</ids:specifications>
+</ids:ids>

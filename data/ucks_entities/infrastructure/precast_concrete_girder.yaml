@@ -1,0 +1,60 @@
+schema: ucks/0.1
+sector: infrastructure
+domain: structural
+entity:
+  id: precast_concrete_girder
+  name: Precast Concrete Girder
+  description: A structural beam manufactured off-site and assembled on location.
+  property_groups:
+  - id: geometry_properties
+    name: Geometry Properties
+    properties:
+    - id: span_length
+      name: Span Length
+      data_type: real
+      unit: m
+    - id: depth
+      name: Depth
+      data_type: real
+      unit: mm
+    - id: width
+      name: Width
+      data_type: real
+      unit: mm
+    - id: cross_section_shape
+      name: Cross-section Shape
+      data_type: enum
+    - id: camber
+      name: Camber
+      data_type: real
+      unit: mm
+  - id: material_properties
+    name: Material Properties
+    properties:
+    - id: concrete_strength_class
+      name: Concrete Strength Class
+      data_type: enum
+    - id: prestress_type
+      name: Prestress Type
+      data_type: enum
+  - id: performance_properties
+    name: Performance Properties
+    properties:
+    - id: load_bearing_capacity
+      name: Load Bearing Capacity
+      data_type: real
+      unit: kN
+    - id: self_weight
+      name: Self Weight
+      data_type: real
+      unit: kN
+  relationships:
+  - type: supports
+    target: slab
+    cardinality: 1..n
+  - type: connects_to
+    target: column
+    cardinality: 0..n
+  - type: connects_to
+    target: bearing_pad
+    cardinality: 0..n

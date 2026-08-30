@@ -2,6 +2,10 @@
 __pycache__/
 *.pyc
 *.ifc
-data/
+data/*
+!data/README.md
+!data/ids.xsd
+!data/ucks_entities/
 .claude/
 .dockerignore
+.pytest_cache/

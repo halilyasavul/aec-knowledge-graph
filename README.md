@@ -1,132 +1,203 @@
-# IFC 4.3 Semantic Query Engine
+# AEC Knowledge Graph
 
-A GraphRAG-powered web application that answers natural language questions about the **IFC 4.3 standard** using a Neo4j knowledge graph and Google Gemini.
+A GraphRAG-powered knowledge engine for the built environment. It ingests the
+official **IFC 4.3** schema into a **Neo4j** knowledge graph, answers
+natural-language questions about it through an LLM agent grounded in graph
+queries, lets domain experts define new civil engineering concepts in the
+**Universal Civil Knowledge Schema (UCKS)**, and exports machine-readable
+**IDS** (Information Delivery Specification) requirements.
 
-Ask a question in plain English, get a structured answer grounded in real graph data, and see the relevant knowledge graph rendered live.
+**Live demo:** https://ifc-query-engine-16881077631.us-central1.run.app
 
-![Architecture](https://img.shields.io/badge/GraphRAG-Neo4j%20%2B%20Gemini-blue)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Graph](https://img.shields.io/badge/GraphRAG-Neo4j%20%2B%20Gemini-green)
 
-## How It Works
+## Overview and Purpose
 
+Semantic interoperability is one of the hardest problems in digital twins for
+the built environment: the IFC standard is enormous (1,400+ classes, 2,500+
+properties), hard to browse, and harder to query. This project makes that
+knowledge *conversational and computable*:
+
+- The full IFC 4.3 schema — classes, property sets, properties, EXPRESS
+  attributes, inheritance, enumerations — becomes a queryable knowledge graph.
+- An LLM agent answers questions by **retrieving facts from the graph**
+  (GraphRAG), not by guessing from training data.
+- Domain experts describe new concepts in plain English; the system
+  structures them into validated, versioned UCKS entities stored in the same
+  graph — and can map them back to IFC and export IDS specifications.
+
+## Key Capabilities
+
+- **Natural-language IFC queries** — "What properties does IfcBridge need?"
+  answered from live graph data, with the supporting subgraph visualized.
+- **Structural queries** — EXPRESS-level attributes, inheritance chains,
+  WHERE rules, enumerations, and select types.
+- **Read-only Cypher analytics** — aggregations and comparisons across the
+  schema ("which property sets are shared by the most classes?").
+- **UCKS entity definition** — conversational capture of new civil
+  engineering concepts into a validated YAML + graph representation.
+- **UCKS → IFC mapping and IDS export** — generate XSD-validated
+  buildingSMART IDS XML from graph knowledge.
+- **Interactive graph UI** — vis.js force-directed visualization with node
+  details, class search, and a three-tab workflow (Query / Define / Library).
+
+## Role in the STC-DT Ecosystem
+
+This repository is the **Knowledge Graph / Semantic Interoperability**
+component of the Socio-Technical Cyberinfrastructure for Digital Twins
+(STC-DT) umbrella. It provides the shared semantic backbone: other STC-DT
+components (AI-enabled geometry generation, urban digital twin
+interoperability) can resolve *what things mean* — entity definitions,
+required properties, relationships, and exchange requirements — against this
+graph, and exchange requirements with it via standard formats (IFC, IDS,
+UCKS YAML).
+
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph Sources
+        A[bSDD IFC 4.3 JSON]
+        B[EXPRESS schema<br/>IFC4X3_ADD2]
+        C[UCKS YAML<br/>user-defined entities]
+    end
+    subgraph Graph["Neo4j knowledge graph"]
+        G[(IFC layer<br/>+ UCKS layer)]
+    end
+    subgraph Agent["LLM agent (Gemini)"]
+        T1[query_class]
+        T2[search_classes]
+        T3[run_cypher · read-only]
+        T4[define_entity]
+        T5[generate_ids]
+    end
+    U[Web UI<br/>chat + graph viz] --> Agent
+    A -->|ingest_graph.py| G
+    B -->|ingest_graph.py| G
+    C -->|reingest_ucks.py| G
+    Agent <-->|Cypher| G
+    T5 --> X[IDS XML<br/>XSD-validated]
 ```
-User: "What properties does IfcBridge need?"
-       |
-       v
-  Gemini 2.5 Flash (LLM with function calling)
-       |
-       +---> query_class("IfcBridge")      --> Neo4j lookup
-       +---> search_classes("bridge")      --> keyword search
-       +---> run_cypher("MATCH ...")       --> read-only Cypher
-       |
-       v
-  Structured answer + live graph visualization
-```
 
-The LLM doesn't guess — it retrieves facts from the knowledge graph using 3 tools, then synthesizes a grounded answer. This is **GraphRAG**: Retrieval-Augmented Generation backed by a graph database instead of vector search.
+The agent never answers from memory alone: every factual claim is retrieved
+through one of its graph tools, and the `run_cypher` tool rejects all write
+operations.
 
-## Knowledge Graph
+## Installation and Setup
 
-Built from the official IFC 4.3 JSON schema:
+### Software requirements
 
-- **1,418** Class nodes (IfcWall, IfcBridge, IfcDoor, ...)
-- **746** PropertySet nodes (Pset_WallCommon, Pset_BridgeCommon, ...)
-- **2,501** Property nodes (LoadBearing, FireRating, ...)
-- Relationships: `HAS_PROPERTY_SET`, `HAS_PROPERTY`, `INHERITS_FROM`
+| Requirement | Version | Notes |
+|---|---|---|
+| Python | 3.10+ | |
+| Neo4j | 5.x | Local Docker or [AuraDB Free](https://neo4j.com/cloud/aura-free/) |
+| Google Gemini API key | — | Free tier at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| Docker | optional | For local Neo4j / full-stack compose |
 
-## Features
+Python dependencies (see `requirements.txt`): `neo4j`, `google-genai`,
+`flask`, `pydantic`, `lxml`, `pyyaml`, `python-dotenv`, `gunicorn`.
 
-- **Chat interface** — ask questions in natural language
-- **Live graph visualization** — vis.js force-directed graph updates with each answer
-- **3 LLM tools** — class lookup, keyword search, and raw Cypher queries
-- **Multi-turn conversations** — the system remembers context across messages
-- **Node details panel** — click any node to see its full definition and metadata
-- **Class search** — autocomplete search bar for browsing IFC classes
-
-## Setup
-
-### Prerequisites
-
-- Python 3.10+
-- Docker (for Neo4j)
-- Gemini API key (free tier: [aistudio.google.com/apikey](https://aistudio.google.com/apikey))
-
-### 1. Install dependencies
+### Steps
 
 ```bash
+# 1. Clone and install
+git clone https://github.com/halilujah/aec-knowledge-graph.git
+cd aec-knowledge-graph
 pip install -r requirements.txt
-```
 
-### 2. Start Neo4j
+# 2. Start Neo4j (local option)
+docker run -d --name neo4j -p 7474:7474 -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/password123 neo4j:5
 
-```bash
-docker run -d --name neo4j \
-  -p 7474:7474 -p 7687:7687 \
-  -e NEO4J_AUTH=neo4j/password123 \
-  neo4j:5
-```
+# 3. Configure environment
+cp .env.example .env    # fill in Neo4j credentials + Gemini API key
 
-### 3. Configure environment
+# 4. Download the IFC schema files from buildingSMART (free account)
+#    -> see data/README.md for exact instructions; not redistributed here
 
-```bash
-cp .env.example .env
-# Edit .env with your Neo4j password and Gemini API key
-```
-
-### 4. Ingest the IFC schema
-
-Place `ifc-4.3.json` in the `data/` directory, then:
-
-```bash
+# 5. Build the knowledge graph (~1 minute local, a few minutes on Aura)
 python ingest_graph.py
+python reingest_ucks.py   # loads the bundled example UCKS entities
+
+# 6. Run the web app
+python web_app.py         # open http://localhost:8080
 ```
 
-This parses the IFC 4.3 JSON and loads all classes, property sets, and properties into Neo4j.
+## Quick-Start Example
 
-### 5. Run the web app
+Ask a question from the CLI without the web UI:
 
 ```bash
-python web_app.py
+python main_orchestrator.py -q "What property sets does IfcRailing require?"
 ```
 
-Open [http://localhost:5000](http://localhost:5000)
+### Example input and output
 
-## Example Prompts
+**Input** (chat or CLI):
 
-**Class lookups:**
-- What properties does IfcBridge need?
-- Tell me about IfcActuator and its property sets
+> Define a bridge pier. It's a vertical support that transfers deck loads to
+> the foundation. It has height, cross-section shape, number of columns, and
+> a design load capacity in kN.
 
-**Graph analytics (Cypher):**
-- Which IFC classes have the most property sets?
-- Which property sets are shared by the most classes?
-- What is the inheritance chain of IfcBridge?
+**Output**: the agent structures this into a validated UCKS entity
+([data/ucks_entities/infrastructure/bridge_pier.yaml](data/ucks_entities/infrastructure/bridge_pier.yaml)),
+ingests it into the graph, and can then export it as an IDS specification —
+see [examples/sample_output_railing.ids](examples/sample_output_railing.ids)
+for a generated, XSD-validated IDS file.
 
-**Comparisons:**
-- Which property sets are common between IfcWall and IfcBeam?
-- Compare the properties of IfcDoor and IfcWindow
+More worked prompts: [examples/](examples/).
 
-**Multi-turn:**
-- "Tell me about IfcWall" → "What about its parent class?" → "Which other classes share the same parent?"
+## Current Applications / Use Cases
 
-## Project Structure
+- **IFC schema exploration** for practitioners and researchers — property
+  requirements, inheritance, and cross-class comparisons without reading the
+  specification.
+- **Exchange-requirement authoring** — conversational generation of IDS
+  specifications grounded in exact IFC property set / property names.
+- **Domain knowledge capture** — structuring expert knowledge of civil
+  infrastructure (bridge piers, precast girders, railings) into a versioned,
+  machine-readable schema (UCKS) with IFC mappings.
+- **NSF PESOSE / STC-DT** — semantic backbone use case for an open-source
+  digital-twin ecosystem.
 
-```
-ifc-ai/
-  config.py              # Environment config (Neo4j, Gemini)
-  ingest_graph.py        # Parses ifc-4.3.json -> Neo4j
-  neuro_agent.py         # Neo4j query layer
-  main_orchestrator.py   # Gemini agent with tool calling
-  web_app.py             # Flask server + REST API
-  templates/
-    index.html           # Chat + graph visualization UI
-  data/
-    ifc-4.3.json         # IFC 4.3 schema (not in repo)
-```
+## Testing and Validation
 
-## Tech Stack
+- `pytest` suite in [tests/](tests/) covering the EXPRESS parser, IDS
+  generation + XSD validation, UCKS model validation, and the YAML
+  round-trip. Run with `pytest`; no database or API key required.
+- Continuous integration via GitHub Actions runs the suite on every push
+  and pull request.
+- Ingestion self-verifies: `ingest_graph.py` logs node/relationship counts
+  after loading (1,418 bSDD classes, 746 property sets, 2,501 properties,
+  876 EXPRESS entities).
+- Every generated IDS file is validated against the official buildingSMART
+  `ids.xsd` before being returned.
+- Agent answers are grounded: tools return live graph data, and the Cypher
+  tool is restricted to read-only queries.
 
-- **LLM**: Google Gemini 2.5 Flash (free tier)
-- **Graph DB**: Neo4j 5
-- **Backend**: Flask (Python)
-- **Frontend**: vis.js (graph), vanilla JS (chat)
-- **Data**: IFC 4.3 official schema (buildingSMART)
+## Documentation
+
+- [docs/whitepaper.md](docs/whitepaper.md) — architecture and design rationale
+- [docs/deployment.md](docs/deployment.md) — Cloud Run + AuraDB deployment guide
+- [docs/universal_schema_draft.md](docs/universal_schema_draft.md) — UCKS design draft
+- [data/README.md](data/README.md) — obtaining the IFC schema files
+
+## Related Publications
+
+None yet — publications building on this component will be listed here.
+
+## Developers / Contributors
+
+- **Halil Yasavul** — design and development
+  ([halil.yasavul@redeqn.com](mailto:halil.yasavul@redeqn.com))
+
+Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+[Apache License 2.0](LICENSE). IFC, bSDD, and IDS are standards of
+[buildingSMART International](https://www.buildingsmart.org/); their schema
+content is obtained directly from buildingSMART and is not redistributed
+here (see [NOTICE](NOTICE)).

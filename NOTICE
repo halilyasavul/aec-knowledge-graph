@@ -1,0 +1,15 @@
+AEC Knowledge Graph
+Copyright 2026 Halil Yasavul
+
+This product includes the IDS XML Schema (data/ids.xsd), published by
+buildingSMART International as part of the Information Delivery
+Specification (IDS) standard: https://github.com/buildingSMART/IDS
+
+The IFC 4.3 schema content (bSDD JSON export and EXPRESS schema) is
+copyright buildingSMART International and is NOT redistributed with this
+repository. Users obtain it directly from buildingSMART — see
+data/README.md for instructions.
+
+IFC and bSDD are registered trademarks of buildingSMART International.
+This project is not affiliated with or endorsed by buildingSMART
+International.

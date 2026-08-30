@@ -1,0 +1,61 @@
+schema: ucks/0.1
+sector: general
+domain: architectural
+entity:
+  id: railing
+  name: Railing
+  description: A barrier along edges of stairs, balconies, or walkways for fall protection.
+    It can be MASH-compliant for highway use.
+  property_groups:
+  - id: geometry_properties
+    name: Geometry Properties
+    properties:
+    - id: height
+      name: Height
+      data_type: real
+      unit: mm
+    - id: length
+      name: Length
+      data_type: real
+      unit: mm
+    - id: section_type
+      name: Section Type
+      data_type: string
+      description: Describes the cross-sectional shape of the railing components (e.g.,
+        circular, rectangular, custom).
+  - id: material_and_finish_properties
+    name: Material and Finish Properties
+    properties:
+    - id: material
+      name: Material
+      data_type: string
+      description: The primary material of the railing (e.g., steel, aluminum, glass,
+        wood).
+    - id: surface_texture
+      name: Surface Texture
+      data_type: string
+      description: Describes the finish or texture of the railing surface (e.g., smooth,
+        brushed, grit-blasted).
+  - id: design_and_compliance_properties
+    name: Design and Compliance Properties
+    properties:
+    - id: railing_type
+      name: Railing Type
+      data_type: enum
+      description: Categorization of the railing based on its primary function.
+    - id: bicycle_railing_features
+      name: Bicycle Railing Features
+      data_type: boolean
+      description: Indicates if the railing includes specific features to accommodate
+        bicycles (e.g., secondary lower rail).
+    - id: mash_compliant
+      name: MASH Compliant
+      data_type: boolean
+      description: Indicates if the railing meets the requirements of the AASHTO Manual
+        for Assessing Safety Hardware (MASH) for highway applications.
+  relationships:
+  - type: connects_to
+    target: structural_component
+    cardinality: many_to_many
+    description: The railing connects to structural elements like stairs, slabs, or
+      walkways.
