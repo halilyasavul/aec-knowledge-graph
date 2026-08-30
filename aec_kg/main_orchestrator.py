@@ -9,11 +9,11 @@ Tools:
 
 Usage:
     # As a library (called by web_app.py):
-    from main_orchestrator import run_agent
+    from aec_kg.main_orchestrator import run_agent
     answer, history, tool_log = run_agent("What properties does IfcBridge need?")
 
     # CLI:
-    python main_orchestrator.py -q "What is IfcActuator?"
+    python -m aec_kg.main_orchestrator -q "What is IfcActuator?"
 """
 
 import json
@@ -25,10 +25,10 @@ import neo4j
 from google import genai
 from google.genai import types
 
-from config import GEMINI_API_KEY, GEMINI_MODEL, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
-from neuro_agent import get_class_requirements, get_class_structure, list_classes
-from ids_pipeline import generate_ids_from_json
-from ucks_pipeline import define_entity_from_json, list_ucks_entities, get_ucks_entity_detail
+from aec_kg.config import GEMINI_API_KEY, GEMINI_MODEL, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+from aec_kg.neuro_agent import get_class_requirements, get_class_structure, list_classes
+from aec_kg.ids.pipeline import generate_ids_from_json
+from aec_kg.ucks.pipeline import define_entity_from_json, list_ucks_entities, get_ucks_entity_detail
 
 logger = logging.getLogger(__name__)
 

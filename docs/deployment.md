@@ -90,7 +90,7 @@ GEMINI_MODEL=gemini-2.5-flash
 
 ```bash
 pip install -r requirements.txt
-python ingest_graph.py
+python -m aec_kg.ingest_graph
 ```
 
 3. Verify the data loaded (you should see ~1400 classes, ~700 property sets):
@@ -98,7 +98,7 @@ python ingest_graph.py
 ```bash
 python -c "
 from neo4j import GraphDatabase
-from config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+from aec_kg.config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
 d = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 with d.session() as s:
     r = s.run('MATCH (n) RETURN labels(n)[0] AS label, count(*) AS cnt ORDER BY cnt DESC')
@@ -240,7 +240,7 @@ Note: You still need to ingest data into the local Neo4j. With Docker Compose ru
 
 ```bash
 # Set NEO4J_URI to the Docker container
-NEO4J_URI=bolt://localhost:7687 NEO4J_USER=neo4j NEO4J_PASSWORD=password123 python ingest_graph.py
+NEO4J_URI=bolt://localhost:7687 NEO4J_USER=neo4j NEO4J_PASSWORD=password123 python -m aec_kg.ingest_graph
 ```
 
 ---

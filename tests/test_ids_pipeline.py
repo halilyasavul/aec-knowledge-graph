@@ -1,7 +1,7 @@
 """Tests for IDS generation: Pydantic validation, XML serialization, and
 XSD validation against the bundled buildingSMART ids.xsd."""
 
-from ids_pipeline import generate_ids_from_json
+from aec_kg.ids.pipeline import generate_ids_from_json
 
 VALID_DOC = {
     "info": {"title": "Wall Requirements"},

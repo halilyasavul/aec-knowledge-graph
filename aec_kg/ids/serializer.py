@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import xml.etree.ElementTree as ET
 
-from ids_models import (
+from aec_kg.ids.models import (
     Applicability,
     AttributeFacet,
     EntityFacet,

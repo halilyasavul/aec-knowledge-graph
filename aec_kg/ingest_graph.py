@@ -14,7 +14,7 @@ Phase 2 — EXPRESS enrichment (IFC4X3_ADD2.exp.txt):
     (:SelectType)-[:HAS_OPTION]->(:Class|:Type|:Enumeration|:SelectType)
 
 Usage:
-    python ingest_graph.py
+    python -m aec_kg.ingest_graph
 """
 
 import json
@@ -23,8 +23,8 @@ import time
 
 import neo4j
 
-from config import IFC_SCHEMA_PATH, EXPRESS_SCHEMA_PATH, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
-from express_parser import parse_express
+from aec_kg.config import IFC_SCHEMA_PATH, EXPRESS_SCHEMA_PATH, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+from aec_kg.express_parser import parse_express
 
 logger = logging.getLogger(__name__)
 

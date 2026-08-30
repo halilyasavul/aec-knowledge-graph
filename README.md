@@ -118,11 +118,11 @@ cp .env.example .env    # fill in Neo4j credentials + Gemini API key
 #    -> see data/README.md for exact instructions; not redistributed here
 
 # 5. Build the knowledge graph (~1 minute local, a few minutes on Aura)
-python ingest_graph.py
-python reingest_ucks.py   # loads the bundled example UCKS entities
+python -m aec_kg.ingest_graph
+python -m aec_kg.reingest_ucks   # loads the bundled example UCKS entities
 
 # 6. Run the web app
-python web_app.py         # open http://localhost:8080
+python -m aec_kg.web_app         # open http://localhost:8080
 ```
 
 ## Quick-Start Example
@@ -130,7 +130,7 @@ python web_app.py         # open http://localhost:8080
 Ask a question from the CLI without the web UI:
 
 ```bash
-python main_orchestrator.py -q "What property sets does IfcRailing require?"
+python -m aec_kg.main_orchestrator -q "What property sets does IfcRailing require?"
 ```
 
 ### Example input and output
@@ -148,6 +148,27 @@ see [examples/sample_output_railing.ids](examples/sample_output_railing.ids)
 for a generated, XSD-validated IDS file.
 
 More worked prompts: [examples/](examples/).
+
+## Project Structure
+
+```
+aec-knowledge-graph/
+  aec_kg/                  # Application package
+    config.py              #   Environment configuration
+    express_parser.py      #   EXPRESS (.exp) schema parser
+    ingest_graph.py        #   IFC schema -> Neo4j ingestion
+    reingest_ucks.py       #   Restore UCKS YAML entities into Neo4j
+    neuro_agent.py         #   Neo4j query layer
+    main_orchestrator.py   #   LLM agent with graph tools
+    web_app.py             #   Flask server + REST API
+    templates/             #   Web UI (chat + graph visualization)
+    ids/                   #   IDS generation (models, serializer, XSD validator)
+    ucks/                  #   UCKS models + pipeline
+  data/                    # Schema files (see data/README.md) + UCKS examples
+  docs/                    # Whitepaper, deployment guide, API reference
+  examples/                # Worked prompts and a sample IDS output
+  tests/                   # Pytest suite (no external services needed)
+```
 
 ## Current Applications / Use Cases
 

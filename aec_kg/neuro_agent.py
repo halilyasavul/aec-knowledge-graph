@@ -6,7 +6,7 @@ Provides:
     list_classes(search_term) -> list[dict]
 
 Usage:
-    from neuro_agent import get_class_requirements
+    from aec_kg.neuro_agent import get_class_requirements
     rules = get_class_requirements("IfcActuator")
 """
 
@@ -15,7 +15,7 @@ import logging
 
 import neo4j
 
-from config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+from aec_kg.config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
 
 logger = logging.getLogger(__name__)
 

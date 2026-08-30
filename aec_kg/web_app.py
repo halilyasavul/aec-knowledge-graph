@@ -4,7 +4,7 @@ IFC Semantic Query Engine — Flask server with:
   - Chat interface powered by Gemini + Neo4j GraphRAG
 
 Usage:
-    python web_app.py
+    python -m aec_kg.web_app
     # Open http://localhost:8080
 """
 
@@ -19,14 +19,14 @@ from functools import wraps
 import neo4j
 from flask import Flask, jsonify, render_template, request
 
-from config import (
+from aec_kg.config import (
     NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, PROJECT_ROOT,
     API_SECRET_KEY, UI_ACCESS_TOKEN, ADMIN_TOKEN, ALLOWED_ORIGINS,
     RATE_LIMIT_PER_MINUTE, CHAT_RATE_LIMIT_PER_MINUTE, CHAT_DAILY_CAP,
     MAX_CHAT_MESSAGE_LENGTH, PORT,
 )
-from main_orchestrator import run_agent
-from ucks_pipeline import list_ucks_entities, get_ucks_entity_graph, get_ucks_entity_detail, save_entity_yaml, UCKS_OUTPUT_DIR
+from aec_kg.main_orchestrator import run_agent
+from aec_kg.ucks.pipeline import list_ucks_entities, get_ucks_entity_graph, get_ucks_entity_detail, save_entity_yaml, UCKS_OUTPUT_DIR
 
 IDS_OUTPUT_DIR = PROJECT_ROOT / "data" / "ids_output"
 IDS_OUTPUT_DIR.mkdir(exist_ok=True)
@@ -595,7 +595,7 @@ def api_ucks_clear():
     if request.headers.get("X-Admin-Token", "") != ADMIN_TOKEN:
         return jsonify({"error": "Invalid or missing admin token."}), 401
     try:
-        from ucks_pipeline import _get_driver
+        from aec_kg.ucks.pipeline import _get_driver
         driver = _get_driver()
         with driver.session() as session:
             result = session.run(

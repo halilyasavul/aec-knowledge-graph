@@ -12,9 +12,9 @@ import logging
 
 from pydantic import ValidationError
 
-from ids_models import IdsDocument
-from ids_serializer import serialize_ids
-from ids_validator import validate_ids_xml
+from aec_kg.ids.models import IdsDocument
+from aec_kg.ids.serializer import serialize_ids
+from aec_kg.ids.validator import validate_ids_xml
 
 logger = logging.getLogger(__name__)
 

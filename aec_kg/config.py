@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Paths
-PROJECT_ROOT = Path(__file__).parent
+# Paths (PROJECT_ROOT is the repository root, one level above this package)
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 IFC_SCHEMA_PATH = PROJECT_ROOT / "data" / "ifc-4.3.json"
 EXPRESS_SCHEMA_PATH = PROJECT_ROOT / "data" / "IFC4X3_ADD2.exp.txt"
 IDS_XSD_PATH = PROJECT_ROOT / "data" / "ids.xsd"

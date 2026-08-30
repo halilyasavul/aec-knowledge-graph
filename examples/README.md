@@ -6,7 +6,7 @@ A walk-through of the main functionality, reproducible after completing the
 ## 1. Query the IFC knowledge graph
 
 ```bash
-python main_orchestrator.py -q "What property sets does IfcRailing require?"
+python -m aec_kg.main_orchestrator -q "What property sets does IfcRailing require?"
 ```
 
 The agent calls `query_class("IfcRailing")` against Neo4j and answers from

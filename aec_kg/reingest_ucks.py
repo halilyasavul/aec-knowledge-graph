@@ -6,8 +6,8 @@ and ingests it into the graph. Use after rebuilding the database (e.g. a new
 Aura instance) to restore user-defined entities without redefining them.
 
 Usage:
-    python reingest_ucks.py            # validate + ingest into Neo4j
-    python reingest_ucks.py --dry-run  # validate YAMLs only, no DB needed
+    python -m aec_kg.reingest_ucks            # validate + ingest into Neo4j
+    python -m aec_kg.reingest_ucks --dry-run  # validate YAMLs only, no DB needed
 """
 
 import argparse
@@ -16,8 +16,8 @@ import sys
 
 import yaml
 
-from ucks_models import EntityDef
-from ucks_pipeline import UCKS_OUTPUT_DIR, ingest_entity_to_neo4j
+from aec_kg.ucks.models import EntityDef
+from aec_kg.ucks.pipeline import UCKS_OUTPUT_DIR, ingest_entity_to_neo4j
 
 logger = logging.getLogger(__name__)
 

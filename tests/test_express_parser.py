@@ -5,7 +5,7 @@ IFC4X3_ADD2 file (tab-indented attributes, space-indented section keywords),
 so no buildingSMART data files are required.
 """
 
-from express_parser import parse_express
+from aec_kg.express_parser import parse_express
 
 SAMPLE = (
     "SCHEMA IFC_TEST;\n"

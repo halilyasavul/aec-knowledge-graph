@@ -4,9 +4,9 @@ save_entity_yaml / reingest_ucks (no database required)."""
 import pytest
 from pydantic import ValidationError
 
-from ucks_models import EntityDef
-from ucks_pipeline import _entity_to_yaml_dict
-from reingest_ucks import load_entity_yaml
+from aec_kg.ucks.models import EntityDef
+from aec_kg.ucks.pipeline import _entity_to_yaml_dict
+from aec_kg.reingest_ucks import load_entity_yaml
 
 BRIDGE_PIER = {
     "id": "bridge_pier",
@@ -85,7 +85,7 @@ def test_yaml_round_trip(tmp_path):
 
 def test_bundled_example_entities_load():
     """Every UCKS YAML shipped in data/ucks_entities must validate."""
-    from ucks_pipeline import UCKS_OUTPUT_DIR
+    from aec_kg.ucks.pipeline import UCKS_OUTPUT_DIR
 
     files = sorted(UCKS_OUTPUT_DIR.rglob("*.yaml"))
     assert files, "expected bundled example entities in data/ucks_entities"

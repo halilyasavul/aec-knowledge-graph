@@ -6,7 +6,7 @@ from an EXPRESS (.exp) file and returns structured dicts suitable for
 Neo4j ingestion.
 
 Usage:
-    from express_parser import parse_express
+    from aec_kg.express_parser import parse_express
     data = parse_express("data/IFC4X3_ADD2.exp.txt")
     # data["entities"]  -> list of entity dicts
     # data["types"]     -> list of type dicts

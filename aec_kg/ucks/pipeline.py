@@ -3,7 +3,7 @@ UCKS Pipeline — validates, serializes to YAML, and ingests entity definitions
 into the Neo4j knowledge graph.
 
 Usage:
-    from ucks_pipeline import define_entity_from_json
+    from aec_kg.ucks.pipeline import define_entity_from_json
     result = define_entity_from_json({"id": "wall", "name": "Wall", ...})
 """
 
@@ -14,8 +14,8 @@ from pathlib import Path
 import neo4j
 import yaml
 
-from config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, PROJECT_ROOT
-from ucks_models import EntityDef, UcksDocument
+from aec_kg.config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, PROJECT_ROOT
+from aec_kg.ucks.models import EntityDef, UcksDocument
 
 logger = logging.getLogger(__name__)
 

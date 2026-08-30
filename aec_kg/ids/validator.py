@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 
-from config import IDS_XSD_PATH
+from aec_kg.config import IDS_XSD_PATH
 
 logger = logging.getLogger(__name__)
 
