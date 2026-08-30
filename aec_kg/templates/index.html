@@ -1269,7 +1269,20 @@ function _doSendChat(message, ctx, ucksContext) {
 
         // IDS file attachment — or an honest failure note
         if (data.ids_xml) {
-            renderIdsPreview(ctx.messages, data.ids_xml, data.ids_filename);
+            try {
+                renderIdsPreview(ctx.messages, data.ids_xml, data.ids_filename);
+            } catch (renderErr) {
+                // Never lose the file to a rendering bug — degrade to a plain download button
+                var fb = document.createElement('div');
+                fb.className = 'msg msg-assistant';
+                var fbBtn = document.createElement('button');
+                fbBtn.className = 'ids-btn';
+                fbBtn.textContent = 'Download ' + (data.ids_filename || 'specification.ids');
+                fbBtn.addEventListener('click', function() { autoDownloadIds(data.ids_xml, data.ids_filename); });
+                fb.appendChild(fbBtn);
+                ctx.messages.appendChild(fb);
+                ctx.messages.scrollTop = ctx.messages.scrollHeight;
+            }
         } else if (data.ids_error) {
             var errDiv = document.createElement('div');
             errDiv.className = 'msg msg-assistant';

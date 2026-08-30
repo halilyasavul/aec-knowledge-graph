@@ -136,7 +136,11 @@ def _get_driver() -> neo4j.Driver:
 
 @app.route("/")
 def index():
-    return render_template("index.html", api_key=API_SECRET_KEY)
+    # no-store: the UI ships fixes frequently — never let browsers serve a
+    # stale cached page with outdated JavaScript
+    response = app.make_response(render_template("index.html", api_key=API_SECRET_KEY))
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 # ---------------------------------------------------------------------------
@@ -639,6 +643,15 @@ def api_chat():
         if t.get("ucks_entity"):
             ucks_entity = t["ucks_entity"]
             ucks_yaml = t.get("ucks_yaml")
+
+    # Guard against the model claiming an attachment that doesn't exist:
+    # if generation failed, correct the answer text server-side.
+    if not ids_xml and ids_error and re.search(r"attach", answer or "", re.IGNORECASE):
+        answer = (
+            (answer or "")
+            + "\n\n**Correction:** the IDS file was NOT generated — generation "
+            + f"failed with: {ids_error}. Please try again."
+        )
 
     # Save IDS file to data/ids_output/
     if ids_xml:
