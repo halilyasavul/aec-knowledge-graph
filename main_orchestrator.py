@@ -42,7 +42,7 @@ _WRITE_KEYWORDS = re.compile(
 )
 
 SYSTEM_PROMPT = """\
-You are a Civil Engineering Knowledge Engine. You have two modes:
+You are an AEC (Architecture, Engineering, Construction) Knowledge Engine. You have two modes:
 
 MODE 1 — QUERY: Answer questions about the IFC 4.3 standard and UCKS entities
 using a Neo4j knowledge graph.
