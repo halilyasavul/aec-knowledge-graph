@@ -25,7 +25,7 @@ import neo4j
 from google import genai
 from google.genai import types
 
-from aec_kg.config import GEMINI_API_KEY, GEMINI_MODEL, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+from aec_kg.config import GEMINI_API_KEY, GEMINI_MODEL, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, UCKS_STORAGE
 from aec_kg.neuro_agent import get_class_requirements, get_class_structure, list_classes
 from aec_kg.ids.pipeline import generate_ids_from_json
 from aec_kg.ucks.pipeline import define_entity_from_json, list_ucks_entities, get_ucks_entity_detail
@@ -78,10 +78,12 @@ IFC Generation tools:
   - generate_ids: Generate IDS XML specification
 
 UCKS tools:
-  - define_entity: Define a new AEC entity in UCKS format.
-    Validates, saves as YAML, and ingests into Neo4j.
-  - list_ucks_entities: List all UCKS entities currently in the knowledge library.
-  - get_ucks_entity: Get full details of a UCKS entity (properties, relationships).
+  - define_entity: Define a new AEC entity in UCKS format. Validates and
+    structures it; the result is saved to the user's personal library.
+  - list_ucks_entities: List UCKS entities in the server-side knowledge library
+    (the user's personal library lives in their browser and is not listed here).
+  - get_ucks_entity: Get full details of a server-side UCKS entity. When the
+    user provides an entity's JSON in their message, use that directly instead.
 
 === UCKS ENTITY DEFINITION GUIDELINES ===
 
@@ -126,7 +128,9 @@ defines a similar concept, then create a cleaner UCKS version.
 
 When the user asks to export a UCKS entity to IFC (or "convert to IFC", "map to IFC"):
 
-1. Call get_ucks_entity to retrieve the full UCKS entity details.
+1. Get the full UCKS entity definition. If the user's message includes the
+   entity JSON, use it directly — do NOT call get_ucks_entity. Only call
+   get_ucks_entity when no definition was provided.
 2. Use search_classes to find the closest IFC class(es) for this concept.
 3. Use query_class on the best match to get its PropertySets and Properties.
 4. Produce a MAPPING REPORT showing:
@@ -452,7 +456,7 @@ def dispatch_tool(name: str, args: dict) -> dict:
                 return {"error": f"Invalid JSON string: {e}"}
         else:
             entity_data = raw
-        return define_entity_from_json(entity_data)
+        return define_entity_from_json(entity_data, persist=(UCKS_STORAGE == "graph"))
     elif name == "list_ucks_entities":
         return {"entities": list_ucks_entities()}
     elif name == "get_ucks_entity":
@@ -609,8 +613,14 @@ def run_agent(user_message: str, history: list | None = None) -> tuple:
                 log_entry["ucks_entity_id"] = result.get("entity_id")
                 log_entry["ucks_entity_name"] = result.get("entity_name")
                 log_entry["ucks_yaml_path"] = result.get("yaml_saved")
+                log_entry["ucks_entity"] = result.get("entity")
+                log_entry["ucks_yaml"] = result.get("yaml")
 
             tool_log.append(log_entry)
+
+            # The YAML is for the frontend only — no need to send it back to the LLM
+            if fn_name == "define_entity" and isinstance(result, dict):
+                result.pop("yaml", None)
 
             fn_response_parts.append(
                 types.Part.from_function_response(

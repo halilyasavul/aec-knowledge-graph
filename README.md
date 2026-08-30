@@ -37,7 +37,9 @@ knowledge *conversational and computable*:
 - **Read-only Cypher analytics** — aggregations and comparisons across the
   schema ("which property sets are shared by the most classes?").
 - **UCKS entity definition** — conversational capture of new AEC
-  concepts into a validated YAML + graph representation.
+  concepts into a validated YAML + graph representation. On the hosted
+  demo each visitor's library is private to their browser; self-hosted
+  deployments can switch to a shared Neo4j library (`UCKS_STORAGE=graph`).
 - **UCKS → IFC mapping and IDS export** — generate XSD-validated
   buildingSMART IDS XML from graph knowledge.
 - **Interactive graph UI** — vis.js force-directed visualization with node

@@ -245,23 +245,50 @@ def ingest_entity_to_neo4j(entity: EntityDef) -> dict:
 # Main entry point (called by orchestrator tool)
 # ---------------------------------------------------------------------------
 
-def define_entity_from_json(entity_data: dict) -> dict:
-    """
-    Validate an entity JSON from the LLM, save as YAML, and ingest into Neo4j.
+def entity_to_yaml_string(entity: EntityDef) -> str:
+    """Serialize a validated entity to its canonical YAML text."""
+    return yaml.dump(
+        _entity_to_yaml_dict(entity),
+        default_flow_style=False, allow_unicode=True, sort_keys=False,
+    )
 
-    Returns a result dict with status, file path, and graph stats.
+
+def define_entity_from_json(entity_data: dict, persist: bool = True) -> dict:
+    """
+    Validate an entity JSON from the LLM and structure it for storage.
+
+    With ``persist=True`` the entity is saved as YAML and ingested into
+    Neo4j (shared library). With ``persist=False`` nothing is written
+    server-side — the structured entity and its YAML are returned so the
+    caller (the web frontend) can keep it in the visitor's own library.
     """
     try:
         entity = EntityDef(**entity_data)
     except Exception as e:
         return {"error": f"Validation failed: {e}"}
 
+    result = {
+        "status": "success",
+        "entity_id": entity.id,
+        "entity_name": entity.name,
+        "sector": entity.sector,
+        "domain": entity.domain,
+        "property_count": sum(len(pg.properties) for pg in entity.property_groups),
+        "relationship_count": len(entity.relationships),
+        "entity": entity.model_dump(),
+        "yaml": entity_to_yaml_string(entity),
+    }
+
+    if not persist:
+        return result
+
     # Save YAML
     yaml_path = save_entity_yaml(entity)
+    result["yaml_saved"] = str(yaml_path)
 
     # Ingest to Neo4j
     try:
-        stats = ingest_entity_to_neo4j(entity)
+        result["graph_stats"] = ingest_entity_to_neo4j(entity)
     except Exception as e:
         logger.error("Neo4j ingestion failed for '%s': %s", entity.id, e)
         return {
@@ -270,17 +297,7 @@ def define_entity_from_json(entity_data: dict) -> dict:
             "graph_error": str(e),
         }
 
-    return {
-        "status": "success",
-        "entity_id": entity.id,
-        "entity_name": entity.name,
-        "sector": entity.sector,
-        "domain": entity.domain,
-        "yaml_saved": str(yaml_path),
-        "graph_stats": stats,
-        "property_count": sum(len(pg.properties) for pg in entity.property_groups),
-        "relationship_count": len(entity.relationships),
-    }
+    return result
 
 
 def list_ucks_entities() -> list[dict]:

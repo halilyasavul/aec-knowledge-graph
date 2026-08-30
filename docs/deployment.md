@@ -270,6 +270,7 @@ NEO4J_URI=bolt://localhost:7687 NEO4J_USER=neo4j NEO4J_PASSWORD=password123 pyth
 | `API_SECRET_KEY` | Recommended | — | Secret for API authentication (empty = no auth) |
 | `UI_ACCESS_TOKEN` | Recommended | — | Token required in URL to access UI (empty = open access) |
 | `ADMIN_TOKEN` | No | — | Required for destructive admin endpoints; empty disables them |
+| `UCKS_STORAGE` | No | `local` | `local`: defined entities live in each visitor's browser; `graph`: saved server-side + ingested into Neo4j (shared) |
 | `ALLOWED_ORIGINS` | No | `*` | Comma-separated allowed CORS origins |
 | `RATE_LIMIT_PER_MINUTE` | No | `30` | Max API requests per IP per minute |
 | `CHAT_RATE_LIMIT_PER_MINUTE` | No | `5` | Max chat requests per IP per minute (LLM cost guard) |

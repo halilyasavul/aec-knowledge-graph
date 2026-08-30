@@ -17,7 +17,7 @@ Download them yourself (free) and place them here before running ingestion.
 | File | Purpose |
 |------|---------|
 | `ids.xsd` | IDS 1.0 XML Schema from the [buildingSMART IDS repository](https://github.com/buildingSMART/IDS), used to validate generated IDS specifications. |
-| `ucks_entities/**/*.yaml` | Example UCKS entity definitions created through the Define workflow. Re-ingest them with `python -m aec_kg.reingest_ucks`. |
+| `ucks_entities/**/*.yaml` | Example UCKS entity definitions. They seed each visitor's personal (browser-stored) library in the web app, and can be ingested into Neo4j with `python -m aec_kg.reingest_ucks`. |
 
 ## Generated at runtime
 

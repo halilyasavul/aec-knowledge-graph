@@ -21,6 +21,13 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
+# UCKS library storage:
+#   "local" — defined entities are returned to the browser and kept in the
+#             visitor's localStorage (per-person library; public-demo default)
+#   "graph" — defined entities are saved as YAML and ingested into Neo4j
+#             (shared library for self-hosted single-team deployments)
+UCKS_STORAGE = os.getenv("UCKS_STORAGE", "local")
+
 # Security
 API_SECRET_KEY = os.getenv("API_SECRET_KEY", "")  # Required for /api/* in production
 UI_ACCESS_TOKEN = os.getenv("UI_ACCESS_TOKEN", "")  # Token required in URL to access UI

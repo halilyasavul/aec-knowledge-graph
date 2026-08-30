@@ -83,6 +83,26 @@ def test_yaml_round_trip(tmp_path):
     assert restored.relationships[0].cardinality == "one_to_one"
 
 
+def test_define_without_persist_returns_entity_and_yaml():
+    """persist=False must not touch YAML files or Neo4j — it returns the
+    structured entity + YAML for the caller (browser library) to store."""
+    from aec_kg.ucks.pipeline import define_entity_from_json
+
+    result = define_entity_from_json(dict(CULVERT), persist=False)
+    assert result["status"] == "success"
+    assert result["entity_id"] == "culvert"
+    assert "yaml_saved" not in result
+    assert result["entity"]["property_groups"][0]["properties"][0]["id"] == "length"
+    assert "schema: ucks/0.1" in result["yaml"]
+
+
+def test_define_rejects_invalid_entity():
+    from aec_kg.ucks.pipeline import define_entity_from_json
+
+    result = define_entity_from_json({"id": "x"}, persist=False)
+    assert "error" in result
+
+
 def test_bundled_example_entities_load():
     """Every UCKS YAML shipped in data/ucks_entities must validate."""
     from aec_kg.ucks.pipeline import UCKS_OUTPUT_DIR

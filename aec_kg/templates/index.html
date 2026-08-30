@@ -703,92 +703,130 @@ document.getElementById('tabQuery').addEventListener('click', function() { switc
 document.getElementById('tabDefine').addEventListener('click', function() { switchTab('define'); });
 
 // ============================
-// Library
+// Library — per-person, stored in this browser's localStorage
 // ============================
+var UCKS_LIB_KEY = 'ucks_library_v1';
+var UCKS_SEED_KEY = 'ucks_seeded_v1';
+
+function getLibrary() {
+    try { return JSON.parse(localStorage.getItem(UCKS_LIB_KEY)) || {}; }
+    catch (e) { return {}; }
+}
+function saveLibrary(lib) {
+    try { localStorage.setItem(UCKS_LIB_KEY, JSON.stringify(lib)); } catch (e) {}
+}
+function saveEntityLocal(entity, yaml) {
+    if (!entity || !entity.id) return;
+    var lib = getLibrary();
+    lib[entity.id] = { entity: entity, yaml: yaml || '', saved_at: new Date().toISOString() };
+    saveLibrary(lib);
+}
+
+function seedExamples(done) {
+    fetch('/api/ucks/examples', { headers: apiHeaders() })
+        .then(function(r) { return r.json(); })
+        .then(function(examples) {
+            var lib = getLibrary();
+            (examples || []).forEach(function(ex) {
+                if (ex.entity && ex.entity.id && !lib[ex.entity.id]) {
+                    lib[ex.entity.id] = { entity: ex.entity, yaml: ex.yaml || '', saved_at: new Date().toISOString() };
+                }
+            });
+            saveLibrary(lib);
+            try { localStorage.setItem(UCKS_SEED_KEY, '1'); } catch (e) {}
+            if (done) done();
+        })
+        .catch(function() { if (done) done(); });
+}
+
+function countProps(entity) {
+    var n = 0;
+    (entity.property_groups || []).forEach(function(pg) { n += (pg.properties || []).length; });
+    return n;
+}
+
 function loadLibrary() {
     var container = document.getElementById('libraryContent');
-    container.innerHTML = '<div style="padding:20px;text-align:center;color:#6e7681;"><div class="spinner"></div></div>';
+    var lib = getLibrary();
+    var ids = Object.keys(lib);
 
-    fetch('/api/ucks/entities', { headers: apiHeaders() })
-        .then(function(r) { return r.json(); })
-        .then(function(entities) {
-            if (!entities || entities.length === 0 || entities.error) {
-                container.innerHTML =
-                    '<div class="library-empty">' +
-                    '<p>No entities defined yet</p>' +
-                    '<p class="hint">Switch to the <strong>Define</strong> tab and describe an AEC concept to get started.</p>' +
-                    '</div>';
-                return;
-            }
+    var seeded = true;
+    try { seeded = localStorage.getItem(UCKS_SEED_KEY) === '1'; } catch (e) {}
+    if (ids.length === 0 && !seeded) {
+        container.innerHTML = '<div style="padding:20px;text-align:center;color:#6e7681;"><div class="spinner"></div></div>';
+        seedExamples(loadLibrary);
+        return;
+    }
 
-            var sectors = {};
-            entities.forEach(function(e) {
-                var s = e.sector || 'general';
-                if (!sectors[s]) sectors[s] = [];
-                sectors[s].push(e);
-            });
+    if (ids.length === 0) {
+        container.innerHTML =
+            '<div class="library-empty">' +
+            '<p>Your library is empty</p>' +
+            '<p class="hint">Switch to the <strong>Define</strong> tab and describe an AEC concept. Entities you define are stored in this browser only.</p>' +
+            '<button class="btn" style="margin-top:10px;" onclick="seedExamples(loadLibrary)">Restore example entities</button>' +
+            '</div>';
+        return;
+    }
 
-            var sectorOrder = ['building', 'infrastructure', 'facility', 'urban', 'general'];
-            var html = '';
-            sectorOrder.forEach(function(sector) {
-                if (!sectors[sector]) return;
-                html += '<div class="library-section">';
-                html += '<h3><span class="sector-badge sector-' + sector + '">' + sector + '</span> ' + sectors[sector].length + ' entities</h3>';
-                sectors[sector].forEach(function(e) {
-                    html += '<div class="entity-card" onclick="loadUcksGraph(\'' + e.id + '\')">';
-                    html += '<div class="entity-card-name">' + e.name + '</div>';
-                    if (e.description) html += '<div class="entity-card-desc">' + (e.description || '').substring(0, 100) + '</div>';
-                    html += '<div class="entity-card-meta"><span>' + (e.domain || '') + ' | ' + (e.property_groups || 0) + ' groups | ' + (e.properties || 0) + ' props</span>';
-                    html += '<button class="export-btn" style="background:#6e40c9;" onclick="event.stopPropagation(); viewYaml(\'' + e.id + '\')">YAML</button>';
-                    html += '<button class="export-btn" onclick="event.stopPropagation(); exportToIfc(\'' + e.id + '\', \'' + e.name + '\')">Export to IFC</button>';
-                    html += '</div></div>';
-                });
-                html += '</div>';
-            });
+    var sectors = {};
+    ids.forEach(function(id) {
+        var e = lib[id].entity;
+        var s = e.sector || 'general';
+        if (!sectors[s]) sectors[s] = [];
+        sectors[s].push(e);
+    });
 
-            container.innerHTML = html;
-        })
-        .catch(function() {
-            container.innerHTML = '<div class="library-empty"><p style="color:#f85149;">Failed to load library</p></div>';
+    var sectorOrder = ['building', 'infrastructure', 'facility', 'urban', 'general'];
+    var html = '<p style="font-size:10px;color:#6e7681;margin-bottom:10px;">Your personal library — stored in this browser only.</p>';
+    sectorOrder.forEach(function(sector) {
+        if (!sectors[sector]) return;
+        sectors[sector].sort(function(a, b) { return (a.name || '').localeCompare(b.name || ''); });
+        html += '<div class="library-section">';
+        html += '<h3><span class="sector-badge sector-' + sector + '">' + sector + '</span> ' + sectors[sector].length + ' entities</h3>';
+        sectors[sector].forEach(function(e) {
+            html += '<div class="entity-card" onclick="loadUcksGraph(\'' + e.id + '\')">';
+            html += '<div class="entity-card-name">' + e.name + '</div>';
+            if (e.description) html += '<div class="entity-card-desc">' + (e.description || '').substring(0, 100) + '</div>';
+            html += '<div class="entity-card-meta"><span>' + (e.domain || '') + ' | ' + (e.property_groups || []).length + ' groups | ' + countProps(e) + ' props</span>';
+            html += '<button class="export-btn" style="background:#6e40c9;" onclick="event.stopPropagation(); viewYaml(\'' + e.id + '\')">YAML</button>';
+            html += '<button class="export-btn" onclick="event.stopPropagation(); exportToIfc(\'' + e.id + '\', \'' + e.name + '\')">Export to IFC</button>';
+            html += '</div></div>';
         });
+        html += '</div>';
+    });
+
+    container.innerHTML = html;
 }
 
 document.getElementById('refreshLibrary').addEventListener('click', loadLibrary);
 document.getElementById('clearLibrary').addEventListener('click', function() {
-    if (!confirm('Delete all UCKS entities from the library?')) return;
-    fetch('/api/ucks/clear', { method: 'POST', headers: apiHeaders() })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            if (data.error) { alert('Error: ' + data.error); return; }
-            loadLibrary();
-        })
-        .catch(function(err) { alert('Error: ' + err.message); });
+    if (!confirm('Clear your personal library? This only affects this browser.')) return;
+    try { localStorage.removeItem(UCKS_LIB_KEY); } catch (e) {}
+    loadLibrary();
 });
 
 function viewYaml(entityId) {
     var panel = document.getElementById('sidePanel');
     panel.classList.remove('collapsed');
     var body = document.getElementById('panelBody');
-    body.innerHTML = '<div style="text-align:center;padding:20px;"><div class="spinner"></div></div>';
 
-    fetch('/api/ucks/yaml/' + encodeURIComponent(entityId), { headers: apiHeaders() })
-        .then(function(r) { return r.text(); })
-        .then(function(yaml) {
-            var escaped = yaml.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            body.innerHTML =
-                '<div class="detail-section"><h3>UCKS YAML — ' + entityId + '</h3></div>' +
-                '<div style="display:flex;gap:6px;margin-bottom:10px;">' +
-                '<button class="export-btn" style="background:#6e40c9;" onclick="copyYaml()">Copy</button>' +
-                '<button class="export-btn" style="background:#238636;" onclick="downloadYaml(\'' + entityId + '\')">Download</button>' +
-                '</div>' +
-                '<pre id="yamlContent" style="background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:12px;font-size:11px;line-height:1.6;color:#c9d1d9;overflow:auto;max-height:calc(100vh - 200px);white-space:pre;font-family:Consolas,monospace;">' + escaped + '</pre>';
-            // Store raw yaml for copy/download
-            body.dataset.yaml = yaml;
-            body.dataset.entityId = entityId;
-        })
-        .catch(function(err) {
-            body.innerHTML = '<p style="color:#f85149;">Failed to load YAML: ' + err.message + '</p>';
-        });
+    var item = getLibrary()[entityId];
+    if (!item) {
+        body.innerHTML = '<p style="color:#f85149;">Entity not found in your library.</p>';
+        return;
+    }
+    var yaml = item.yaml || JSON.stringify(item.entity, null, 2);
+    var escaped = yaml.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    body.innerHTML =
+        '<div class="detail-section"><h3>UCKS YAML — ' + entityId + '</h3></div>' +
+        '<div style="display:flex;gap:6px;margin-bottom:10px;">' +
+        '<button class="export-btn" style="background:#6e40c9;" onclick="copyYaml()">Copy</button>' +
+        '<button class="export-btn" style="background:#238636;" onclick="downloadYaml(\'' + entityId + '\')">Download</button>' +
+        '</div>' +
+        '<pre id="yamlContent" style="background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:12px;font-size:11px;line-height:1.6;color:#c9d1d9;overflow:auto;max-height:calc(100vh - 200px);white-space:pre;font-family:Consolas,monospace;">' + escaped + '</pre>';
+    // Store raw yaml for copy/download
+    body.dataset.yaml = yaml;
+    body.dataset.entityId = entityId;
 }
 
 function copyYaml() {
@@ -813,14 +851,16 @@ function downloadYaml(entityId) {
 }
 
 function exportToIfc(entityId, entityName) {
-    // Switch to Query tab and send the export command
+    // Switch to Query tab and send the export command with the entity
+    // definition from the personal library attached
+    var item = getLibrary()[entityId];
     switchTab('query');
     var msg = 'Export the UCKS entity "' + entityId + '" (' + entityName + ') to IFC. ' +
-        'First retrieve its full details with get_ucks_entity, then find the closest IFC class, ' +
+        'Use the entity definition provided with this message; find the closest IFC class, ' +
         'create a mapping report, and generate an IDS specification. Do not ask questions, just do it.';
     var ctx = getActiveChat();
     addChatMessage(ctx.messages, 'user', 'Export ' + entityName + ' to IFC', ctx.mode);
-    _doSendChat(msg, ctx);
+    _doSendChat(msg, ctx, item ? item.entity : null);
 }
 
 // ============================
@@ -901,22 +941,61 @@ function loadClassGraph(classCode) {
 
 function loadUcksGraph(entityId) {
     var overlay = document.getElementById('overlay');
-    overlay.classList.remove('hidden');
-    overlay.innerHTML = '<div><div class="spinner"></div><p style="color:#f778ba;margin-top:8px;">Loading ' + entityId + '...</p></div>';
+    var item = getLibrary()[entityId];
+    if (!item) {
+        overlay.classList.remove('hidden');
+        overlay.innerHTML = '<div><p style="color:#f85149;">\'' + entityId + '\' is not in your library</p></div>';
+        return;
+    }
+    var data = buildUcksGraph(item.entity);
+    document.getElementById('searchInput').value = entityId;
+    if (network) { network.destroy(); network = null; }
+    initNetwork(data.nodes, data.edges);
+    overlay.classList.add('hidden');
+    document.getElementById('statNodes').textContent = 'Nodes: ' + data.nodes.length;
+    document.getElementById('statEdges').textContent = 'Edges: ' + data.edges.length;
+    document.getElementById('statClass').textContent = 'UCKS: ' + entityId;
+}
 
-    fetch('/api/ucks/graph/' + encodeURIComponent(entityId), { headers: apiHeaders() })
-        .then(function(r) { return r.ok ? r.json() : null; })
-        .then(function(data) {
-            if (!data || data.error) { overlay.innerHTML = '<div><p style="color:#f85149;">Not found</p></div>'; return; }
-            document.getElementById('searchInput').value = entityId;
-            if (network) { network.destroy(); network = null; }
-            initNetwork(data.nodes, data.edges);
-            setTimeout(function() { overlay.classList.add('hidden'); }, 300);
-            document.getElementById('statNodes').textContent = 'Nodes: ' + data.nodes.length;
-            document.getElementById('statEdges').textContent = 'Edges: ' + data.edges.length;
-            document.getElementById('statClass').textContent = 'UCKS: ' + entityId;
-        })
-        .catch(function(err) { overlay.innerHTML = '<div><p style="color:#f85149;">' + err.message + '</p></div>'; });
+// Build a vis.js graph from a locally stored entity definition
+function buildUcksGraph(e) {
+    var nodes = [], edges = [], seen = {};
+    function addNode(n) { if (!seen[n.id]) { seen[n.id] = true; nodes.push(n); } }
+
+    var eid = 'entity:' + e.id;
+    addNode({ id: eid, label: e.name, title: e.description || '', group: 'entity',
+              meta: { id: e.id, name: e.name, description: e.description, sector: e.sector, domain: e.domain } });
+
+    if (e.parent) {
+        var pid = 'entity:' + e.parent;
+        addNode({ id: pid, label: e.parent, title: 'Parent entity', group: 'parent', meta: { id: e.parent } });
+        edges.push({ from: eid, to: pid, label: 'INHERITS_FROM', arrows: 'to' });
+    }
+
+    (e.property_groups || []).forEach(function(pg) {
+        var pgid = 'pg:' + e.id + '.' + pg.id;
+        addNode({ id: pgid, label: pg.name, title: pg.description || '', group: 'pset',
+                  meta: { id: pg.id, name: pg.name, description: pg.description } });
+        edges.push({ from: eid, to: pgid, label: 'HAS_PROPERTY_GROUP', arrows: 'to' });
+
+        (pg.properties || []).forEach(function(p) {
+            var prid = 'prop:' + e.id + '.' + pg.id + '.' + p.id;
+            var tooltip = p.description || p.name;
+            if (p.data_type) tooltip += '\nType: ' + p.data_type;
+            if (p.unit) tooltip += '\nUnit: ' + p.unit;
+            addNode({ id: prid, label: p.name, title: tooltip, group: 'property',
+                      meta: { id: p.id, name: p.name, description: p.description, data_type: p.data_type, unit: p.unit } });
+            edges.push({ from: pgid, to: prid, label: 'HAS_PROPERTY', arrows: 'to' });
+        });
+    });
+
+    (e.relationships || []).forEach(function(r) {
+        var tid = 'entity:' + r.target;
+        addNode({ id: tid, label: r.target, title: r.description || '', group: 'entity', meta: { id: r.target } });
+        edges.push({ from: eid, to: tid, label: r.type + (r.cardinality ? ' (' + r.cardinality + ')' : ''), arrows: 'to', dashes: true });
+    });
+
+    return { nodes: nodes, edges: edges };
 }
 
 function showNodeDetails(nodeId) {
@@ -980,14 +1059,14 @@ searchInput.addEventListener('keydown', function(e) {
 function updateAC(items) { for (var i = 0; i < items.length; i++) items[i].classList.toggle('active', i === acIndex); }
 
 function fetchSuggestions(term) {
-    // Fetch both IFC classes and UCKS entities in parallel
+    // IFC classes from the server; UCKS entities from the personal library
     var ifcP = fetch('/api/classes?search=' + encodeURIComponent(term), { headers: apiHeaders() }).then(function(r) { return r.json(); }).catch(function() { return []; });
-    var ucksP = fetch('/api/ucks/entities', { headers: apiHeaders() }).then(function(r) { return r.json(); }).catch(function() { return []; });
 
-    Promise.all([ifcP, ucksP]).then(function(results) {
-        var ifcClasses = results[0] || [];
-        var ucksEntities = (results[1] || []).filter(function(e) {
-            return e.name.toLowerCase().indexOf(term.toLowerCase()) >= 0 || e.id.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+    ifcP.then(function(ifcResult) {
+        var ifcClasses = ifcResult || [];
+        var lib = getLibrary();
+        var ucksEntities = Object.keys(lib).map(function(k) { return lib[k].entity; }).filter(function(e) {
+            return (e.name || '').toLowerCase().indexOf(term.toLowerCase()) >= 0 || (e.id || '').toLowerCase().indexOf(term.toLowerCase()) >= 0;
         });
 
         if (ifcClasses.length === 0 && ucksEntities.length === 0) {
@@ -1112,17 +1191,20 @@ function sendChat(forceTab, text) {
     _doSendChat(message, ctx);
 }
 
-function _doSendChat(message, ctx) {
+function _doSendChat(message, ctx, ucksContext) {
     addThinking(ctx.messages);
     chatBusy = true;
     ctx.sendBtn.disabled = true;
 
     var sessionId = ctx.sessionKey === 'define' ? defineSessionId : querySessionId;
 
+    var payload = { message: message, session_id: sessionId };
+    if (ucksContext) payload.ucks_context = ucksContext;
+
     fetch('/api/chat', {
         method: 'POST',
         headers: apiHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ message: message, session_id: sessionId })
+        body: JSON.stringify(payload)
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -1147,13 +1229,11 @@ function _doSendChat(message, ctx) {
             renderIdsPreview(ctx.messages, data.ids_xml, data.ids_filename);
         }
 
-        // UCKS entity defined — load its graph + refresh library
-        if (data.ucks_entity_id) {
-            try { loadUcksGraph(data.ucks_entity_id); } catch(e) {}
-            if (currentTab !== 'library') {
-                // Refresh library in background
-                setTimeout(loadLibrary, 500);
-            }
+        // UCKS entity defined — save to the personal library, show its graph
+        if (data.ucks_entity) {
+            saveEntityLocal(data.ucks_entity, data.ucks_yaml);
+            try { loadUcksGraph(data.ucks_entity.id); } catch(e) {}
+            setTimeout(loadLibrary, 300);
         }
         // IFC class queried
         else if (data.graph_class) {

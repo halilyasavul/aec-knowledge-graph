@@ -590,6 +590,18 @@ def api_chat():
     if len(user_message) > MAX_CHAT_MESSAGE_LENGTH:
         return jsonify({"error": f"Message too long (max {MAX_CHAT_MESSAGE_LENGTH} chars)"}), 400
 
+    # Optional entity definition from the visitor's personal (browser) library,
+    # e.g. for IFC export. Kept separate from the message length check, with
+    # its own size cap.
+    ucks_context = data.get("ucks_context")
+    if ucks_context is not None:
+        context_str = json.dumps(ucks_context, ensure_ascii=False)
+        if len(context_str) > 20000:
+            return jsonify({"error": "UCKS entity context too large"}), 400
+        user_message += (
+            "\n\nUCKS entity definition (from the user's personal library):\n" + context_str
+        )
+
     session_id = data.get("session_id", "")
     if not session_id:
         import uuid
@@ -612,6 +624,8 @@ def api_chat():
     ids_xml = None
     ids_filename = None
     ucks_entity_id = None
+    ucks_entity = None
+    ucks_yaml = None
     for t in tool_log:
         if t["tool"] in ("query_class", "query_class_structure"):
             graph_class = graph_class or t["args"].get("class_code")
@@ -619,6 +633,9 @@ def api_chat():
             ids_xml = t["ids_xml"]
         if t.get("ucks_entity_id"):
             ucks_entity_id = t["ucks_entity_id"]
+        if t.get("ucks_entity"):
+            ucks_entity = t["ucks_entity"]
+            ucks_yaml = t.get("ucks_yaml")
 
     # Save IDS file to data/ids_output/
     if ids_xml:
@@ -639,6 +656,8 @@ def api_chat():
         "tools_used": clean_log,
         "graph_class": graph_class,
         "ucks_entity_id": ucks_entity_id,
+        "ucks_entity": ucks_entity,
+        "ucks_yaml": ucks_yaml,
         "session_id": session_id,
         "ids_xml": ids_xml,
         "ids_filename": ids_filename,
@@ -648,6 +667,26 @@ def api_chat():
 # ---------------------------------------------------------------------------
 # API: UCKS entity library
 # ---------------------------------------------------------------------------
+
+@app.route("/api/ucks/examples")
+def api_ucks_examples():
+    """Bundled example entities used to seed a visitor's personal library."""
+    from aec_kg.reingest_ucks import load_entity_yaml
+    from aec_kg.ucks.pipeline import entity_to_yaml_string
+
+    examples = []
+    for path in sorted(UCKS_OUTPUT_DIR.rglob("*.yaml")):
+        try:
+            entity = load_entity_yaml(path)
+        except Exception as e:
+            logger.warning("Skipping invalid example YAML %s: %s", path, e)
+            continue
+        examples.append({
+            "entity": entity.model_dump(),
+            "yaml": entity_to_yaml_string(entity),
+        })
+    return jsonify(examples)
+
 
 @app.route("/api/ucks/entities")
 def api_ucks_entities():
