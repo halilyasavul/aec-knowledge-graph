@@ -22,9 +22,10 @@ In the web UI's **Define** tab (or the chat), describe a concept:
 > of columns, and a design load capacity in kN. It's founded on a foundation
 > element and supports bridge decks.
 
-The agent structures this into a validated UCKS entity, saves
-[../data/ucks_entities/infrastructure/bridge_pier.yaml](../data/ucks_entities/infrastructure/bridge_pier.yaml),
-and ingests it into the graph. More definition prompts:
+The agent structures this into a validated UCKS entity, saves it as YAML
+under `data/ucks_entities/`, and ingests it into the graph — see
+[../data/ucks_entities/general/railing.yaml](../data/ucks_entities/general/railing.yaml)
+for what the stored format looks like. More definition prompts:
 [prompts_ucks_definition.md](prompts_ucks_definition.md).
 
 ## 3. Map a concept to IFC and export an IDS specification

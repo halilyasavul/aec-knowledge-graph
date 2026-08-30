@@ -191,9 +191,10 @@
             border-top: 1px solid #30363d;
             display: flex;
             gap: 8px;
+            align-items: flex-end;
         }
 
-        .chat-input-area input {
+        .chat-input-area textarea {
             flex: 1;
             padding: 8px 12px;
             background: #0d1117;
@@ -201,10 +202,15 @@
             border-radius: 6px;
             color: #e1e4e8;
             font-size: 13px;
+            font-family: inherit;
+            line-height: 1.4;
             outline: none;
+            resize: none;
+            overflow-y: hidden;
+            max-height: 140px;
         }
-        .chat-input-area input:focus { border-color: #58a6ff; }
-        .chat-input-area input::placeholder { color: #6e7681; }
+        .chat-input-area textarea:focus { border-color: #58a6ff; }
+        .chat-input-area textarea::placeholder { color: #6e7681; }
 
         .send-btn {
             padding: 8px 16px;
@@ -349,38 +355,55 @@
         .class-link { color: #58a6ff; cursor: pointer; text-decoration: underline; }
         .class-link:hover { color: #79c0ff; }
 
-        /* IDS preview */
+        /* IDS attachment card (like a chat file attachment) */
         .ids-preview {
-            margin-top: 8px;
+            align-self: flex-start;
+            margin-top: 4px;
+            max-width: 95%;
             background: #0d1117;
             border: 1px solid #30363d;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
         }
         .ids-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 8px 12px;
-            background: #161b22;
-            border-bottom: 1px solid #30363d;
-            font-size: 11px; font-weight: 600; color: #3fb950;
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
         }
-        .ids-actions { display: flex; gap: 6px; }
+        .ids-header:hover { background: #161b22; }
+        .ids-file-icon {
+            width: 34px; height: 34px; flex-shrink: 0;
+            border-radius: 8px; background: #23863633;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+        .ids-file-info { min-width: 0; }
+        .ids-file-name {
+            font-size: 12px; font-weight: 600; color: #e1e4e8;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .ids-file-meta { font-size: 10px; color: #8b949e; margin-top: 1px; }
+        .ids-actions { display: flex; gap: 6px; margin-left: auto; flex-shrink: 0; }
         .ids-actions button {
-            padding: 3px 10px; font-size: 10px;
+            padding: 4px 10px; font-size: 11px;
             background: #21262d; border: 1px solid #30363d;
-            border-radius: 4px; color: #e1e4e8; cursor: pointer;
+            border-radius: 6px; color: #e1e4e8; cursor: pointer;
         }
         .ids-actions button:hover { background: #30363d; }
+        .ids-actions .ids-download-btn { background: #238636; border-color: #238636; font-weight: 600; }
+        .ids-actions .ids-download-btn:hover { background: #2ea043; }
         .ids-xml {
+            display: none;
             max-height: 300px; overflow: auto; padding: 10px 12px;
+            border-top: 1px solid #30363d;
             font-family: 'SFMono-Regular', Consolas, monospace;
             font-size: 11px; line-height: 1.5; color: #c9d1d9;
             white-space: pre; tab-size: 2;
         }
+        .ids-expanded .ids-xml { display: block; }
         .ids-xml .xml-tag { color: #7ee787; }
         .ids-xml .xml-attr { color: #d2a8ff; }
         .ids-xml .xml-val { color: #a5d6ff; }
-        .ids-collapsed .ids-xml { display: none; }
 
         /* YAML preview */
         .yaml-preview {
@@ -404,14 +427,14 @@
             white-space: pre;
         }
 
-        /* --- Token gate overlay --- */
+        /* --- Token gate overlay (hidden until we know a token is required) --- */
         #tokenGate {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: #0f1117;
-            display: flex; align-items: center; justify-content: center;
+            display: none; align-items: center; justify-content: center;
             z-index: 9999;
         }
-        #tokenGate.hidden { display: none; }
+        #tokenGate.visible { display: flex; }
         .token-box {
             background: #161b22; border: 1px solid #30363d; border-radius: 12px;
             padding: 32px; max-width: 380px; width: 90%; text-align: center;
@@ -448,9 +471,9 @@
 <div class="header">
     <h1>AEC Knowledge Engine</h1>
     <div class="tab-bar">
-        <button class="tab-btn active-library" id="tabLibrary" data-tab="library">Library</button>
-        <button class="tab-btn" id="tabQuery" data-tab="query">Query</button>
-        <button class="tab-btn" id="tabDefine" data-tab="define">Define</button>
+        <button class="tab-btn active-define" id="tabDefine" data-tab="define">1 · Define</button>
+        <button class="tab-btn" id="tabLibrary" data-tab="library">2 · Library</button>
+        <button class="tab-btn" id="tabQuery" data-tab="query">3 · Query</button>
     </div>
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="Search IFC class or UCKS entity..." autocomplete="off">
@@ -475,7 +498,7 @@
     <div class="left-panel" id="leftPanel">
 
         <!-- === LIBRARY TAB === -->
-        <div id="libraryView" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
+        <div id="libraryView" style="display:none; flex-direction:column; flex:1; overflow:hidden;">
             <div class="panel-top-bar">
                 <span>UCKS Library</span>
                 <div style="display:flex;gap:4px;">
@@ -499,33 +522,36 @@
             </div>
             <div class="chat-messages" id="queryMessages">
                 <div class="msg msg-assistant">
-                    <p>Ask me anything about IFC 4.3 classes, property sets, or properties.</p>
+                    <p><strong>Step 3 — Query the knowledge graph.</strong> Ask about IFC 4.3 classes, your UCKS entities, or export an entity to an IDS specification.</p>
                     <p>Try: <span class="class-link" onclick="sendChat('query','What properties does IfcBridge need?')">What properties does IfcBridge need?</span></p>
                     <p>Or: <span class="class-link" onclick="sendChat('query','Compare IfcWall and IfcCurtainWall properties')">Compare IfcWall and IfcCurtainWall</span></p>
                 </div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="queryInput" placeholder="Ask about IFC 4.3..." autocomplete="off">
+                <textarea id="queryInput" rows="1" placeholder="Ask about IFC 4.3... (Shift+Enter for a new line)"></textarea>
                 <button class="send-btn query-mode" id="querySendBtn">Send</button>
                 <button class="ids-btn" id="idsBtn" title="Generate IDS specification">IDS</button>
             </div>
         </div>
 
         <!-- === DEFINE TAB === -->
-        <div id="defineView" style="display:none; flex-direction:column; flex:1; overflow:hidden;">
+        <div id="defineView" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
             <div class="panel-top-bar">
                 <span>Define UCKS Entity</span>
                 <button class="btn" id="resetDefineChat" style="font-size:11px; padding:3px 8px;">New Chat</button>
             </div>
             <div class="chat-messages" id="defineMessages">
                 <div class="msg msg-assistant">
-                    <p>Describe any civil engineering concept and I'll structure it into a UCKS entity with properties, relationships, and constraints.</p>
-                    <p>Try: <span class="class-link" onclick="sendChat('define','A retaining wall holds back soil. It has height, thickness, and can be cantilever, gravity, or anchored type. It is founded on a foundation.')">Define a retaining wall</span></p>
-                    <p>Or: <span class="class-link" onclick="sendChat('define','A bridge pier is a vertical support that transfers deck loads to the foundation. It has height, cross-section shape (circular or rectangular), number of columns, and design load capacity in kN.')">Define a bridge pier</span></p>
+                    <p><strong>Welcome!</strong> This is a three-step workflow:</p>
+                    <p><strong>1 · Define</strong> — describe a civil engineering concept in plain English and it becomes a structured UCKS entity.<br>
+                       <strong>2 · Library</strong> — browse the entities you've defined and inspect their graphs.<br>
+                       <strong>3 · Query</strong> — ask about IFC 4.3 or export your entities to IDS specifications.</p>
+                    <p>Start here. Try: <span class="class-link" onclick="sendChat('define','A bridge pier is a vertical support that transfers deck loads to the foundation. It has height, cross-section shape (circular or rectangular), number of columns, and design load capacity in kN.')">Define a bridge pier</span></p>
+                    <p>Or: <span class="class-link" onclick="sendChat('define','A retaining wall holds back soil. It has height, thickness, and can be cantilever, gravity, or anchored type. It is founded on a foundation.')">Define a retaining wall</span></p>
                 </div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="defineInput" placeholder="Describe a civil engineering concept..." autocomplete="off">
+                <textarea id="defineInput" rows="1" placeholder="Describe a civil engineering concept... (Shift+Enter for a new line)"></textarea>
                 <button class="send-btn define-mode" id="defineSendBtn">Define</button>
             </div>
         </div>
@@ -539,7 +565,7 @@
         <div id="overlay">
             <div>
                 <p style="font-size: 14px; color: #58a6ff;">AEC Knowledge Engine</p>
-                <p style="margin-top: 6px; color: #8b949e; font-size: 12px;">Browse the library, query IFC 4.3, or define new concepts</p>
+                <p style="margin-top: 6px; color: #8b949e; font-size: 12px;">1 · Define a concept &nbsp;→&nbsp; 2 · Browse the library &nbsp;→&nbsp; 3 · Query &amp; export</p>
             </div>
         </div>
     </div>
@@ -600,22 +626,21 @@ function apiHeaders(extra) {
     var storedToken = localStorage.getItem('ifc_access_token');
     var initialToken = urlToken || storedToken || '';
 
-    if (initialToken) {
-        validateToken(initialToken, function(valid) {
-            if (valid) {
-                ACCESS_TOKEN = initialToken;
-                localStorage.setItem('ifc_access_token', initialToken);
-                if (urlToken && window.history.replaceState) {
-                    window.history.replaceState({}, '', window.location.pathname);
-                }
-                gate.classList.add('hidden');
-                loadLibrary();
-            } else {
-                localStorage.removeItem('ifc_access_token');
-                gate.classList.remove('hidden');
+    // The gate stays hidden while we check. An empty token is valid when the
+    // deployment has open access, so fresh visitors go straight in.
+    validateToken(initialToken, function(valid) {
+        if (valid) {
+            ACCESS_TOKEN = initialToken;
+            if (initialToken) localStorage.setItem('ifc_access_token', initialToken);
+            if (urlToken && window.history.replaceState) {
+                window.history.replaceState({}, '', window.location.pathname);
             }
-        });
-    }
+            loadLibrary();
+        } else {
+            localStorage.removeItem('ifc_access_token');
+            gate.classList.add('visible');
+        }
+    });
 
     function validateToken(token, cb) {
         fetch('/api/auth/check', {
@@ -636,7 +661,7 @@ function apiHeaders(extra) {
             if (valid) {
                 ACCESS_TOKEN = token;
                 localStorage.setItem('ifc_access_token', token);
-                gate.classList.add('hidden');
+                gate.classList.remove('visible');
                 loadLibrary();
             } else {
                 error.style.display = 'block';
@@ -1082,6 +1107,7 @@ function sendChat(forceTab, text) {
     if (!message) return;
 
     ctx.input.value = '';
+    resetGrow(ctx.input);
     addChatMessage(ctx.messages, 'user', message, ctx.mode);
     _doSendChat(message, ctx);
 }
@@ -1116,10 +1142,9 @@ function _doSendChat(message, ctx) {
         addToolPills(ctx.messages, data.tools_used);
         addChatMessage(ctx.messages, 'assistant', data.answer || '(no response)');
 
-        // IDS preview
+        // IDS file attachment
         if (data.ids_xml) {
             renderIdsPreview(ctx.messages, data.ids_xml, data.ids_filename);
-            autoDownloadIds(data.ids_xml, data.ids_filename);
         }
 
         // UCKS entity defined — load its graph + refresh library
@@ -1143,6 +1168,22 @@ function _doSendChat(message, ctx) {
     });
 }
 
+// Auto-growing chat textareas (Enter sends, Shift+Enter adds a line)
+function autoGrow(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+    el.style.overflowY = el.scrollHeight > 140 ? 'auto' : 'hidden';
+}
+function resetGrow(el) {
+    el.style.height = 'auto';
+    el.style.overflowY = 'hidden';
+}
+
+['queryInput', 'defineInput'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.addEventListener('input', function() { autoGrow(el); });
+});
+
 // Query tab input
 document.getElementById('queryInput').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat('query'); }
@@ -1164,6 +1205,7 @@ document.getElementById('idsBtn').addEventListener('click', function() {
         ? userText + '\n\nGenerate an IDS specification for this. Do not ask questions, just generate it.'
         : 'Generate an IDS specification based on our conversation. Include all relevant properties. Do not ask questions, just generate it.';
     ctx.input.value = '';
+    resetGrow(ctx.input);
     addChatMessage(ctx.messages, 'user', userText ? userText + ' (+ generate IDS)' : 'Generate IDS specification', ctx.mode);
     _doSendChat(msg, ctx);
 });
@@ -1218,27 +1260,31 @@ function renderIdsPreview(container, xmlString, filename) {
         .replace(/([\w:]+)(=)/g, '<span class="xml-attr">$1</span>$2')
         .replace(/(".*?")/g, '<span class="xml-val">$1</span>');
 
+    var name = filename || 'specification.ids';
+    var sizeKb = (new Blob([xmlString]).size / 1024).toFixed(1);
+
     div.innerHTML =
-        '<div class="ids-header">' +
-        '<span>Generated IDS Specification</span>' +
+        '<div class="ids-header" onclick="toggleIdsXml(this)" title="Click to preview">' +
+        '<div class="ids-file-icon">&#128196;</div>' +
+        '<div class="ids-file-info">' +
+        '<div class="ids-file-name">' + name + '</div>' +
+        '<div class="ids-file-meta">IDS specification &middot; XSD-validated &middot; ' + sizeKb + ' KB</div>' +
+        '</div>' +
         '<div class="ids-actions">' +
-        '<button onclick="toggleIdsXml(this)">Collapse</button>' +
-        '<button onclick="copyIdsXml(this)">Copy</button>' +
-        '<button onclick="downloadIdsXml(this)">Download .ids</button>' +
+        '<button onclick="event.stopPropagation(); copyIdsXml(this)">Copy</button>' +
+        '<button class="ids-download-btn" onclick="event.stopPropagation(); downloadIdsXml(this)">Download</button>' +
         '</div></div>' +
         '<div class="ids-xml">' + highlighted + '</div>';
 
     div.dataset.xml = xmlString;
-    div.dataset.filename = filename || 'specification.ids';
+    div.dataset.filename = name;
 
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
 }
 
-function toggleIdsXml(btn) {
-    var preview = btn.closest('.ids-preview');
-    preview.classList.toggle('ids-collapsed');
-    btn.textContent = preview.classList.contains('ids-collapsed') ? 'Expand' : 'Collapse';
+function toggleIdsXml(el) {
+    el.closest('.ids-preview').classList.toggle('ids-expanded');
 }
 
 function copyIdsXml(btn) {
@@ -1348,9 +1394,9 @@ document.getElementById('togglePanel').addEventListener('click', function() {
 })();
 
 // ============================
-// Init: start on Library tab
+// Init: start on Define tab (step 1 of the workflow)
 // ============================
-switchTab('library');
+switchTab('define');
 </script>
 </body>
 </html>

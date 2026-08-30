@@ -188,10 +188,87 @@ def api_classes():
 # API: single class graph (Class -> PropertySets -> Properties)
 # ---------------------------------------------------------------------------
 
+def _class_graph_summary(driver: neo4j.Driver, class_code: str):
+    """Compact class graph: class + parent + property sets with counts."""
+    query = """
+    MATCH (c:Class {code: $code})
+    OPTIONAL MATCH (c)-[:INHERITS_FROM]->(parent:Class)
+    OPTIONAL MATCH (c)-[:HAS_PROPERTY_SET]->(ps:PropertySet)
+    OPTIONAL MATCH (ps)-[:HAS_PROPERTY]->(p:Property)
+    RETURN c.code AS class_code, c.name AS class_name, c.definition AS class_def,
+           parent.code AS parent_code, parent.name AS parent_name,
+           ps.code AS pset_code, ps.name AS pset_name, ps.definition AS pset_def,
+           count(p) AS prop_count
+    """
+    with driver.session() as session:
+        records = list(session.run(query, code=class_code))
+
+    if not records:
+        return jsonify({"nodes": [], "edges": [], "error": f"Class '{class_code}' not found"}), 404
+
+    first = records[0]
+    nodes = {}
+    edges = set()
+
+    cid = f"class:{first['class_code']}"
+    nodes[cid] = {
+        "id": cid,
+        "label": first["class_code"],
+        "title": first["class_def"] or first["class_name"] or "",
+        "group": "class",
+        "meta": {"code": first["class_code"], "name": first["class_name"], "definition": first["class_def"]},
+    }
+
+    if first["parent_code"]:
+        pid = f"class:{first['parent_code']}"
+        nodes[pid] = {
+            "id": pid,
+            "label": first["parent_code"],
+            "title": first["parent_name"] or "",
+            "group": "parent",
+            "meta": {"code": first["parent_code"], "name": first["parent_name"]},
+        }
+        edges.add((cid, pid, "INHERITS_FROM"))
+
+    for rec in records:
+        pset_code = rec["pset_code"]
+        if pset_code is None:
+            continue
+        psid = f"pset:{pset_code}"
+        if psid not in nodes:
+            tooltip = rec["pset_def"] or rec["pset_name"] or ""
+            if rec["prop_count"]:
+                tooltip = (tooltip + f"\n{rec['prop_count']} properties").strip()
+            nodes[psid] = {
+                "id": psid,
+                "label": pset_code,
+                "title": tooltip,
+                "group": "pset",
+                "meta": {
+                    "code": pset_code,
+                    "name": rec["pset_name"],
+                    "definition": rec["pset_def"],
+                    "property_count": rec["prop_count"],
+                },
+            }
+        edges.add((cid, psid, "HAS_PROPERTY_SET"))
+
+    edge_list = [{"from": e[0], "to": e[1], "label": e[2], "arrows": "to"} for e in edges]
+    return jsonify({"nodes": list(nodes.values()), "edges": edge_list})
+
+
 @app.route("/api/graph/<class_code>")
 def api_graph_class(class_code: str):
-    """Return vis.js nodes + edges for a single class and its full tree."""
+    """Return vis.js nodes + edges for a single class.
+
+    Default: a readable summary — the class, its parent, and its property
+    sets (with property counts). Pass ?detail=full for the complete tree
+    with every property, EXPRESS attribute, and attribute type.
+    """
     driver = _get_driver()
+
+    if request.args.get("detail") != "full":
+        return _class_graph_summary(driver, class_code)
 
     query = """
     MATCH (c:Class {code: $code})

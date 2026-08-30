@@ -168,6 +168,10 @@ For custom properties without an IFC match, suggest a PropertySet name like
   - dataType MUST be UPPERCASE IFC type (e.g. "IFCTEXT", "IFCBOOLEAN").
   - Data type mapping: String->IFCTEXT, Real->IFCREAL, Boolean->IFCBOOLEAN,
     Integer->IFCINTEGER, Character->IFCLABEL.
+  - NEVER paste the IDS XML into your reply. The generated file is attached
+    to the chat as a downloadable .ids file automatically. In your reply,
+    briefly summarize what the specification requires (entity, property
+    sets, properties) and point the user to the attached file.
 """
 
 # ---------------------------------------------------------------------------

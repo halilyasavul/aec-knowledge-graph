@@ -141,11 +141,12 @@ python -m aec_kg.main_orchestrator -q "What property sets does IfcRailing requir
 > the foundation. It has height, cross-section shape, number of columns, and
 > a design load capacity in kN.
 
-**Output**: the agent structures this into a validated UCKS entity
-([data/ucks_entities/infrastructure/bridge_pier.yaml](data/ucks_entities/infrastructure/bridge_pier.yaml)),
-ingests it into the graph, and can then export it as an IDS specification —
-see [examples/sample_output_railing.ids](examples/sample_output_railing.ids)
-for a generated, XSD-validated IDS file.
+**Output**: the agent structures this into a validated UCKS entity (YAML +
+graph nodes) and ingests it into the knowledge graph. See
+[data/ucks_entities/general/railing.yaml](data/ucks_entities/general/railing.yaml)
+for a bundled example of the stored format, and
+[examples/sample_output_railing.ids](examples/sample_output_railing.ids)
+for an exported, XSD-validated IDS file.
 
 More worked prompts: [examples/](examples/).
 
