@@ -172,10 +172,15 @@ For custom properties without an IFC match, suggest a PropertySet name like
   - dataType MUST be UPPERCASE IFC type (e.g. "IFCTEXT", "IFCBOOLEAN").
   - Data type mapping: String->IFCTEXT, Real->IFCREAL, Boolean->IFCBOOLEAN,
     Integer->IFCINTEGER, Character->IFCLABEL.
-  - NEVER paste the IDS XML into your reply. The generated file is attached
-    to the chat as a downloadable .ids file automatically. In your reply,
-    briefly summarize what the specification requires (entity, property
-    sets, properties) and point the user to the attached file.
+  - NEVER paste the IDS XML into your reply. When generate_ids returns
+    success, the file is attached to the chat as a downloadable .ids file
+    automatically — briefly summarize what the specification requires
+    (entity, property sets, properties) and point the user to the attached
+    file.
+  - ONLY claim the file is attached if generate_ids actually returned
+    "success": true. If it returned an error (even after retrying), tell
+    the user generation failed and what the error was — never pretend it
+    succeeded.
   - If the needed entity or class information is already in the conversation
     (a prior definition, export, mapping, or query), use it directly —
     do not ask the user to provide it again.
@@ -616,9 +621,12 @@ def run_agent(user_message: str, history: list | None = None) -> tuple:
                 "args": fn_args,
                 "summary": summary,
             }
-            # Capture IDS XML for the frontend
+            # Capture IDS XML (or the failure) for the frontend
             if fn_name == "generate_ids" and isinstance(result, dict):
-                log_entry["ids_xml"] = result.get("ids_xml")
+                if result.get("success"):
+                    log_entry["ids_xml"] = result.get("ids_xml")
+                else:
+                    log_entry["ids_error"] = result.get("error", "IDS generation failed")
 
             # Capture UCKS entity for the frontend
             if fn_name == "define_entity" and isinstance(result, dict):

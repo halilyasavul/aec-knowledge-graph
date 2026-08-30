@@ -487,6 +487,7 @@
         <div class="legend-item"><div class="legend-dot dot-parent"></div>Parent</div>
     </div>
     <div style="margin-left:auto; display:flex; gap:6px;">
+        <button class="btn" id="backBtn" disabled style="opacity:0.5;">&#9664; Back</button>
         <button class="btn" id="togglePanel">Details</button>
         <button class="btn" id="fitBtn">Fit</button>
     </div>
@@ -866,6 +867,45 @@ function exportToIfc(entityId, entityName) {
 }
 
 // ============================
+// Graph history (Back button)
+// ============================
+var graphHistory = [];
+
+function pushGraphHistory(kind, key) {
+    var top = graphHistory[graphHistory.length - 1];
+    if (top && top.kind === kind && top.key === key) return;
+    graphHistory.push({ kind: kind, key: key });
+    if (graphHistory.length > 20) graphHistory.shift();
+    updateBackBtn();
+}
+
+function updateBackBtn() {
+    var btn = document.getElementById('backBtn');
+    var enabled = graphHistory.length > 1;
+    btn.disabled = !enabled;
+    btn.style.opacity = enabled ? '1' : '0.5';
+}
+
+function graphBack() {
+    if (graphHistory.length < 2) return;
+    graphHistory.pop();
+    var prev = graphHistory[graphHistory.length - 1];
+    updateBackBtn();
+    if (prev.kind === 'ifc') loadClassGraph(prev.key);
+    else loadUcksGraph(prev.key);
+}
+
+document.getElementById('backBtn').addEventListener('click', graphBack);
+
+// Show a transient message on the graph overlay without hiding the current graph
+function overlayFlash(html) {
+    var overlay = document.getElementById('overlay');
+    overlay.classList.remove('hidden');
+    overlay.innerHTML = '<div>' + html + '</div>';
+    setTimeout(function() { overlay.classList.add('hidden'); }, 1800);
+}
+
+// ============================
 // vis.js
 // ============================
 var VIS_OPTIONS = {
@@ -929,24 +969,24 @@ function loadClassGraph(classCode) {
     fetch('/api/graph/' + encodeURIComponent(classCode), { headers: apiHeaders() })
         .then(function(r) { return r.ok ? r.json() : null; })
         .then(function(data) {
-            if (!data) { overlay.innerHTML = '<div><p style="color:#f85149;">Not found</p></div>'; return; }
+            if (!data) { overlayFlash('<p style="color:#f85149;">Class \'' + classCode + '\' not found</p>'); return; }
             document.getElementById('searchInput').value = classCode;
             if (network) { network.destroy(); network = null; }
             initNetwork(data.nodes, data.edges);
             setTimeout(function() { overlay.classList.add('hidden'); }, 300);
+            pushGraphHistory('ifc', classCode);
             document.getElementById('statNodes').textContent = 'Nodes: ' + data.nodes.length;
             document.getElementById('statEdges').textContent = 'Edges: ' + data.edges.length;
             document.getElementById('statClass').textContent = 'IFC: ' + classCode;
         })
-        .catch(function(err) { overlay.innerHTML = '<div><p style="color:#f85149;">' + err.message + '</p></div>'; });
+        .catch(function(err) { overlayFlash('<p style="color:#f85149;">' + err.message + '</p>'); });
 }
 
 function loadUcksGraph(entityId) {
     var overlay = document.getElementById('overlay');
     var item = getLibrary()[entityId];
     if (!item) {
-        overlay.classList.remove('hidden');
-        overlay.innerHTML = '<div><p style="color:#f85149;">\'' + entityId + '\' is not in your library</p></div>';
+        overlayFlash('<p style="color:#f85149;">\'' + entityId + '\' is not in your library</p>');
         return;
     }
     var data = buildUcksGraph(item.entity);
@@ -954,6 +994,7 @@ function loadUcksGraph(entityId) {
     if (network) { network.destroy(); network = null; }
     initNetwork(data.nodes, data.edges);
     overlay.classList.add('hidden');
+    pushGraphHistory('ucks', entityId);
     document.getElementById('statNodes').textContent = 'Nodes: ' + data.nodes.length;
     document.getElementById('statEdges').textContent = 'Edges: ' + data.edges.length;
     document.getElementById('statClass').textContent = 'UCKS: ' + entityId;
@@ -1226,9 +1267,17 @@ function _doSendChat(message, ctx, ucksContext) {
         addToolPills(ctx.messages, data.tools_used);
         addChatMessage(ctx.messages, 'assistant', data.answer || '(no response)');
 
-        // IDS file attachment
+        // IDS file attachment — or an honest failure note
         if (data.ids_xml) {
             renderIdsPreview(ctx.messages, data.ids_xml, data.ids_filename);
+        } else if (data.ids_error) {
+            var errDiv = document.createElement('div');
+            errDiv.className = 'msg msg-assistant';
+            errDiv.innerHTML = '<p style="color:#f85149;">IDS generation failed: ' +
+                String(data.ids_error).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                '</p><p style="color:#8b949e;font-size:12px;">Try again, or rephrase what the specification should require.</p>';
+            ctx.messages.appendChild(errDiv);
+            ctx.messages.scrollTop = ctx.messages.scrollHeight;
         }
 
         // UCKS entity defined — save to the personal library, show its graph
@@ -1238,8 +1287,9 @@ function _doSendChat(message, ctx, ucksContext) {
             try { loadUcksGraph(data.ucks_entity.id); } catch(e) {}
             setTimeout(loadLibrary, 300);
         }
-        // IFC class queried
-        else if (data.graph_class) {
+        // IFC class queried — but don't yank the graph away from the user's
+        // own entity during an export (the request carried its definition)
+        else if (data.graph_class && !ucksContext) {
             try { loadClassGraph(data.graph_class); } catch(e) {}
         }
     })

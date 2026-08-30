@@ -626,11 +626,14 @@ def api_chat():
     ucks_entity_id = None
     ucks_entity = None
     ucks_yaml = None
+    ids_error = None
     for t in tool_log:
         if t["tool"] in ("query_class", "query_class_structure"):
             graph_class = graph_class or t["args"].get("class_code")
         if t.get("ids_xml"):
             ids_xml = t["ids_xml"]
+        if t.get("ids_error"):
+            ids_error = t["ids_error"]
         if t.get("ucks_entity_id"):
             ucks_entity_id = t["ucks_entity_id"]
         if t.get("ucks_entity"):
@@ -661,6 +664,7 @@ def api_chat():
         "session_id": session_id,
         "ids_xml": ids_xml,
         "ids_filename": ids_filename,
+        "ids_error": ids_error if not ids_xml else None,
     })
 
 
