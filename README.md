@@ -212,7 +212,7 @@ None yet — publications building on this component will be listed here.
 ## Developers / Contributors
 
 - **Halil Yasavul** — design and development
-  ([hyasav1@lsu.edu](mailto:hyasav1@lsu.edu))
+  ([halil.i.yasavul@gmail.com](mailto:halil.i.yasavul@gmail.com))
 
 Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
