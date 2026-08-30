@@ -12,7 +12,7 @@ abstract: >-
 authors:
   - family-names: "Yasavul"
     given-names: "Halil"
-    email: "halil.yasavul@redeqn.com"
+    email: "hyasav1@lsu.edu"
 repository-code: "https://github.com/halilyasavul/aec-knowledge-graph"
 license: Apache-2.0
 version: 0.1.0
