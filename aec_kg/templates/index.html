@@ -586,6 +586,7 @@
     <span id="statNodes">Nodes: 0</span>
     <span id="statEdges">Edges: 0</span>
     <span id="statClass">-</span>
+    <span id="uiBuild" style="margin-left:auto; color:#484f58;"></span>
 </div>
 
 <!-- Scripts -->
@@ -598,6 +599,10 @@ var network = null;
 var allNodes = null;
 var allEdges = null;
 var searchTimeout = null;
+var UI_BUILD = 'v14';
+console.log('AEC Knowledge Engine UI build ' + UI_BUILD);
+document.getElementById('uiBuild').textContent = 'ui ' + UI_BUILD;
+
 var querySessionId = '';
 var defineSessionId = '';
 var lastUcksEntity = null;  // most recently defined/exported entity, attached to IDS requests
@@ -1268,6 +1273,7 @@ function _doSendChat(message, ctx, ucksContext) {
         addChatMessage(ctx.messages, 'assistant', data.answer || '(no response)');
 
         // IDS file attachment — or an honest failure note
+        console.log('[chat] ids_xml received:', !!data.ids_xml, '| length:', (data.ids_xml || '').length, '| ui', UI_BUILD);
         if (data.ids_xml) {
             try {
                 renderIdsPreview(ctx.messages, data.ids_xml, data.ids_filename);
