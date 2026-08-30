@@ -7,7 +7,7 @@ queries, lets domain experts define new AEC concepts in the
 **UCKS knowledge schema**, and exports machine-readable
 **IDS** (Information Delivery Specification) requirements.
 
-**Live demo:** https://ifc-query-engine-16881077631.us-central1.run.app
+**Live demo:** https://aec-knowledge-engine-16881077631.us-central1.run.app
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)

@@ -16,7 +16,7 @@ set -euo pipefail
 # ---------- Configuration ----------
 PROJECT_ID=$(gcloud config get-value project)
 REGION="us-central1"
-SERVICE_NAME="ifc-query-engine"
+SERVICE_NAME="aec-knowledge-engine"
 REPO_NAME="ifc-ai"
 
 echo "=== Deploying to project: $PROJECT_ID, region: $REGION ==="

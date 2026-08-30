@@ -39,8 +39,8 @@ This guide covers deploying the application to **Google Cloud** using **Cloud Ru
 ## Step 1: Create a Google Cloud Project
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project (e.g., `ifc-query-engine`)
-3. Note the **Project ID** (e.g., `ifc-query-engine-12345`)
+2. Create a new project (e.g., `aec-knowledge-engine`)
+3. Note the **Project ID** (e.g., `aec-knowledge-engine-12345`)
 4. Enable billing (required even for free tier services)
 
 ```bash
@@ -142,7 +142,7 @@ python -c "import secrets; print(secrets.token_urlsafe(16))"
 Share the full link (`https://your-url/?token=abc123...`) with your advisor or collaborators. To revoke access, just change the token:
 
 ```bash
-gcloud run services update ifc-query-engine \
+gcloud run services update aec-knowledge-engine \
   --region europe-west1 \
   --update-env-vars UI_ACCESS_TOKEN=new-token-here
 ```
@@ -175,7 +175,7 @@ chmod +x deploy.sh
 # Variables
 PROJECT_ID=$(gcloud config get-value project)
 REGION="europe-west1"
-SERVICE_NAME="ifc-query-engine"
+SERVICE_NAME="aec-knowledge-engine"
 REPO_NAME="ifc-ai"
 IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${SERVICE_NAME}:latest"
 
@@ -209,7 +209,7 @@ ALLOWED_ORIGINS=*,\
 RATE_LIMIT_PER_MINUTE=30"
 ```
 
-The deploy command outputs the service URL (e.g., `https://ifc-query-engine-xxxxx-ew.a.run.app`).
+The deploy command outputs the service URL (e.g., `https://aec-knowledge-engine-xxxxx-ew.a.run.app`).
 
 ---
 
@@ -218,9 +218,9 @@ The deploy command outputs the service URL (e.g., `https://ifc-query-engine-xxxx
 After getting your Cloud Run URL, restrict CORS to only allow requests from your own domain:
 
 ```bash
-gcloud run services update ifc-query-engine \
+gcloud run services update aec-knowledge-engine \
   --region europe-west1 \
-  --set-env-vars ALLOWED_ORIGINS=https://ifc-query-engine-xxxxx-ew.a.run.app
+  --set-env-vars ALLOWED_ORIGINS=https://aec-knowledge-engine-xxxxx-ew.a.run.app
 ```
 
 ---
@@ -288,7 +288,7 @@ After code changes, redeploy with:
 gcloud builds submit --tag $IMAGE .
 
 # Deploy new revision
-gcloud run deploy ifc-query-engine --image $IMAGE --region europe-west1
+gcloud run deploy aec-knowledge-engine --image $IMAGE --region europe-west1
 ```
 
 ---
@@ -311,7 +311,7 @@ For a demo with moderate usage, **total cost should be $0**.
 
 **Container fails to start**
 ```bash
-gcloud run services logs read ifc-query-engine --region europe-west1 --limit 50
+gcloud run services logs read aec-knowledge-engine --region europe-west1 --limit 50
 ```
 
 **Neo4j connection refused**
