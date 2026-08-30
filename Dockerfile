@@ -12,7 +12,8 @@ COPY express_parser.py ingest_graph.py ./
 COPY ids_pipeline.py ids_models.py ids_serializer.py ids_validator.py ./
 COPY ucks_models.py ucks_pipeline.py ./
 COPY templates/ templates/
-COPY ids.xsd data/ids.xsd
+COPY data/ids.xsd data/ids.xsd
+COPY data/ucks_entities/ data/ucks_entities/
 
 # Create output directories
 RUN mkdir -p data/ids_output data/ucks_entities

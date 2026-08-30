@@ -3,9 +3,13 @@
 __pycache__/
 *.pyc
 *.ifc
-data/
+data/ifc-4.3.json
+data/IFC4X3_ADD2.exp.txt
+data/ids_output/
+data/ids_Examples/
 .claude/
 .dockerignore
-WHITEPAPER.md
-DEPLOYMENT.md
-examples.md
+docs/
+examples/
+tests/
+*.md
