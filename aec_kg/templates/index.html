@@ -355,13 +355,12 @@
         .class-link { color: #58a6ff; cursor: pointer; text-decoration: underline; }
         .class-link:hover { color: #79c0ff; }
 
-        /* IDS attachment card (like a chat file attachment) */
+        /* IDS attachment card — rendered INSIDE the answer bubble */
         .ids-preview {
-            align-self: flex-start;
-            margin-top: 4px;
-            max-width: 95%;
+            display: block;
+            margin-top: 10px;
             background: #0d1117;
-            border: 1px solid #30363d;
+            border: 1px solid #3fb950;
             border-radius: 10px;
             overflow: hidden;
         }
@@ -599,7 +598,7 @@ var network = null;
 var allNodes = null;
 var allEdges = null;
 var searchTimeout = null;
-var UI_BUILD = 'v14';
+var UI_BUILD = 'v15';
 console.log('AEC Knowledge Engine UI build ' + UI_BUILD);
 document.getElementById('uiBuild').textContent = 'ui ' + UI_BUILD;
 
@@ -1270,25 +1269,27 @@ function _doSendChat(message, ctx, ucksContext) {
         else querySessionId = data.session_id || querySessionId;
 
         addToolPills(ctx.messages, data.tools_used);
-        addChatMessage(ctx.messages, 'assistant', data.answer || '(no response)');
+        var answerDiv = addChatMessage(ctx.messages, 'assistant', data.answer || '(no response)');
 
-        // IDS file attachment — or an honest failure note
+        // IDS file attachment — rendered INSIDE the answer bubble so it can
+        // never be separated from the visible message
         console.log('[chat] ids_xml received:', !!data.ids_xml, '| length:', (data.ids_xml || '').length, '| ui', UI_BUILD);
         if (data.ids_xml) {
             try {
-                renderIdsPreview(ctx.messages, data.ids_xml, data.ids_filename);
+                renderIdsPreview(answerDiv, data.ids_xml, data.ids_filename);
+                console.log('[chat] attachment card appended inside answer bubble; cards in DOM:',
+                    document.querySelectorAll('.ids-preview').length);
             } catch (renderErr) {
+                console.log('[chat] attachment render FAILED:', renderErr && renderErr.message);
                 // Never lose the file to a rendering bug — degrade to a plain download button
-                var fb = document.createElement('div');
-                fb.className = 'msg msg-assistant';
                 var fbBtn = document.createElement('button');
                 fbBtn.className = 'ids-btn';
+                fbBtn.style.marginTop = '10px';
                 fbBtn.textContent = 'Download ' + (data.ids_filename || 'specification.ids');
                 fbBtn.addEventListener('click', function() { autoDownloadIds(data.ids_xml, data.ids_filename); });
-                fb.appendChild(fbBtn);
-                ctx.messages.appendChild(fb);
-                ctx.messages.scrollTop = ctx.messages.scrollHeight;
+                answerDiv.appendChild(fbBtn);
             }
+            ctx.messages.scrollTop = ctx.messages.scrollHeight;
         } else if (data.ids_error) {
             var errDiv = document.createElement('div');
             errDiv.className = 'msg msg-assistant';
