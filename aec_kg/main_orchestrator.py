@@ -176,6 +176,13 @@ For custom properties without an IFC match, suggest a PropertySet name like
     to the chat as a downloadable .ids file automatically. In your reply,
     briefly summarize what the specification requires (entity, property
     sets, properties) and point the user to the attached file.
+  - If the needed entity or class information is already in the conversation
+    (a prior definition, export, mapping, or query), use it directly —
+    do not ask the user to provide it again.
+  - NEVER ask the user to paste JSON or mention a "server-side library";
+    the app attaches entity definitions automatically when available. If
+    you truly have nothing to work from, ask the user which IFC class or
+    concept the specification is for.
 """
 
 # ---------------------------------------------------------------------------
@@ -546,15 +553,20 @@ def run_agent(user_message: str, history: list | None = None) -> tuple:
 
         candidate = response.candidates[0]
 
-        # Guard against empty content (safety filter, empty response)
+        # Guard against empty content (safety filter, empty response).
+        # Transient empties happen — retry once before giving up.
         if candidate.content is None or not candidate.content.parts:
             reason = getattr(candidate, 'finish_reason', 'unknown')
-            logger.warning("Empty response from Gemini. Finish reason: %s", reason)
-            return (
-                "I could not generate a response. Please try rephrasing.",
-                contents,
-                tool_log,
-            )
+            logger.warning("Empty response from Gemini (finish reason: %s), retrying once.", reason)
+            response = _call_with_retry(client, GEMINI_MODEL, contents, config)
+            candidate = response.candidates[0]
+            if candidate.content is None or not candidate.content.parts:
+                logger.warning("Empty response from Gemini after retry.")
+                return (
+                    "I could not generate a response. Please try rephrasing.",
+                    contents,
+                    tool_log,
+                )
 
         # Append assistant response to contents
         contents.append(candidate.content)

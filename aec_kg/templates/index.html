@@ -599,6 +599,7 @@ var allEdges = null;
 var searchTimeout = null;
 var querySessionId = '';
 var defineSessionId = '';
+var lastUcksEntity = null;  // most recently defined/exported entity, attached to IDS requests
 var chatBusy = false;
 var currentTab = 'library';
 var API_KEY = '{{ api_key | default("", true) }}';
@@ -854,6 +855,7 @@ function exportToIfc(entityId, entityName) {
     // Switch to Query tab and send the export command with the entity
     // definition from the personal library attached
     var item = getLibrary()[entityId];
+    if (item) lastUcksEntity = item.entity;
     switchTab('query');
     var msg = 'Export the UCKS entity "' + entityId + '" (' + entityName + ') to IFC. ' +
         'Use the entity definition provided with this message; find the closest IFC class, ' +
@@ -1232,6 +1234,7 @@ function _doSendChat(message, ctx, ucksContext) {
         // UCKS entity defined — save to the personal library, show its graph
         if (data.ucks_entity) {
             saveEntityLocal(data.ucks_entity, data.ucks_yaml);
+            lastUcksEntity = data.ucks_entity;
             try { loadUcksGraph(data.ucks_entity.id); } catch(e) {}
             setTimeout(loadLibrary, 300);
         }
@@ -1281,13 +1284,21 @@ document.getElementById('idsBtn').addEventListener('click', function() {
     if (chatBusy) return;
     var ctx = getActiveChat();
     var userText = ctx.input.value.trim();
-    var msg = userText
-        ? userText + '\n\nGenerate an IDS specification for this. Do not ask questions, just generate it.'
-        : 'Generate an IDS specification based on our conversation. Include all relevant properties. Do not ask questions, just generate it.';
+    var context = null;
+    var msg;
+    if (userText) {
+        msg = userText + '\n\nGenerate an IDS specification for this. Do not ask questions, just generate it.';
+    } else if (lastUcksEntity) {
+        context = lastUcksEntity;
+        msg = 'Generate an IDS specification for the UCKS entity provided with this message. ' +
+              'Include all relevant properties. Do not ask questions, just generate it.';
+    } else {
+        msg = 'Generate an IDS specification based on our conversation. Include all relevant properties. Do not ask questions, just generate it.';
+    }
     ctx.input.value = '';
     resetGrow(ctx.input);
     addChatMessage(ctx.messages, 'user', userText ? userText + ' (+ generate IDS)' : 'Generate IDS specification', ctx.mode);
-    _doSendChat(msg, ctx);
+    _doSendChat(msg, ctx, context);
 });
 
 // Reset buttons
