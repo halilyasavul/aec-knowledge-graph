@@ -148,7 +148,7 @@ Data type mapping for IDS:
   - UCKS date → IFCTEXT
 
 For custom properties without an IFC match, suggest a PropertySet name like
-"Pset_<EntityName>Custom" (e.g. "Pset_BridgePierCustom").
+"Pset_<EntityName>Custom" (e.g. "Pset_CulvertCustom").
 
 === IFC QUERY GUIDELINES ===
 
@@ -332,7 +332,7 @@ TOOL_DECLARATIONS = [
             "properties": {
                 "entity_id": {
                     "type": "string",
-                    "description": "The UCKS entity id (snake_case), e.g. 'bridge_pier', 'retaining_wall'",
+                    "description": "The UCKS entity id (snake_case), e.g. 'culvert', 'retaining_wall'",
                 }
             },
             "required": ["entity_id"],

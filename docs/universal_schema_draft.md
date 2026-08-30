@@ -22,7 +22,7 @@ captures the essence of each concept, then exports to whichever format is needed
 ## Design Principles
 
 1. **Domain-first** — model what things *are*, not how a file format represents them
-2. **Sector-agnostic** — same primitives work for a wall, a bridge pier, or a pump
+2. **Sector-agnostic** — same primitives work for a wall, a culvert, or a pump
 3. **Minimal** — only the primitives needed to express AEC knowledge
 4. **Graph-native** — maps directly to nodes and edges in a knowledge graph
 5. **Human-readable** — YAML as the authoring format, JSON as the interchange format

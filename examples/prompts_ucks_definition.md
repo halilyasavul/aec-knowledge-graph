@@ -32,12 +32,11 @@ Include load-bearing capacity in kN.
 
 ## Infrastructure Sector
 
-### Bridge Pier
-A bridge pier is a vertical support structure that transfers deck loads to
-the foundation. It has height, cross-section shape (circular, rectangular,
-or hammerhead), number of columns, diameter or width, design load capacity
-in kN, and material type (reinforced concrete or steel). It supports bridge
-decks and is founded on pile caps or spread footings.
+### Culvert
+A culvert is a drainage structure that channels water under a road or
+railway. It has length, span or diameter, invert level, and can be pipe,
+box, or arch type. It is made of concrete, steel, or HDPE, has a design
+flow capacity in m3/s, and passes under a roadway or embankment.
 
 ### Road Segment
 Define a road segment. It's a continuous section of roadway between two

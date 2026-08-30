@@ -17,10 +17,10 @@ properties and data types. More query prompts: [prompts_queries.md](prompts_quer
 
 In the web UI's **Define** tab (or the chat), describe a concept:
 
-> Define a bridge pier. It's a vertical support structure that transfers
-> deck loads to the foundation. It has height, cross-section shape, number
-> of columns, and a design load capacity in kN. It's founded on a foundation
-> element and supports bridge decks.
+> Define a culvert. It's a drainage structure that channels water under a
+> road or railway. It has length, span or diameter, invert level, and can be
+> pipe, box, or arch type. It's made of concrete, steel, or HDPE, and has a
+> design flow capacity in m3/s.
 
 The agent structures this into a validated UCKS entity, saves it as YAML
 under `data/ucks_entities/`, and ingests it into the graph — see

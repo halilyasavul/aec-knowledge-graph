@@ -60,7 +60,7 @@ class PropertyGroupDef(BaseModel):
 class RelationshipDef(BaseModel):
     """How this entity relates to another entity."""
     type: str = Field(description="Relationship type, e.g. 'contains', 'supported_by', 'serves'")
-    target: str = Field(description="Target entity id, e.g. 'opening', 'bridge_pier'")
+    target: str = Field(description="Target entity id, e.g. 'opening', 'culvert'")
     cardinality: str = Field(default="0..*", description="e.g. '1..1', '0..*', '1..*', '2..2'")
     description: str | None = Field(default=None)
 

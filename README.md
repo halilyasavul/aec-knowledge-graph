@@ -137,9 +137,9 @@ python -m aec_kg.main_orchestrator -q "What property sets does IfcRailing requir
 
 **Input** (chat or CLI):
 
-> Define a bridge pier. It's a vertical support that transfers deck loads to
-> the foundation. It has height, cross-section shape, number of columns, and
-> a design load capacity in kN.
+> Define a culvert. It's a drainage structure that channels water under a
+> road or railway. It has length, span or diameter, invert level, and can be
+> pipe, box, or arch type, with a design flow capacity in m3/s.
 
 **Output**: the agent structures this into a validated UCKS entity (YAML +
 graph nodes) and ingests it into the knowledge graph. See
@@ -179,7 +179,7 @@ aec-knowledge-graph/
 - **Exchange-requirement authoring** — conversational generation of IDS
   specifications grounded in exact IFC property set / property names.
 - **Domain knowledge capture** — structuring expert knowledge of the built
-  environment (bridge piers, precast girders, railings) into a versioned,
+  environment (culverts, precast girders, railings) into a versioned,
   machine-readable schema (UCKS) with IFC mappings.
 - **NSF PESOSE / STC-DT** — semantic backbone use case for an open-source
   digital-twin ecosystem.
