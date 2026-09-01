@@ -245,6 +245,7 @@ None yet — publications building on this component will be listed here.
 
 - **Halil Yasavul** — design and development
   ([halil.i.yasavul@gmail.com](mailto:halil.i.yasavul@gmail.com))
+- **Yong-Cheol Lee, Ph.D., LEED AP, FMP** — Principal Investigator, Louisiana State University
 
 Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
