@@ -12,6 +12,7 @@ abstract: >-
 authors:
   - family-names: "Lee"
     given-names: "Yong-Cheol"
+    email: "yclee@lsu.edu"
     affiliation: "Louisiana State University"
   - family-names: "Yasavul"
     given-names: "Halil"
