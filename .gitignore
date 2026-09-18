@@ -13,3 +13,4 @@ data/*
 eval/runs/
 eval/models/
 eval/models_src/
+eval/reports/
