@@ -9,3 +9,7 @@ data/*
 .claude/
 .dockerignore
 .pytest_cache/
+# eval: run outputs hold graph (bSDD-derived) tool results; sample models are fetched, not vendored
+eval/runs/
+eval/models/
+eval/models_src/

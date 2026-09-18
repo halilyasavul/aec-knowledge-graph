@@ -1,0 +1,486 @@
+"""Step 3 — score generated IDS intensionally (facet F1) and extensionally (verdicts).
+
+    python -m eval.score <run_dir> <tasks.jsonl> <models_dir>
+
+Writes <run_dir>/scores.csv (one row per item), <run_dir>/pairs.csv (one row per
+item x model x version-mode), and <run_dir>/reference/ (the reconstructed reference IDS).
+
+Extensional scoring is done twice:
+  vf0  should_filter_version=False — ifcVersion ignored at execution. The models are
+       only a surface for disagreement, so a candidate declaring IFC4 still runs
+       against IFC4X3_ADD2 models. This isolates applicability/requirement semantics.
+  vf1  should_filter_version=True — as a deployed checker behaves: a spec whose
+       ifcVersion excludes the model's schema_identifier applies to nothing.
+ifcVersion problems are reported separately either way (XSD validity, bad_ifcversion).
+"""
+from __future__ import annotations
+
+import csv
+import importlib.util
+import json
+import re
+import sys
+import warnings
+from collections import Counter
+from pathlib import Path
+
+import ifcopenshell
+from lxml import etree
+from ifctester import ids as idsmod, reporter
+
+from eval.common import TESTSET_DIR, XSD_IFC_VERSIONS, load_tasks, safe_name
+
+warnings.filterwarnings("ignore")
+
+
+def _load(name):
+    spec = importlib.util.spec_from_file_location(name, TESTSET_DIR / f"{name}.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+extract = _load("extract_testset")      # facet_target(): the same flattening the targets came from
+harness = _load("harness")              # run(): cross-checked against execute() below
+
+NS_IDS = "http://standards.buildingsmart.org/IDS"
+NS_XS = "http://www.w3.org/2001/XMLSchema"
+NS_XSI = "http://www.w3.org/2001/XMLSchema-instance"
+I = lambda t: f"{{{NS_IDS}}}{t}"
+X = lambda t: f"{{{NS_XS}}}{t}"
+ALL_VERSIONS = "IFC2X3 IFC4 IFC4X3_ADD2"
+BOUNDS = {"minInclusive", "maxInclusive", "minExclusive", "maxExclusive"}
+_RESTR_SPLIT = re.compile(r",(?=(?:enumeration|pattern|minInclusive|maxInclusive|minExclusive|maxExclusive|"
+                          r"length|minLength|maxLength|totalDigits|fractionDigits)=)")
+UPPER_FIELDS = {("entity", "name"), ("entity", "predefinedType"), ("partOf", "entity")}
+
+
+# =========================================================================== canonical facets
+def restriction_members(s: str) -> list[tuple[str, str]]:
+    body = s[len("RESTRICTION("):-1]
+    return [tuple(m.split("=", 1)) for m in _RESTR_SPLIT.split(body) if m] if body else []
+
+
+def canon_value(kind: str, field: str, v: str | None) -> str | None:
+    if v is None:
+        return None
+    v = v.strip()
+    up = (kind, field) in UPPER_FIELDS
+    if v.startswith("RESTRICTION("):
+        mem = sorted((k, (x.strip().upper() if up else x.strip())) for k, x in restriction_members(v))
+        return "RESTRICTION(" + ",".join(f"{k}={x}" for k, x in mem) + ")"
+    return v.upper() if up else v
+
+
+def canon(f: dict) -> tuple:
+    """Canonical, hashable form of a target-shaped facet dict. `uri`/`instructions` ignored."""
+    kind = f["facet"]
+    out = [("facet", kind)]
+    for fld in extract.FIELDS.get(kind, ()):
+        out.append((fld, canon_value(kind, fld, f.get(fld))))
+    out.append(("dataType", (f.get("dataType") or "").strip().upper() or None))
+    if kind != "entity":                       # entity-in-requirements has no cardinality
+        out.append(("cardinality", (f.get("cardinality") or "required").strip().lower()))
+    return tuple(out)
+
+
+def loose_key(f: dict) -> tuple:
+    """Identity of a requirement ignoring value/dataType/cardinality — for the error taxonomy."""
+    kind = f["facet"]
+    if kind == "property":
+        return (kind, (f.get("propertySet") or "").strip(), (f.get("baseName") or "").strip())
+    if kind == "attribute":
+        return (kind, (f.get("name") or "").strip())
+    if kind == "classification":
+        return (kind, (f.get("system") or "").strip())
+    if kind == "entity":
+        return (kind, canon_value("entity", "name", f.get("name")))
+    if kind == "partOf":
+        return (kind, canon_value("partOf", "entity", f.get("entity")))
+    return (kind,)
+
+
+def children(node):
+    return [c for c in node if isinstance(c.tag, str)]       # skip comments / PIs
+
+
+def parse_candidate(path: Path) -> dict:
+    """Flatten a generated IDS with the same facet_target() used to build the targets."""
+    tree = etree.parse(str(path))
+    specs = tree.findall(".//" + I("specification"))
+    reqs, apps, versions = [], [], []
+    for sp in specs:
+        versions.append(sp.get("ifcVersion") or "")
+        app = sp.find(I("applicability"))
+        ent = app.find(I("entity")) if app is not None else None
+        apps.append(extract.facet_target(ent) if ent is not None else {"facet": "entity"})
+        req = sp.find(I("requirements"))
+        if req is not None:
+            reqs += [extract.facet_target(c) for c in children(req)]
+    return {"n_specs": len(specs), "requirements": reqs, "applicability": apps, "versions": versions}
+
+
+def prf(tp, fp, fn):
+    p = tp / (tp + fp) if tp + fp else (1.0 if not fn else 0.0)
+    r = tp / (tp + fn) if tp + fn else 1.0
+    f = 2 * p * r / (p + r) if p + r else 0.0
+    return p, r, f
+
+
+def multiset_match(ref: list, cand: list):
+    rc, cc = Counter(ref), Counter(cand)
+    tp = sum((rc & cc).values())
+    return tp, sum(cc.values()) - tp, sum(rc.values()) - tp
+
+
+# =========================================================================== reference IDS
+def _value(parent, tag, v: str):
+    w = etree.SubElement(parent, I(tag))
+    if v.startswith("RESTRICTION("):
+        mem = restriction_members(v)
+        base = "xs:double" if any(k in BOUNDS for k, _ in mem) else "xs:string"
+        r = etree.SubElement(w, X("restriction"), base=base)
+        for k, x in mem:
+            etree.SubElement(r, X(k), value=x)
+    else:
+        etree.SubElement(w, I("simpleValue")).text = v
+
+
+def _facet(parent, f: dict):
+    kind = f["facet"]
+    el = etree.SubElement(parent, I(kind))
+    for a in ("dataType", "cardinality", "uri"):
+        if f.get(a):
+            el.set(a, f[a])
+    for fld in extract.FIELDS.get(kind, ()):
+        if f.get(fld) is not None:
+            if kind == "partOf":                     # partOf wraps an entity facet
+                _facet(el, {"facet": "entity", "name": f[fld]})
+            else:
+                _value(el, fld, f[fld])
+    return el
+
+
+def build_reference(item: dict) -> bytes:
+    """Reference IDS = task applicability (entity/predefinedType) + target requirement facets.
+    ifcVersion lists all three versions so the reference itself is never version-filtered."""
+    root = etree.Element(I("ids"), nsmap={"ids": NS_IDS, "xs": NS_XS, "xsi": NS_XSI})
+    root.set(f"{{{NS_XSI}}}schemaLocation", f"{NS_IDS} http://standards.buildingsmart.org/IDS/1.0/ids.xsd")
+    info = etree.SubElement(root, I("info"))
+    etree.SubElement(info, I("title")).text = f"reference {item['id']}"
+    specs = etree.SubElement(root, I("specifications"))
+    sp = etree.SubElement(specs, I("specification"), name=item.get("spec_name") or item["id"], ifcVersion=ALL_VERSIONS)
+    app = etree.SubElement(sp, I("applicability"), minOccurs="0", maxOccurs="unbounded")
+    a = item["applicability"]
+    ent = etree.SubElement(app, I("entity"))
+    _value(ent, "name", a["entity"])
+    if a.get("predefinedType"):
+        _value(ent, "predefinedType", a["predefinedType"])
+    req = etree.SubElement(sp, I("requirements"))
+    for f in item["target"]:
+        _facet(req, f)
+    return etree.tostring(root, xml_declaration=True, encoding="UTF-8", pretty_print=True)
+
+
+# =========================================================================== XSD
+def xsd_check(path: Path) -> tuple[bool, str]:
+    from aec_kg.ids.validator import validate_ids_xml
+    ok, errs = validate_ids_xml(path.read_text(encoding="utf-8"), strict=True)
+    return ok, "; ".join(errs)[:500]
+
+
+# =========================================================================== execution
+def execute(ids_path: Path, model, filter_version: bool) -> dict:
+    """harness.run() with a version-filter switch and failure reasons harvested.
+    Specs are unioned: an element failing any applicable spec fails."""
+    specs = idsmod.open(str(ids_path), validate=True)
+    specs.validate(model, should_filter_version=filter_version)
+    r = reporter.Json(specs)
+    r.report()
+    data = json.loads(r.to_string())
+    app, passed, failed, reasons = set(), set(), set(), []
+    for sp in data.get("specifications", []):
+        if sp.get("is_skipped"):
+            continue
+        app |= {e["global_id"] for e in sp.get("applicable_entities", []) if e.get("global_id")}
+        for req in sp.get("requirements", []):
+            passed |= {e["global_id"] for e in (req.get("passed_entities") or []) if e.get("global_id")}
+            for e in req.get("failed_entities") or []:
+                if e.get("global_id"):
+                    failed.add(e["global_id"])
+                    reasons.append(f"{req.get('facet_type')}:{req.get('label')}: {e.get('reason')}")
+    passed -= failed
+    return {"applicable": app, "passed": passed, "failed": failed, "reasons": reasons}
+
+
+def cohen_kappa(a: list[bool], b: list[bool]) -> float | None:
+    n = len(a)
+    if not n:
+        return None
+    po = sum(x == y for x, y in zip(a, b)) / n
+    pa, pb = sum(a) / n, sum(b) / n
+    pe = pa * pb + (1 - pa) * (1 - pb)
+    return None if pe == 1 else (po - pe) / (1 - pe)     # undefined when both raters are constant
+
+
+def compare(ref: dict, cand: dict) -> dict:
+    A, B = ref["applicable"], cand["applicable"]
+    inter = A & B
+    rv = [g in ref["passed"] for g in sorted(inter)]
+    cv = [g in cand["passed"] for g in sorted(inter)]
+    union = A | B
+    return {
+        "n_ref_app": len(A), "n_cand_app": len(B), "n_inter": len(inter),
+        "n_ref_pass": len(ref["passed"]), "n_ref_fail": len(ref["failed"]),
+        "n_cand_pass": len(cand["passed"]), "n_cand_fail": len(cand["failed"]),
+        "app_jaccard": len(inter) / len(union) if union else 1.0,
+        "verdict_acc": (sum(x == y for x, y in zip(rv, cv)) / len(inter)) if inter else None,
+        "verdict_kappa": cohen_kappa(rv, cv),
+        "outcome_equiv": int(ref["passed"] == cand["passed"] and ref["failed"] == cand["failed"]),
+        "over_applicable": len(B - A), "under_applicable": len(A - B),
+        "over_strict": sum(1 for x, y in zip(rv, cv) if x and not y),     # ref pass, cand fail
+        "under_strict": sum(1 for x, y in zip(rv, cv) if y and not x),    # ref fail, cand pass
+    }
+
+
+def direction(c: dict) -> str:
+    if c["outcome_equiv"]:
+        return "equivalent"
+    parts = [k for k in ("over_applicable", "under_applicable", "over_strict", "under_strict") if c[k]]
+    return "+".join(parts) or "other"
+
+
+# =========================================================================== graph snapshot
+def graph_psets(run_dir: Path) -> dict[str, set] | None:
+    """{pset code: {property codes}} from the knowledge graph, cached in the run dir."""
+    snap = run_dir / "graph_psets.json"
+    if not snap.exists():
+        try:
+            from aec_kg.main_orchestrator import _run_cypher_safe
+            res = _run_cypher_safe("MATCH (ps:PropertySet) OPTIONAL MATCH (ps)-[:HAS_PROPERTY]->(p:Property) "
+                                   "RETURN ps.code AS ps, collect(p.code) AS props")
+            if "error" in res:
+                raise RuntimeError(res["error"])
+            snap.write_text(json.dumps({r["ps"]: sorted(r["props"]) for r in res["records"]}))
+        except Exception as e:
+            print(f"  ! graph unavailable ({e}); hallucinated-pset check disabled")
+            return None
+    return {k: set(v) for k, v in json.loads(snap.read_text()).items()}
+
+
+# =========================================================================== error taxonomy
+def taxonomy(item: dict, cand: dict | None, psets: dict | None, ext: dict | None) -> dict:
+    e = Counter()
+    if cand is None:
+        e["no_ids"] = 1
+        return dict(e)
+    tgt = {loose_key(f): f for f in item["target"]}
+    got = {loose_key(f): f for f in cand["requirements"]}
+    for k in set(tgt) & set(got):
+        t, g = tgt[k], got[k]
+        if (t.get("dataType") or "").upper() != (g.get("dataType") or "").upper():
+            e["wrong_datatype"] += 1
+        if (t.get("cardinality") or "required") != (g.get("cardinality") or "required"):
+            e["wrong_cardinality"] += 1
+        if canon_value(t["facet"], "value", t.get("value")) != canon_value(g["facet"], "value", g.get("value")):
+            e["wrong_value"] += 1
+    tgt_by_base = {f.get("baseName"): f for f in item["target"] if f["facet"] == "property"}
+    for k in set(got) - set(tgt):
+        g = got[k]
+        if g["facet"] == "property":
+            ps = g.get("propertySet") or ""
+            if psets is not None and ps not in psets:
+                e["hallucinated_pset"] += 1
+            if g.get("baseName") in tgt_by_base and tgt_by_base[g["baseName"]].get("propertySet") != ps:
+                e["wrong_pset"] += 1
+                continue                              # a relocated property is not also "extra"
+        e["extra_requirement"] += 1
+    got_bases = {g.get("baseName") for g in cand["requirements"] if g["facet"] == "property"}
+    for k in set(tgt) - set(got):
+        t = tgt[k]
+        if t["facet"] == "property" and t.get("baseName") in got_bases:
+            continue                                  # counted as wrong_pset
+        e["missing_requirement"] += 1
+    for g in cand["requirements"] + cand["applicability"]:
+        vals = [g.get(k) for k in ("value", "name", "predefinedType", "propertySet", "baseName")]
+        e["empty_restriction"] += sum(v == "RESTRICTION()" for v in vals)     # constraint silently dropped
+        e["placeholder_value"] += int(str(g.get("value", "")).strip().lower() in PLACEHOLDERS)
+    for g in cand["requirements"]:
+        dt_ = (g.get("dataType") or "").strip()
+        e["invalid_datatype"] += int(bool(dt_) and not _is_ifc_type(dt_))
+    bad = [v for v in " ".join(cand["versions"]).split() if v not in XSD_IFC_VERSIONS]
+    if bad:
+        e["bad_ifcversion"] += 1
+    if ext is not None:
+        if ext["over_applicable"] and not ext["under_applicable"]:
+            e["applicability_too_broad"] += 1
+        elif ext["under_applicable"] and not ext["over_applicable"]:
+            e["applicability_too_narrow"] += 1
+        elif ext["under_applicable"] and ext["over_applicable"]:
+            e["applicability_disjoint"] += 1
+    return dict(e)
+
+
+_IFC_SCHEMA = ifcopenshell.ifcopenshell_wrapper.schema_by_name("IFC4X3_ADD2")
+
+
+def _is_ifc_type(name: str) -> bool:
+    """dataType names a real IFC4X3_ADD2 type (the IDS XSD does not check this)."""
+    try:
+        _IFC_SCHEMA.declaration_by_name(name)
+        return True
+    except Exception:
+        return False
+
+
+PLACEHOLDERS = {"required", "mandatory", "any", "*", "present", "exists", "not empty", "notempty", "yes"}
+ERROR_COLS = ["no_ids", "wrong_datatype", "hallucinated_pset", "wrong_pset", "missing_requirement",
+              "extra_requirement", "applicability_too_broad", "applicability_too_narrow",
+              "applicability_disjoint", "wrong_cardinality", "wrong_value", "bad_ifcversion",
+              "empty_restriction", "placeholder_value", "invalid_datatype"]
+FACET_KINDS = ["property", "attribute", "classification", "material", "partOf", "entity"]
+
+
+# =========================================================================== main
+def main(argv=None):
+    argv = argv if argv is not None else sys.argv[1:]
+    if len(argv) != 3:
+        sys.exit(__doc__)
+    run_dir, tasks_path, models_dir = Path(argv[0]), Path(argv[1]), Path(argv[2])
+    gen_dir, ref_dir = run_dir / "generated", run_dir / "reference"
+    ref_dir.mkdir(exist_ok=True)
+
+    tasks = {t["id"]: t for t in load_tasks(tasks_path)}
+    log = {}
+    if (run_dir / "log.jsonl").exists():
+        for line in open(run_dir / "log.jsonl", encoding="utf-8"):
+            r = json.loads(line)
+            log[r["id"]] = r                          # last attempt wins
+    models = {}
+    for p in sorted(models_dir.glob("*.ifc")):
+        m = ifcopenshell.open(str(p))
+        models[p.stem] = m
+    print(f"{len(models)} models: " + ", ".join(f"{k} ({m.schema_identifier})" for k, m in models.items()))
+    psets = graph_psets(run_dir)
+
+    rows, pair_rows, cross_checked = [], [], 0
+    not_generated = 0
+    for iid, item in tasks.items():
+        name = safe_name(iid)
+        cand_path, fail_path = gen_dir / f"{name}.ids", gen_dir / f"{name}.fail.json"
+        if not cand_path.exists() and not fail_path.exists():
+            not_generated += 1
+            continue
+        ref_path = ref_dir / f"{name}.ids"
+        ref_path.write_bytes(build_reference(item))
+        ref_ok, ref_err = xsd_check(ref_path)
+
+        row = {"id": iid, "source": item["source"], "leak": int(bool(item.get("any_leak"))),
+               "n_target": len(item["target"]), "status": "ok" if cand_path.exists() else "no_ids",
+               "ref_xsd_valid": int(ref_ok), "ref_xsd_error": ref_err}
+        L = log.get(iid, {})
+        row.update({k: L.get(k) for k in ("wall_ms", "cost_usd", "input_tokens", "output_tokens")})
+        row["n_tool_calls"] = len(L.get("tool_calls", []))
+        row["generate_ids_attempts"] = (L.get("retries") or {}).get("generate_ids_attempts")
+
+        # ---------------- A. intensional
+        cand = parse_candidate(cand_path) if cand_path.exists() else None
+        ref_c = [canon(f) for f in item["target"]]
+        cand_c = [canon(f) for f in cand["requirements"]] if cand else []
+        tp, fp, fn = multiset_match(ref_c, cand_c)
+        p, r, f1 = prf(tp, fp, fn) if cand else (0.0, 0.0, 0.0)
+        row.update({"facet_tp": tp, "facet_fp": fp, "facet_fn": fn, "facet_p": p, "facet_r": r, "facet_f1": f1})
+        ltp, lfp, lfn = multiset_match([loose_key(f) for f in item["target"]],
+                                       [loose_key(f) for f in cand["requirements"]] if cand else [])
+        row["loose_f1"] = prf(ltp, lfp, lfn)[2] if cand else 0.0
+        for k in FACET_KINDS:
+            row[f"{k}_tp"], row[f"{k}_fp"], row[f"{k}_fn"] = multiset_match(
+                [c for c in ref_c if c[0][1] == k], [c for c in cand_c if c[0][1] == k])
+        if cand:
+            ref_app = canon({"facet": "entity", "name": item["applicability"]["entity"],
+                             "predefinedType": item["applicability"].get("predefinedType")})
+            row["n_specs"] = cand["n_specs"]
+            row["app_match"] = int(any(canon(a) == ref_app for a in cand["applicability"]))
+            row["ifc_version"] = "|".join(cand["versions"])
+            row["ifcversion_xsd_ok"] = int(all(v in XSD_IFC_VERSIONS for v in " ".join(cand["versions"]).split())
+                                           and all(cand["versions"]))
+            row["ifcversion_covers_models"] = int(all("IFC4X3_ADD2" in v.split() for v in cand["versions"]))
+            ok, err = xsd_check(cand_path)
+            row["xsd_valid"], row["xsd_error"] = int(ok), err
+
+        # ---------------- B. extensional
+        for vf in (0, 1):
+            pooled = {"ref": {"applicable": set(), "passed": set(), "failed": set()},
+                      "cand": {"applicable": set(), "passed": set(), "failed": set()}}
+            skipped = used = 0
+            exec_err = ""
+            reasons = Counter()
+            for mname, model in models.items():
+                ref_x = execute(ref_path, model, bool(vf))
+                if vf and cross_checked < 25:            # our executor must agree with harness.run
+                    h = harness.run(str(ref_path), model)
+                    hu = {k: set().union(*(s[k] for s in h)) for k in ("applicable", "passed", "failed")} if h is not None else None
+                    assert hu is not None and all(hu[k] == ref_x[k] for k in hu), f"executor != harness on {iid}/{mname}"
+                    cross_checked += 1
+                if not ref_x["applicable"]:
+                    skipped += 1
+                    continue
+                used += 1
+                if cand is None or not row.get("xsd_valid"):
+                    cand_x = {"applicable": set(), "passed": set(), "failed": set(), "reasons": []}
+                    exec_err = exec_err or ("no_ids" if cand is None else "xsd_invalid")
+                else:
+                    try:
+                        cand_x = execute(cand_path, model, bool(vf))
+                    except Exception as e:
+                        cand_x = {"applicable": set(), "passed": set(), "failed": set(), "reasons": []}
+                        exec_err = exec_err or f"{type(e).__name__}: {e}"[:200]
+                reasons.update(set(cand_x["reasons"]))
+                pr = compare(ref_x, cand_x)
+                pair_rows.append({"id": iid, "model": mname, "vf": vf, "leak": row["leak"], **pr,
+                                  "direction": direction(pr)})
+                for side, x in (("ref", ref_x), ("cand", cand_x)):
+                    for k in ("applicable", "passed", "failed"):
+                        pooled[side][k] |= {(mname, g) for g in x[k]}
+            pre = f"vf{vf}_"
+            row[pre + "models_used"], row[pre + "models_skipped"] = used, skipped
+            row[pre + "exec_error"] = exec_err
+            if used:
+                c = compare(pooled["ref"], pooled["cand"])
+                row.update({pre + k: v for k, v in c.items()})
+                row[pre + "direction"] = direction(c)
+                if vf == 0:
+                    row["cand_fail_reasons"] = " || ".join(f"{n}x {r}" for r, n in reasons.most_common(4))[:600]
+            else:
+                row[pre + "outcome_equiv"] = None
+
+        ext = ({"over_applicable": row.get("vf0_over_applicable"), "under_applicable": row.get("vf0_under_applicable")}
+               if row.get("vf0_models_used") else None)
+        tax = taxonomy(item, cand, psets, ext)
+        row.update({f"err_{k}": tax.get(k, 0) for k in ERROR_COLS})
+        if psets is not None:
+            row["ref_psets_not_in_graph"] = sum(1 for f in item["target"] if f["facet"] == "property"
+                                                and f.get("propertySet") not in psets)
+        rows.append(row)
+        print(f"  {iid[:60]:<60} F1={f1:.2f}  equiv(vf0)={row.get('vf0_outcome_equiv')}  "
+              f"equiv(vf1)={row.get('vf1_outcome_equiv')}  skipped={row['vf0_models_skipped']}/{len(models)}")
+
+    cols = []
+    for r_ in rows:
+        cols += [k for k in r_ if k not in cols]
+    with open(run_dir / "scores.csv", "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=cols)
+        w.writeheader()
+        w.writerows(rows)
+    if pair_rows:
+        with open(run_dir / "pairs.csv", "w", newline="", encoding="utf-8") as fh:
+            w = csv.DictWriter(fh, fieldnames=list(pair_rows[0]))
+            w.writeheader()
+            w.writerows(pair_rows)
+    print(f"\nscored {len(rows)} items ({not_generated} task items not generated yet); "
+          f"executor cross-checked against harness.run on {cross_checked} (item, model) pairs")
+    print(f"-> {run_dir / 'scores.csv'}")
+
+
+if __name__ == "__main__":
+    main()
