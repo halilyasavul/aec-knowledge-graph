@@ -63,4 +63,4 @@ validator raises instead of passing.
 
 **report.py** prints outcome equivalence, the two conditional probabilities, F1 vs
 equivalence (Spearman is withheld below 10 distinct F1 values), the error table, and cost and
-latency. Headline numbers use non-leaked items only.
+latency. All items count; whether the request text names the property is shown only as a breakdown.

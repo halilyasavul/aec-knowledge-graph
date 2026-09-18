@@ -192,7 +192,7 @@ def run_metadata(mo) -> dict:
 
 # --------------------------------------------------------------------------- ordering
 def ordered(tasks: list[dict]) -> list[dict]:
-    """Non-leaked items first, round-robin across source files (so --limit is diverse)."""
+    """Round-robin across source files, so --limit is diverse."""
     def rr(items):
         by_src: dict[str, list] = {}
         for t in items:
@@ -204,7 +204,7 @@ def ordered(tasks: list[dict]) -> list[dict]:
                 if q:
                     out.append(q.pop(0))
         return out
-    return rr([t for t in tasks if not t.get("any_leak")]) + rr([t for t in tasks if t.get("any_leak")])
+    return rr(tasks)
 
 
 # --------------------------------------------------------------------------- main

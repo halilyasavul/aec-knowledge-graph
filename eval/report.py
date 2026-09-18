@@ -2,7 +2,8 @@
 
     python -m eval.report <run_dir>
 
-Headline numbers are over NON-LEAKED items only. The leaked slice is printed separately.
+All items count. `leak` (the request text contains a target property name) is not a filter;
+block 1 only shows it as a breakdown.
 Surfaces (see eval/score.py): wit = witness models built from each reference (primary);
 vf0 = sample buildings, ifcVersion ignored; vf1 = sample buildings, version-filtered.
 """
@@ -53,20 +54,22 @@ def main(argv=None):
         sys.exit(__doc__)
     run_dir = Path(argv[0])
     df = pd.read_csv(run_dir / "scores.csv")
-    clean, leaked = df[df.leak == 0].copy(), df[df.leak == 1].copy()
-    print(f"run: {run_dir}   items scored: {len(df)}   non-leaked: {len(clean)}   leaked (excluded): {len(leaked)}")
+    items = df
+    print(f"run: {run_dir}   items scored: {len(df)}   (property name appears in request text: {int(df.leak.sum())})")
 
     # ------------------------------------------------------------------ 1
-    hr("1. OUTCOME EQUIVALENCE (non-leaked)")
-    rates = {m: outcome_block(clean, m) for m in SURFACES}
+    hr("1. OUTCOME EQUIVALENCE")
+    rates = {m: outcome_block(items, m) for m in SURFACES}
     for m, r in rates.items():
         if r is not None and r in (0.0, 1.0):
             print(f"\n  !!! STOP: [{m}] outcome equivalence is {r:.0%}. The corpus or the applicability filter "
                   f"is driving this, not the models. Do not interpret it.")
-    if len(leaked):
-        print("  leaked slice (not in headline):")
-        outcome_block(leaked, "wit")
-    ex = clean[clean.vf0_outcome_equiv.notna()]
+    for flag, lab in ((0, "name NOT in request text"), (1, "name appears in request text")):
+        sub = df[(df.leak == flag) & df.wit_outcome_equiv.notna()]
+        if len(sub):
+            print(f"  breakdown [wit], {lab:<30}: equivalent {pct(int(sub.wit_outcome_equiv.sum()), len(sub))}, "
+                  f"mean facet-F1 {sub.facet_f1.mean():.2f}")
+    ex = items[items.vf0_outcome_equiv.notna()]
     if len(ex):
         allfail = ex[ex.vf0_n_ref_pass == 0]
         print(f"  surface check [vf0]: reference FAILS EVERY applicable element in {pct(len(allfail), len(ex))} items "
@@ -84,7 +87,7 @@ def main(argv=None):
               f"Cohen kappa mean={kap.mean():.3f} (defined for n={len(kap)}; undefined when both sides "
               f"give one verdict to every element)")
 
-    ew = clean[clean.wit_outcome_equiv.notna()] if "wit_outcome_equiv" in clean else clean.iloc[0:0]
+    ew = items[items.wit_outcome_equiv.notna()] if "wit_outcome_equiv" in items else items.iloc[0:0]
     if len(ew):
         print("  divergence direction [wit]: " +
               ", ".join(f"{k}={v}" for k, v in ew.wit_direction.value_counts().items()))
@@ -98,31 +101,31 @@ def main(argv=None):
               "   a broken one; decoy = applies where the reference does not)")
 
     # ------------------------------------------------------------------ intensional summary
-    hr("A. FACET-LEVEL (intensional) — non-leaked")
-    gen = clean[clean.status == "ok"]
-    tp, fp, fn = clean.facet_tp.sum(), clean.facet_fp.sum(), clean.facet_fn.sum()
+    hr("A. FACET-LEVEL (intensional)")
+    gen = items[items.status == "ok"]
+    tp, fp, fn = items.facet_tp.sum(), items.facet_fp.sum(), items.facet_fn.sum()
     p, r, f = prf(tp, fp, fn)
-    print(f"  micro P={p:.3f} R={r:.3f} F1={f:.3f}   macro F1={clean.facet_f1.mean():.3f}   "
-          f"(name-level 'loose' macro F1={clean.loose_f1.mean():.3f})")
-    print(f"  items with an IDS: {pct(len(gen), len(clean))}   XSD-valid: {pct(int(gen.xsd_valid.sum()), len(gen))}   "
+    print(f"  micro P={p:.3f} R={r:.3f} F1={f:.3f}   macro F1={items.facet_f1.mean():.3f}   "
+          f"(name-level 'loose' macro F1={items.loose_f1.mean():.3f})")
+    print(f"  items with an IDS: {pct(len(gen), len(items))}   XSD-valid: {pct(int(gen.xsd_valid.sum()), len(gen))}   "
           f"ifcVersion in XSD set: {pct(int(gen.ifcversion_xsd_ok.sum()), len(gen))}   "
           f"ifcVersion covers IFC4X3_ADD2: {pct(int(gen.ifcversion_covers_models.sum()), len(gen))}")
     print(f"  ifcVersion emitted: " + ", ".join(f"{k}={v}" for k, v in gen.ifc_version.value_counts().items()))
     print(f"  applicability entity/predefinedType exact match: {pct(int(gen.app_match.sum()), len(gen))}")
     print(f"  {'facet type':<16}{'TP':>5}{'FP':>5}{'FN':>5}{'P':>8}{'R':>8}{'F1':>8}")
     for k in FACET_KINDS:
-        a, b, c = (int(clean[f"{k}_{x}"].sum()) for x in ("tp", "fp", "fn"))
+        a, b, c = (int(items[f"{k}_{x}"].sum()) for x in ("tp", "fp", "fn"))
         if a + b + c:
             p, r, f = prf(a, b, c)
             print(f"  {k:<16}{a:>5}{b:>5}{c:>5}{p:>8.3f}{r:>8.3f}{f:>8.3f}")
-    if "ref_psets_not_in_graph" in clean:
-        n_ref = int(clean.ref_psets_not_in_graph.sum())
+    if "ref_psets_not_in_graph" in items:
+        n_ref = int(items.ref_psets_not_in_graph.sum())
         print(f"  reference property facets whose pset is not in the graph (ungroundable): {n_ref}")
 
     # ------------------------------------------------------------------ 2
-    hr("2. THE TWO NUMBERS (non-leaked, items with extensional signal)")
+    hr("2. THE TWO NUMBERS (items with extensional signal)")
     for m in SURFACES:
-        e = clean[clean[f"{m}_outcome_equiv"].notna()]
+        e = items[items[f"{m}_outcome_equiv"].notna()]
         hi, lo = e[e.facet_f1 >= 0.9], e[e.facet_f1 < 0.7]
         print(f"  [{m}] P(divergent | facet-F1 >= 0.9) = {pct(int((hi[f'{m}_outcome_equiv'] == 0).sum()), len(hi))}")
         print(f"  [{m}] P(equivalent | facet-F1 <  0.7) = {pct(int((lo[f'{m}_outcome_equiv'] == 1).sum()), len(lo))}")
@@ -130,7 +133,7 @@ def main(argv=None):
     # ------------------------------------------------------------------ 3
     S = "wit"
     hr(f"3. FACET-F1 vs OUTCOME EQUIVALENCE [{S}: {LABEL[S]}]")
-    e = clean[clean[f"{S}_outcome_equiv"].notna()]
+    e = items[items[f"{S}_outcome_equiv"].notna()]
     vals = e.facet_f1.round(4)
     distinct = vals.nunique()
     print(f"  distinct facet-F1 values: {distinct}  -> {sorted(vals.unique().tolist())}")
@@ -156,7 +159,7 @@ def main(argv=None):
         ax.set_yticks([0, 1], ["divergent", "equivalent"])
         ax.set_xlabel("facet-level F1 (intensional)")
         ax.set_xlim(-0.05, 1.05)
-        ax.set_title(f"Facet F1 vs execution outcome, n={len(e)} non-leaked items ({LABEL[S]})", fontsize=10)
+        ax.set_title(f"Facet F1 vs execution outcome, n={len(e)} items ({LABEL[S]})", fontsize=10)
         ax.spines[["top", "right"]].set_visible(False)
         fig.tight_layout()
         fig.savefig(run_dir / "f1_vs_equivalence.png", dpi=150)
@@ -165,17 +168,17 @@ def main(argv=None):
         print(f"  (scatter PNG skipped: {ex_})")
 
     # ------------------------------------------------------------------ 4
-    hr("4. ERROR FREQUENCY (non-leaked items)")
+    hr("4. ERROR FREQUENCY ")
     print(f"  {'error':<28}{'occurrences':>12}{'items':>8}")
     for c in ERROR_COLS:
         col = f"err_{c}"
-        if col in clean:
-            print(f"  {c:<28}{int(clean[col].sum()):>12}{int((clean[col] > 0).sum()):>8}")
+        if col in items:
+            print(f"  {c:<28}{int(items[col].sum()):>12}{int((items[col] > 0).sum()):>8}")
     print("  (hallucinated_pset = pset not in graph; applicability_* from executed element sets [wit, else vf0];\n"
           "   empty_restriction = constraint the pipeline silently dropped; bad_ifcversion = not in XSD set)")
 
     # ------------------------------------------------------------------ 5
-    hr("5. COST AND LATENCY PER ITEM (all generated items, incl. leaked)")
+    hr("5. COST AND LATENCY PER ITEM (all generated items)")
     for col, lab, fmt in (("wall_ms", "wall-clock s", lambda v: f"{v / 1000:.1f}"),
                           ("cost_usd", "cost USD", lambda v: f"{v:.4f}"),
                           ("input_tokens", "input tokens", lambda v: f"{v:,.0f}"),
