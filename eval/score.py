@@ -461,7 +461,9 @@ def main(argv=None):
                 except Exception as e:
                     err = f"{type(e).__name__}: {e}"[:200]
             row["wit_exec_error"] = err
-            if ref_w["applicable"]:
+            if probs:                                 # the witness can't be trusted for this item
+                row["wit_outcome_equiv"], row["wit_direction"] = None, "witness_unverified"
+            elif ref_w["applicable"]:
                 c = compare(ref_w, cand_w)
                 row.update({"wit_" + k: v for k, v in c.items()})
                 row["wit_direction"] = direction(c)
