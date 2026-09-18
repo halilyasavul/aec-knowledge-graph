@@ -3,8 +3,8 @@
     python -m eval.report <run_dir>
 
 Headline numbers are over NON-LEAKED items only. The leaked slice is printed separately.
-Primary extensional mode is vf0 (ifcVersion ignored at execution); vf1 (version-filtered,
-as a deployed checker behaves) is printed alongside. See eval/score.py for both.
+Surfaces (see eval/score.py): wit = witness models built from each reference (primary);
+vf0 = sample buildings, ifcVersion ignored; vf1 = sample buildings, version-filtered.
 """
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 import pandas as pd
+from collections import Counter
 
 from eval.score import ERROR_COLS, FACET_KINDS, prf
 
@@ -26,15 +27,23 @@ def hr(title):
     print(f"\n{'=' * 78}\n{title}\n{'=' * 78}")
 
 
+SURFACES = ("wit", "vf0", "vf1")
+LABEL = {"wit": "witness models", "vf0": "sample buildings", "vf1": "sample buildings, version-filtered"}
+
+
 def outcome_block(df: pd.DataFrame, mode: str) -> float | None:
     col = f"{mode}_outcome_equiv"
     ext = df[df[col].notna()]
     n, k = len(ext), int(ext[col].sum()) if len(ext) else 0
-    skipped = int(df[f"{mode}_models_skipped"].sum())
-    pairs = int(df[f"{mode}_models_used"].sum() + skipped)
-    print(f"  [{mode}] outcome equivalence: {pct(k, n)}   "
-          f"(items with >=1 usable model: {n}/{len(df)}; (item,model) pairs skipped because the "
-          f"reference applies to 0 elements: {skipped}/{pairs})")
+    if mode == "wit":
+        ver = int(df.get("wit_verified", pd.Series(dtype=float)).fillna(0).sum())
+        extra = f"items with a usable witness: {n}/{len(df)}; witness verified against its reference: {ver}"
+    else:
+        skipped = int(df[f"{mode}_models_skipped"].sum())
+        pairs = int(df[f"{mode}_models_used"].sum() + skipped)
+        extra = (f"items with >=1 usable model: {n}/{len(df)}; (item,model) pairs skipped because the "
+                 f"reference applies to 0 elements: {skipped}/{pairs}")
+    print(f"  [{mode:<3}] outcome equivalence: {pct(k, n):<18} {LABEL[mode]}  ({extra})")
     return k / n if n else None
 
 
@@ -49,14 +58,14 @@ def main(argv=None):
 
     # ------------------------------------------------------------------ 1
     hr("1. OUTCOME EQUIVALENCE (non-leaked)")
-    rates = {m: outcome_block(clean, m) for m in ("vf0", "vf1")}
+    rates = {m: outcome_block(clean, m) for m in SURFACES}
     for m, r in rates.items():
         if r is not None and r in (0.0, 1.0):
             print(f"\n  !!! STOP: [{m}] outcome equivalence is {r:.0%}. The corpus or the applicability filter "
                   f"is driving this, not the models. Do not interpret it.")
     if len(leaked):
         print("  leaked slice (not in headline):")
-        outcome_block(leaked, "vf0")
+        outcome_block(leaked, "wit")
     ex = clean[clean.vf0_outcome_equiv.notna()]
     if len(ex):
         allfail = ex[ex.vf0_n_ref_pass == 0]
@@ -74,6 +83,19 @@ def main(argv=None):
               f"verdict accuracy on intersection mean={acc.mean():.3f} (n={len(acc)})   "
               f"Cohen kappa mean={kap.mean():.3f} (defined for n={len(kap)}; undefined when both sides "
               f"give one verdict to every element)")
+
+    ew = clean[clean.wit_outcome_equiv.notna()] if "wit_outcome_equiv" in clean else clean.iloc[0:0]
+    if len(ew):
+        print("  divergence direction [wit]: " +
+              ", ".join(f"{k}={v}" for k, v in ew.wit_direction.value_counts().items()))
+        acc, kap = ew.wit_verdict_acc.dropna(), ew.wit_verdict_kappa.dropna()
+        print(f"  applicability Jaccard [wit] mean={ew.wit_app_jaccard.mean():.3f}   verdict accuracy on "
+              f"intersection mean={acc.mean():.3f} (n={len(acc)})   Cohen kappa mean={kap.mean():.3f} (n={len(kap)})")
+        kinds = Counter(v.split(":")[0] for d in ew.wit_diverging.dropna() for v in str(d).split())
+        print("  witness variants where candidate and reference disagree: " +
+              ", ".join(f"{k}={v}" for k, v in kinds.most_common()))
+        print("  (full/altvalue/edge = candidate rejects a conforming element; missing/badvalue/badtype = accepts\n"
+              "   a broken one; decoy = applies where the reference does not)")
 
     # ------------------------------------------------------------------ intensional summary
     hr("A. FACET-LEVEL (intensional) — non-leaked")
@@ -99,19 +121,20 @@ def main(argv=None):
 
     # ------------------------------------------------------------------ 2
     hr("2. THE TWO NUMBERS (non-leaked, items with extensional signal)")
-    for m in ("vf0", "vf1"):
+    for m in SURFACES:
         e = clean[clean[f"{m}_outcome_equiv"].notna()]
         hi, lo = e[e.facet_f1 >= 0.9], e[e.facet_f1 < 0.7]
         print(f"  [{m}] P(divergent | facet-F1 >= 0.9) = {pct(int((hi[f'{m}_outcome_equiv'] == 0).sum()), len(hi))}")
         print(f"  [{m}] P(equivalent | facet-F1 <  0.7) = {pct(int((lo[f'{m}_outcome_equiv'] == 1).sum()), len(lo))}")
 
     # ------------------------------------------------------------------ 3
-    hr("3. FACET-F1 vs OUTCOME EQUIVALENCE [vf0]")
-    e = clean[clean.vf0_outcome_equiv.notna()]
+    S = "wit"
+    hr(f"3. FACET-F1 vs OUTCOME EQUIVALENCE [{S}: {LABEL[S]}]")
+    e = clean[clean[f"{S}_outcome_equiv"].notna()]
     vals = e.facet_f1.round(4)
     distinct = vals.nunique()
     print(f"  distinct facet-F1 values: {distinct}  -> {sorted(vals.unique().tolist())}")
-    tab = e.groupby(vals).vf0_outcome_equiv.agg(["count", "sum"])
+    tab = e.groupby(vals)[f"{S}_outcome_equiv"].agg(["count", "sum"])
     print(f"  {'facet-F1':>9} {'n':>4} {'equiv':>6}  scatter (x = F1 bucket, #=equivalent, .=divergent)")
     for f1, row in tab.iterrows():
         print(f"  {f1:>9.3f} {int(row['count']):>4} {int(row['sum']):>6}  "
@@ -120,7 +143,7 @@ def main(argv=None):
         print(f"\n  Only {distinct} distinct facet-F1 values (< {MIN_DISTINCT_F1}). Spearman rho NOT reported: "
               f"with this few values it is a range-restriction artifact, not a finding.")
     else:
-        rho = e.facet_f1.corr(e.vf0_outcome_equiv, method="spearman")
+        rho = e.facet_f1.corr(e[f"{S}_outcome_equiv"], method="spearman")
         print(f"\n  Spearman rho(facet-F1, outcome equivalence) = {rho:.3f}  (n={len(e)})")
     try:
         import matplotlib
@@ -129,11 +152,11 @@ def main(argv=None):
         import numpy as np
         rng = np.random.default_rng(0)
         fig, ax = plt.subplots(figsize=(6, 3.2))
-        ax.scatter(e.facet_f1, e.vf0_outcome_equiv + rng.uniform(-0.06, 0.06, len(e)), s=18, alpha=0.7, color="#3b6ea5")
+        ax.scatter(e.facet_f1, e[f"{S}_outcome_equiv"] + rng.uniform(-0.06, 0.06, len(e)), s=18, alpha=0.7, color="#3b6ea5")
         ax.set_yticks([0, 1], ["divergent", "equivalent"])
         ax.set_xlabel("facet-level F1 (intensional)")
         ax.set_xlim(-0.05, 1.05)
-        ax.set_title(f"Facet F1 vs execution outcome, n={len(e)} non-leaked items", fontsize=10)
+        ax.set_title(f"Facet F1 vs execution outcome, n={len(e)} non-leaked items ({LABEL[S]})", fontsize=10)
         ax.spines[["top", "right"]].set_visible(False)
         fig.tight_layout()
         fig.savefig(run_dir / "f1_vs_equivalence.png", dpi=150)
@@ -148,7 +171,7 @@ def main(argv=None):
         col = f"err_{c}"
         if col in clean:
             print(f"  {c:<28}{int(clean[col].sum()):>12}{int((clean[col] > 0).sum()):>8}")
-    print("  (hallucinated_pset = pset not in graph; applicability_* from executed element sets [vf0];\n"
+    print("  (hallucinated_pset = pset not in graph; applicability_* from executed element sets [wit, else vf0];\n"
           "   empty_restriction = constraint the pipeline silently dropped; bad_ifcversion = not in XSD set)")
 
     # ------------------------------------------------------------------ 5

@@ -3,13 +3,17 @@
     python -m eval.score <run_dir> <tasks.jsonl> <models_dir>
 
 Writes <run_dir>/scores.csv (one row per item), <run_dir>/pairs.csv (one row per
-item x model x version-mode), and <run_dir>/reference/ (the reconstructed reference IDS).
+item x model x version-mode), <run_dir>/reference/ (the reconstructed reference IDS) and
+<run_dir>/witness/ (the witness models).
 
-Extensional scoring is done twice:
-  vf0  should_filter_version=False — ifcVersion ignored at execution. The models are
+Extensional scoring is done on three surfaces:
+  wit  a witness model built from the reference alone (eval/witness.py): elements that
+       satisfy it, break one requirement each, or sit just outside its applicability.
+       ifcVersion ignored at execution. This is the surface that can see property errors.
+  vf0  sample models, should_filter_version=False — ifcVersion ignored. The models are
        only a surface for disagreement, so a candidate declaring IFC4 still runs
        against IFC4X3_ADD2 models. This isolates applicability/requirement semantics.
-  vf1  should_filter_version=True — as a deployed checker behaves: a spec whose
+  vf1  sample models, should_filter_version=True — as a deployed checker behaves: a spec whose
        ifcVersion excludes the model's schema_identifier applies to nothing.
 ifcVersion problems are reported separately either way (XSD validity, bad_ifcversion).
 """
@@ -28,6 +32,7 @@ import ifcopenshell
 from lxml import etree
 from ifctester import ids as idsmod, reporter
 
+from eval import witness
 from eval.common import TESTSET_DIR, XSD_IFC_VERSIONS, load_tasks, safe_name
 
 warnings.filterwarnings("ignore")
@@ -454,15 +459,50 @@ def main(argv=None):
             else:
                 row[pre + "outcome_equiv"] = None
 
-        ext = ({"over_applicable": row.get("vf0_over_applicable"), "under_applicable": row.get("vf0_under_applicable")}
-               if row.get("vf0_models_used") else None)
+        # ---------------- B'. extensional on the witness model built from the reference
+        wit = witness.build(item, run_dir / "witness" / f"{name}.ifc")
+        row["wit_unsupported"] = " | ".join(wit["unsupported"])[:400]
+        if wit["path"]:
+            wm = ifcopenshell.open(wit["path"])
+            ref_w = execute(ref_path, wm, False)
+            probs = witness.verify(wit["labels"], ref_w, item["target"])
+            row["wit_n_elements"], row["wit_verified"] = len(wit["labels"]), int(not probs)
+            row["wit_problems"] = " | ".join(probs)[:400]
+            cand_w, err = {"applicable": set(), "passed": set(), "failed": set(), "reasons": []}, ""
+            if cand is None or not row.get("xsd_valid"):
+                err = "no_ids" if cand is None else "xsd_invalid"
+            else:
+                try:
+                    cand_w = execute(cand_path, wm, False)
+                except Exception as e:
+                    err = f"{type(e).__name__}: {e}"[:200]
+            row["wit_exec_error"] = err
+            if ref_w["applicable"]:
+                c = compare(ref_w, cand_w)
+                row.update({"wit_" + k: v for k, v in c.items()})
+                row["wit_direction"] = direction(c)
+                row["wit_diverging"] = " ".join(sorted(
+                    wit["labels"][g] for g in wit["labels"]
+                    if (g in ref_w["applicable"]) != (g in cand_w["applicable"])
+                    or (g in ref_w["passed"]) != (g in cand_w["passed"])))[:600]
+                pair_rows.append({"id": iid, "model": "witness", "vf": 0, "leak": row["leak"], **c,
+                                  "direction": direction(c)})
+            else:
+                row["wit_outcome_equiv"] = None
+        else:
+            row["wit_outcome_equiv"] = None
+
+        src = "wit" if row.get("wit_outcome_equiv") is not None else "vf0"
+        ext = ({"over_applicable": row.get(f"{src}_over_applicable"),
+                "under_applicable": row.get(f"{src}_under_applicable")}
+               if row.get(f"{src}_outcome_equiv") is not None else None)
         tax = taxonomy(item, cand, psets, ext)
         row.update({f"err_{k}": tax.get(k, 0) for k in ERROR_COLS})
         if psets is not None:
             row["ref_psets_not_in_graph"] = sum(1 for f in item["target"] if f["facet"] == "property"
                                                 and f.get("propertySet") not in psets)
         rows.append(row)
-        print(f"  {iid[:60]:<60} F1={f1:.2f}  equiv(vf0)={row.get('vf0_outcome_equiv')}  "
+        print(f"  {iid[:60]:<60} F1={f1:.2f}  equiv(wit)={row.get('wit_outcome_equiv')}  equiv(vf0)={row.get('vf0_outcome_equiv')}  "
               f"equiv(vf1)={row.get('vf1_outcome_equiv')}  skipped={row['vf0_models_skipped']}/{len(models)}")
 
     cols = []

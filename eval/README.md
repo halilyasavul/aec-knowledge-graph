@@ -4,7 +4,7 @@ Step 1 (test set) lives in [nl_to_ids_testset/](nl_to_ids_testset/). This direct
 
 ## Setup
 
-    pip install lxml ifctester==0.8.5 ifcopenshell==0.8.5 pandas matplotlib
+    pip install lxml ifctester==0.8.5 ifcopenshell==0.8.5 pandas matplotlib rstr
 
     # sample models: the models are only a surface for detecting disagreement
     git clone --depth 1 --filter=blob:none --sparse https://github.com/buildingSMART/Sample-Test-Files eval/models_src/st
@@ -46,6 +46,20 @@ validator raises instead of passing.
   reference applies to 0 elements are skipped and counted. Each item is scored in two modes:
   `vf0` ignores `ifcVersion` at execution, and `vf1` uses `should_filter_version=True`.
 - The executor is cross-checked against `harness.run()` on the first 25 pairs.
+- *Witness models* ([witness.py](witness.py)) are a third surface, `wit`, and the primary one.
+  The sample buildings rarely contain the elements and properties a reference asks for, so a
+  reference and a wrong candidate both fail everything and look equivalent. For each item,
+  a small IFC4X3_ADD2 file is built **from the reference only**. It holds elements that satisfy
+  it (`full`, every allowed enumeration value, inclusive bounds), elements that each break
+  one requirement (`missing`, `badvalue`, `badtype`), and decoys just outside its applicability.
+  `verify()` checks the reference behaves as labelled on its own witness: 181 of the 183
+  buildable items verify, and so do all 20 in the first run. Controlled mutations
+  (`harness.mutations`) go from 0/53 detected on the sample buildings to 176–177/177
+  (dataType, pset, baseName, entity) and 140/151 (enumeration tightening).
+  `wit_diverging` lists which variants the candidate judged differently.
+- ifctester 0.8.5 quirk: a `predefinedType` restriction whose enumeration contains `USERDEFINED`
+  compares equal to the string "USERDEFINED", so it only matches user-defined elements. It hits
+  reference and candidate alike, and the witness is built for the checker as it behaves.
 
 **report.py** prints outcome equivalence, the two conditional probabilities, F1 vs
 equivalence (Spearman is withheld below 10 distinct F1 values), the error table, and cost and
