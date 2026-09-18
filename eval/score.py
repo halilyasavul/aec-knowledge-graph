@@ -33,7 +33,7 @@ from lxml import etree
 from ifctester import ids as idsmod, reporter
 
 from eval import witness
-from eval.common import TESTSET_DIR, XSD_IFC_VERSIONS, load_tasks, safe_name
+from eval.common import TESTSET_DIR, XSD_IFC_VERSIONS, graph_psets, ifc_only, load_tasks, safe_name
 
 warnings.filterwarnings("ignore")
 
@@ -256,23 +256,6 @@ def direction(c: dict) -> str:
 
 
 # =========================================================================== graph snapshot
-def graph_psets(run_dir: Path) -> dict[str, set] | None:
-    """{pset code: {property codes}} from the knowledge graph, cached in the run dir."""
-    snap = run_dir / "graph_psets.json"
-    if not snap.exists():
-        try:
-            from aec_kg.main_orchestrator import _run_cypher_safe
-            res = _run_cypher_safe("MATCH (ps:PropertySet) OPTIONAL MATCH (ps)-[:HAS_PROPERTY]->(p:Property) "
-                                   "RETURN ps.code AS ps, collect(p.code) AS props")
-            if "error" in res:
-                raise RuntimeError(res["error"])
-            snap.write_text(json.dumps({r["ps"]: sorted(r["props"]) for r in res["records"]}))
-        except Exception as e:
-            print(f"  ! graph unavailable ({e}); hallucinated-pset check disabled")
-            return None
-    return {k: set(v) for k, v in json.loads(snap.read_text()).items()}
-
-
 # =========================================================================== error taxonomy
 def taxonomy(item: dict, cand: dict | None, psets: dict | None, ext: dict | None) -> dict:
     e = Counter()
@@ -381,6 +364,7 @@ def main(argv=None):
         ref_ok, ref_err = xsd_check(ref_path)
 
         row = {"id": iid, "source": item["source"], "leak": int(bool(item.get("any_leak"))),
+               "ifc_only": (int(ifc_only(item, psets)) if psets is not None else None),
                "n_target": len(item["target"]), "status": "ok" if cand_path.exists() else "no_ids",
                "ref_xsd_valid": int(ref_ok), "ref_xsd_error": ref_err}
         L = log.get(iid, {})

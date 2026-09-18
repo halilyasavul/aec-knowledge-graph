@@ -26,7 +26,7 @@ import sys
 import time
 from pathlib import Path
 
-from eval.common import RUNS_DIR, SPEC_TASKS, load_tasks, safe_name
+from eval.common import RUNS_DIR, SPEC_TASKS, graph_psets, ifc_only, load_tasks, safe_name
 
 # --------------------------------------------------------------------------- model pin
 # The Gemini Developer API exposes no suffix more specific than this code: the
@@ -212,6 +212,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--tasks", default=str(SPEC_TASKS))
     ap.add_argument("--run-id", default=f"spec_{PINNED_MODEL}")
+    ap.add_argument("--all", action="store_true",
+                    help="include items needing project-specific property sets (default: IFC-only items)")
     ap.add_argument("--limit", type=int, default=None, help="only the first N items of the fixed order (completed ones count toward N)")
     args = ap.parse_args(argv)
 
@@ -241,6 +243,12 @@ def main(argv=None):
     instrument(mo, rec)
 
     tasks = ordered(load_tasks(args.tasks))
+    if not args.all:
+        psets = graph_psets(run_dir)
+        if psets is None:
+            sys.exit("graph needed to select IFC-only items (or pass --all)")
+        tasks = [t for t in tasks if ifc_only(t, psets)]
+        print(f"IFC-only items: {len(tasks)}")
     id_map_path = run_dir / "id_map.json"
     id_map = json.loads(id_map_path.read_text()) if id_map_path.exists() else {}
     log_path = run_dir / "log.jsonl"

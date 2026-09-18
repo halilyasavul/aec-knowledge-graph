@@ -2,7 +2,8 @@
 
     python -m eval.report <run_dir>
 
-All items count. `leak` (the request text contains a target property name) is not a filter;
+Only IFC-only items count (every required property is a standard IFC property; see
+eval.common.ifc_only). `leak` (the request text contains a target property name) is not a filter;
 block 1 only shows it as a breakdown.
 Surfaces (see eval/score.py): wit = witness models built from each reference (primary);
 vf0 = sample buildings, ifcVersion ignored; vf1 = sample buildings, version-filtered.
@@ -54,8 +55,10 @@ def main(argv=None):
         sys.exit(__doc__)
     run_dir = Path(argv[0])
     df = pd.read_csv(run_dir / "scores.csv")
-    items = df
-    print(f"run: {run_dir}   items scored: {len(df)}   (property name appears in request text: {int(df.leak.sum())})")
+    items = df[df.ifc_only == 1].copy() if "ifc_only" in df else df
+    df = items
+    print(f"run: {run_dir}   items scored: {len(pd.read_csv(run_dir / 'scores.csv'))}   counted (IFC-only): {len(items)}   "
+          f"(property name appears in request text: {int(items.leak.sum())})")
 
     # ------------------------------------------------------------------ 1
     hr("1. OUTCOME EQUIVALENCE")
