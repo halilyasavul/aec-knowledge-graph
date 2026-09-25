@@ -46,15 +46,16 @@ def load(run: Path) -> dict:
         df = df[df.ifc_only == 1].copy()
     logs = {}
     log_path = run / "log.jsonl"
-    if not log_path.exists() and (run.parent / run.name.replace("-rescored", "") / "log.jsonl").exists():
-        log_path = run.parent / run.name.replace("-rescored", "") / "log.jsonl"
+    if not log_path.exists() and (run / "score_meta.json").exists():   # scored with --out
+        log_path = Path(json.loads((run / "score_meta.json").read_text())["source_run"]) / "log.jsonl"
+    keep_ids = set(df.id)
     if log_path.exists():
         for line in open(log_path, encoding="utf-8"):
             r = json.loads(line)
-            logs[r["id"]] = r
-    meta = json.loads((run / "run.json").read_text()) if (run / "run.json").exists() else {}
-    if not meta and log_path.parent != run:
-        meta = json.loads((log_path.parent / "run.json").read_text())
+            if r["id"] in keep_ids:                  # only the items this report counts
+                logs[r["id"]] = r
+    meta_path = run / "run.json" if (run / "run.json").exists() else log_path.parent / "run.json"
+    meta = json.loads(meta_path.read_text()) if meta_path.exists() else {}
     return {"name": run.name, "df": df, "logs": logs, "meta": meta}
 
 
@@ -91,9 +92,12 @@ def block_pipeline(runs: list[dict]):
             continue
         nf = sum(1 for x in logs if x["status"] != "ok")
         att = [x.get("retries", {}).get("generate_ids_attempts", 0) for x in logs]
-        dropped = sum(len(x.get("property_sets_dropped") or []) for x in logs)
-        mx = max((x.get("tool_result_chars_max") or 0) for x in logs)
-        print(f"  {r['name']:<22}{len(list(logs)):>6}{nf:>8}{sum(att) / max(len(att), 1):>8.1f}{dropped:>15}{mx:>15,}")
+        has_trunc_log = any("property_sets_dropped" in x for x in logs)
+        dropped = (str(sum(len(x.get("property_sets_dropped") or []) for x in logs))
+                   if has_trunc_log else "not logged")
+        mx = (f"{max((x.get('tool_result_chars_max') or 0) for x in logs):,}"
+              if has_trunc_log else "not logged")
+        print(f"  {r['name']:<22}{len(list(logs)):>6}{nf:>8}{sum(att) / max(len(att), 1):>8.1f}{dropped:>15}{mx:>15}")
     print()
     print(f"  {'guard':<32}" + "".join(f"{r['name'][:14]:>16}" for r in runs))
     guards = {r["name"]: Counter() for r in runs}
@@ -104,6 +108,7 @@ def block_pipeline(runs: list[dict]):
     for k in keys:
         if any(guards[r["name"]].get(k) for r in runs):
             print(f"  {k:<32}" + "".join(f"{guards[r['name']].get(k, 0):>16}" for r in runs))
+    print("  (v4 predates this logging, hence 'not logged'; it dropped sets — measured separately)")
     print("  (coerced_* = an unambiguous shape accepted and logged; *_rejected / looks_like_* = returned to\n"
           "   the model as an error to retry; psets_dropped must be 0 — a dropped set is an invented name)")
 

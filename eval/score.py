@@ -26,6 +26,7 @@ import re
 import sys
 import warnings
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 
 import ifcopenshell
@@ -123,6 +124,10 @@ def parse_candidate(path: Path) -> dict:
         if req is not None:
             reqs += [extract.facet_target(c) for c in children(req)]
     return {"n_specs": len(specs), "requirements": reqs, "applicability": apps, "versions": versions}
+
+
+def dt_now() -> str:
+    return datetime.now().isoformat(timespec='seconds')
 
 
 def prf(tp, fp, fn):
@@ -580,6 +585,9 @@ def main(argv=None):
             w.writerows(pair_rows)
     print(f"\nscored {len(rows)} items ({not_generated} task items not generated yet); "
           f"executor cross-checked against harness.run on {cross_checked} (item, model) pairs")
+    if out_dir != run_dir:                        # remember where the generated files came from
+        (out_dir / "score_meta.json").write_text(json.dumps(
+            {"source_run": str(run_dir), "scored": dt_now()}, indent=1))
     print(f"-> {out_dir / 'scores.csv'}")
 
 

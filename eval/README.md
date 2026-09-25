@@ -1,4 +1,9 @@
-# eval/ — NL→IDS: facet F1 vs execution outcome
+# eval/ — NL→IDS: text agreement vs execution outcome
+
+v5 adds pipeline fixes (measured by ablation), graded metrics and symmetric test models.
+Run directories: `v4-baseline-rescored` (v4 files, v5 metrics), `run2-fixed`,
+`run3-no-trunc` (ablation), `run4-rep{1,2,3}` (determinism). `eval/RUNS_LABELS.json` maps
+labels to directories; the v4 directory itself is frozen.
 
 Step 1 (test set) lives in [nl_to_ids_testset/](nl_to_ids_testset/). This directory adds steps 2 and 3.
 
@@ -18,9 +23,28 @@ Generation needs the knowledge graph. To use a local rebuild instead of Aura, st
 
 ## Run
 
-    python -m eval.generate --limit 20            # resumable; writes eval/runs/<run_id>/
-    python -m eval.score eval/runs/spec_gemini-2.5-flash eval/nl_to_ids_testset/spec_tasks.jsonl eval/models
-    python -m eval.report eval/runs/spec_gemini-2.5-flash
+    python -m eval.generate --run-id run2-fixed --ids-file eval/item_lists/v4_21.json
+    python -m eval.generate --run-id run3-no-trunc --ids-file eval/item_lists/v4_21.json --no-truncation-fix
+    python -m eval.score eval/runs/run2-fixed eval/nl_to_ids_testset/spec_tasks.jsonl eval/models
+    python -m eval.score <frozen_run> <tasks> eval/models --out eval/runs/<new>   # score without touching it
+    python -m eval.report eval/runs/v4-baseline-rescored eval/runs/run2-fixed     # side by side
+    python -m eval.determinism eval/runs/run4-rep1 eval/runs/run4-rep2 eval/runs/run4-rep3
+    python -m eval.determinacy      # drafts undetermined-facet annotations for human review
+
+Default item pool: the IFC-only items (`--all` to include project-specific property sets).
+Every v5 fix has an off switch: `--no-truncation-fix`, `--no-model-guards`, `--temperature`.
+
+## Metrics
+
+    S1  strict     identical verdict on every test object (the v4 headline)
+    S2  graded     fraction of test objects both specifications judge the same way
+    S3  decomposed requirement enforcement | false rejection | applicability (in/out of scope)
+
+S2/S3 are reported for reference-derived objects, candidate-derived objects and pooled.
+Only the reference-derived population is identical across runs, so cross-run comparisons use
+`S2 on reference-derived objects`. Test models are synthetic and derived from the
+specifications themselves: they measure agreement on each requirement's own boundary cases,
+not on realistic building data.
 
 `eval/runs/` is git-ignored because `log.jsonl` holds raw graph tool results (bSDD-derived).
 
