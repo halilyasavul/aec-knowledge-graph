@@ -40,8 +40,8 @@ def hr(t):
     print(f"\n{'=' * 84}\n{t}\n{'=' * 84}")
 
 
-def load(run: Path) -> dict:
-    df = pd.read_csv(run / "scores.csv")
+def load(run: Path, scores_file: str = "scores.csv") -> dict:
+    df = pd.read_csv(run / scores_file)
     if "ifc_only" in df:
         df = df[df.ifc_only == 1].copy()
     logs = {}

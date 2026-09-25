@@ -24,8 +24,11 @@ def filter_stats() -> dict:
             "bands": {b: sum(1 for t in keep if rep.band_of(len(t["target"])) == b) for b in rep.BANDS}}
 
 
+SCORES_FILE = "scores.csv"
+
+
 def run_stats(run: Path) -> dict:
-    r = rep.load(run)
+    r = rep.load(run, SCORES_FILE)
     df, logs = r["df"], r["logs"]
     m = rep.metrics(df)
     guards = Counter()
@@ -52,6 +55,9 @@ def run_stats(run: Path) -> dict:
         "facet_f1_micro": _f(m["facet_f1_micro"]), "facet_f1_macro": _f(m["facet_f1_macro"]),
         "names_correct": list(m["names_correct"]),
         "guards": dict(guards), "errors": errs, "bands": bands,
+        "item_ids": list(df.id),
+        "provenance": {c: int(df[c].sum()) for c in df.columns
+                       if c.startswith("dt_") and df[c].sum()},
         "no_file": int((df.status != "ok").sum()),
         "gen_attempts": _f(pd.Series([x.get("retries", {}).get("generate_ids_attempts", 0)
                                      for x in logs.values()]).mean()) if logs else None,
@@ -76,12 +82,84 @@ def _f(x, dp=3):
     return None if x is None or (isinstance(x, float) and pd.isna(x)) else round(float(x), dp)
 
 
+NUMERIC = ["s2_ref", "s2", "s2_cand", "enforce", "false_reject", "app_out", "app_in",
+           "facet_f1_micro", "facet_f1_macro"]
+
+
+def cell_stats(runs: list[dict], name: str, det: dict | None = None) -> dict:
+    """Aggregate repeats of one 2x2 cell: mean and min-max for every metric."""
+    out = {"cell": name, "repeats": len(runs), "fixes": runs[0]["fixes"],
+           "items": runs[0]["items"]}
+    for k in NUMERIC:
+        vals = [r[k] for r in runs if r.get(k) is not None]
+        out[k] = {"mean": round(sum(vals) / len(vals), 3), "min": round(min(vals), 3),
+                  "max": round(max(vals), 3)} if vals else None
+    for k in ("s1", "names_correct"):
+        num = [r[k][0] for r in runs]
+        den = [r[k][1] for r in runs]
+        out[k] = {"mean": round(sum(num) / len(num), 2), "min": min(num), "max": max(num),
+                  "of": round(sum(den) / len(den), 1)}
+    for k in ("with_file", "testable", "no_file"):
+        vals = [r[k] for r in runs]
+        out[k] = {"mean": round(sum(vals) / len(vals), 1), "min": min(vals), "max": max(vals)}
+    errs: dict = {}
+    for r in runs:
+        for e, n in r["errors"].items():
+            errs.setdefault(e, []).append(n)
+    out["errors"] = {e: round(sum(v) / len(runs), 1) for e, v in errs.items()}
+    prov: dict = {}
+    for r in runs:
+        for e, n in (r.get("provenance") or {}).items():
+            prov.setdefault(e, []).append(n)
+    out["provenance"] = {e: round(sum(v) / len(runs), 1) for e, v in prov.items()}
+    hyp = [r["hypothesis"] for r in runs]
+    out["hypothesis"] = {
+        "names_correct_testable": round(sum(h["names_correct_testable"] for h in hyp) / len(hyp), 1),
+        "names_correct_s1": [sum(h["names_correct_s1"][0] for h in hyp), sum(h["names_correct_s1"][1] for h in hyp)],
+        "names_correct_s2": _f(_avg([h["names_correct_s2"] for h in hyp])),
+        "other_s1": [sum(h["other_s1"][0] for h in hyp), sum(h["other_s1"][1] for h in hyp)],
+        "other_s2": _f(_avg([h["other_s2"] for h in hyp])),
+        "distinct_facet_f1": max(h["distinct_facet_f1"] for h in hyp),
+    }
+    if det:
+        out["identical_across_repeats"] = det
+    return out
+
+
+def _avg(xs):
+    xs = [x for x in xs if x is not None]
+    return sum(xs) / len(xs) if xs else None
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("runs", nargs="+")
     ap.add_argument("-o", "--out", default="eval/reports/report_data.json")
+    ap.add_argument("--cells", action="store_true",
+                    help="group run dirs by name (strip -repN) and report mean/min-max per cell")
+    ap.add_argument("--scores", default="scores.csv", help="scores.csv or scores_relaxed.csv")
     a = ap.parse_args(argv)
-    data = {"filter": filter_stats(), "runs": [run_stats(Path(r)) for r in a.runs]}
+    global SCORES_FILE
+    SCORES_FILE = a.scores
+    runs = [run_stats(Path(r)) for r in a.runs]
+    data = {"filter": filter_stats(), "runs": runs, "scores_file": a.scores}
+    if a.cells:
+        import re as _re
+        from eval.determinism import signature as _sig
+        groups: dict = {}
+        for r, path in zip(runs, a.runs):
+            groups.setdefault(_re.sub(r"-rep\d+$", "", r["name"]), []).append((r, Path(path)))
+        cells = []
+        for name, members in groups.items():
+            det = None
+            if len(members) > 1:
+                ids = [i for i in members[0][0]["item_ids"]]
+                same = sum(1 for i in ids
+                           if len({_sig(m[1] / "generated" / f"{safe_name(i)}.ids") for m in members}) == 1
+                           and all((m[1] / "generated" / f"{safe_name(i)}.ids").exists() for m in members))
+                det = {"identical": same, "items": len(ids)}
+            cells.append(cell_stats([m[0] for m in members], name, det))
+        data["cells"] = cells
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(data, indent=1), encoding="utf-8")
     print(f"wrote {a.out}: filter + {len(data['runs'])} runs")
