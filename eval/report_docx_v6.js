@@ -76,6 +76,7 @@ function table(widths, rows) {
 }
 
 const dtOn = [Sx["run6-lk0dt1"], Sx["run6-lk1dt1"]], dtOff = [Sx["run6-lk0dt0"], Sx["run6-lk1dt0"]];
+const lkOn = [Sx["run6-lk1dt0"], Sx["run6-lk1dt1"]], lkOff = [Sx["run6-lk0dt0"], Sx["run6-lk0dt1"]];
 const avg = (cs, f) => cs.reduce((a, c) => a + f(c), 0) / cs.length;
 
 const children = [
@@ -89,11 +90,11 @@ const children = [
     ["Effect of turning the fix on", "Lookup fix", "dataType fix"],
     ["Text: all property names correct (items)", sign(margNames("lk"), 1), sign(margNames("dt"), 1)],
     ["Text: text match (facet F1)", sign(marg("facet_f1_macro", "lk")), sign(marg("facet_f1_macro", "dt"))],
-    [["Behaviour: object agreement (S2)", B], [sign(marg("s2_ref", "lk")), B], [sign(marg("s2_ref", "dt")), B]],
-    [["Behaviour: wrongly rejects correct objects", B], [sign(marg("false_reject", "lk")), B], [sign(marg("false_reject", "dt")), B]],
+    [[["Behaviour: object agreement (S2)", B]], [[sign(marg("s2_ref", "lk")), B]], [[sign(marg("s2_ref", "dt")), B]]],
+    [[["Behaviour: wrongly rejects correct objects", B]], [[sign(marg("false_reject", "lk")), B]], [[sign(marg("false_reject", "dt")), B]]],
   ]),
   gap(),
-  rich([["Read it this way: ", B], "the dataType fix barely changed the text scores but halved wrong rejections and lifted behavioural agreement sharply. The lookup fix did the opposite — it cut invented property sets (from ", `${avg(dtOff, (c) => c.errors.hallucinated_pset || 0).toFixed(1)} to ${avg(dtOn, (c) => c.errors.hallucinated_pset || 0).toFixed(1)} per run in the dataType-on cells`, " and removed wrong property sets entirely in the all-fixes cell) without moving behaviour at all. A text score and a behaviour score answer different questions; improving one does not imply the other."]),
+  rich([["Read it this way: ", B], "the dataType fix barely changed the text scores but halved wrong rejections and lifted behavioural agreement sharply. The lookup fix did the opposite — it cut invented property sets (from ", `${avg(lkOff, (c) => c.errors.hallucinated_pset || 0).toFixed(1)} to ${avg(lkOn, (c) => c.errors.hallucinated_pset || 0).toFixed(1)} per run`, " and removed wrong property sets entirely in the all-fixes cell) without moving behaviour at all. A text score and a behaviour score answer different questions; improving one does not imply the other."]),
 
   h1("2. The predictions we committed before running"),
   p("We wrote these down and committed them before the first cell ran, so they could not be adjusted afterwards."),
@@ -176,7 +177,8 @@ if (run5s) {
       ["All names correct", a.names_correct.mean.toFixed(1), b ? b.names_correct.mean.toFixed(1) : "n/a"],
     ]),
     gap(),
-    rich([["Consistent with the 2×2: ", B], `on the wider set the system reproduces the reference's behaviour exactly on ${b ? s1(b) : s1(a)} items once unguessable details are excluded, and agrees on ${b ? f2(b.s2_ref.mean) : f2(a.s2_ref.mean)} of test objects.`]),
+    rich([["Better than the 2×2 cells, and that difference is the item pool, not the system: ", B],
+      `the 21 items used for the 2×2 are the harder subset (they were chosen in v4), so the all-fixes cell reads ${s1(Sx["run6-lk1dt1"])} and ${f2(Sx["run6-lk1dt1"].s2_ref.mean)} agreement while the full pool reads ${s1(a)} and ${f2(a.s2_ref.mean)}. On the wider set the system reproduces the reference's behaviour exactly on ${b ? s1(b) : s1(a)} items once unguessable details are excluded, and agrees on ${b ? f2(b.s2_ref.mean) : f2(a.s2_ref.mean)} of test objects. Repeats of the full pool produced an identical specification for ${a.identical_across_repeats ? a.identical_across_repeats.identical + " of " + a.identical_across_repeats.items : "n/a"} items.`]),
   );
 }
 
