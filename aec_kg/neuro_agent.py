@@ -19,6 +19,10 @@ from aec_kg.config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
 
 logger = logging.getLogger(__name__)
 
+# Serve the exact IFC type with each property. Off restores the pre-v6 behaviour, where the
+# model had only bSDD's coarse data_type to work from (eval/generate.py --no-datatype-fix).
+INCLUDE_IFC_TYPE = True
+
 _driver: neo4j.Driver | None = None
 
 
@@ -77,6 +81,8 @@ def get_class_requirements(class_code: str) -> dict:
            prop.name           AS prop_name,
            prop.definition     AS prop_definition,
            prop.data_type      AS prop_data_type,
+           prop.ifc_type       AS prop_ifc_type,
+           prop.ifc_type_source AS prop_ifc_type_source,
            prop.property_value_kind AS prop_value_kind,
            prop.allowed_values AS prop_allowed_values
     """
@@ -131,14 +137,19 @@ def get_class_requirements(class_code: str) -> dict:
         allowed_raw = rec["prop_allowed_values"]
         allowed = json.loads(allowed_raw) if allowed_raw else []
 
-        result["property_sets"][pset_code]["properties"].append({
+        entry = {
             "code": prop_code,
             "name": rec["prop_name"],
             "definition": rec["prop_definition"],
             "data_type": rec["prop_data_type"],
             "property_value_kind": rec["prop_value_kind"],
             "allowed_values": allowed,
-        })
+        }
+        if INCLUDE_IFC_TYPE and rec["prop_ifc_type"]:
+            # The IDS dataType, parsed from bSDD's description text at ingestion. bSDD's own
+            # data_type ("String") is too coarse for IDS, which wants IfcLabel/IfcText/...
+            entry["ifc_type"] = rec["prop_ifc_type"]
+        result["property_sets"][pset_code]["properties"].append(entry)
 
     logger.info(
         "Retrieved requirements for %s: %d property sets.",

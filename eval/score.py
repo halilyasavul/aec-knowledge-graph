@@ -34,7 +34,8 @@ from lxml import etree
 from ifctester import ids as idsmod, reporter
 
 from eval import witness
-from eval.common import TESTSET_DIR, XSD_IFC_VERSIONS, graph_psets, ifc_only, load_tasks, safe_name
+from eval.common import (TESTSET_DIR, XSD_IFC_VERSIONS, graph_property_types, graph_psets,
+                         ifc_only, load_tasks, safe_name)
 
 warnings.filterwarnings("ignore")
 
@@ -124,6 +125,31 @@ def parse_candidate(path: Path) -> dict:
         if req is not None:
             reqs += [extract.facet_target(c) for c in children(req)]
     return {"n_specs": len(specs), "requirements": reqs, "applicability": apps, "versions": versions}
+
+
+def relax(item: dict, ann: list) -> dict:
+    """Drop what the request cannot determine: unmentioned requirements go, and value
+    constraints nobody could recover are removed while the requirement itself stays."""
+    drop = {a["facet_index"] for a in ann if a["scope"] == "facet"}
+    devalue = {a["facet_index"] for a in ann if a["scope"] == "value"}
+    target = []
+    for i, f in enumerate(item["target"]):
+        if i in drop:
+            continue
+        g = dict(f)
+        if i in devalue:
+            g.pop("value", None)
+        target.append(g)
+    return {**item, "target": target}
+
+
+def load_annotations(path: Path) -> dict:
+    out: dict = {}
+    if path.exists():
+        for line in open(path, encoding="utf-8"):
+            r = json.loads(line)
+            out.setdefault(r["id"], []).append(r)
+    return out
 
 
 def dt_now() -> str:
@@ -362,6 +388,8 @@ def taxonomy(item: dict, cand: dict | None, psets: dict | None, ext: dict | None
     for g in cand["requirements"]:
         dt_ = (g.get("dataType") or "").strip()
         e["invalid_datatype"] += int(bool(dt_) and not _is_ifc_type(dt_))
+    if not all("IFC4X3_ADD2" in v.split() for v in cand["versions"] if v):
+        e["ifcversion_excludes_model"] += 1      # a version-filtering checker applies it to nothing
     bad = [v for v in " ".join(cand["versions"]).split() if v not in XSD_IFC_VERSIONS]
     if bad:
         e["bad_ifcversion"] += 1
@@ -388,10 +416,34 @@ def _is_ifc_type(name: str) -> bool:
 
 
 PLACEHOLDERS = {"required", "mandatory", "any", "*", "present", "exists", "not empty", "notempty", "yes"}
+def datatype_provenance(cand: dict, ptypes: dict | None) -> dict:
+    """Where did each generated dataType come from? The fix only works if the model copies
+    the graph's ifc_type, so count that explicitly rather than inferring it from accuracy."""
+    out = Counter()
+    if cand is None or ptypes is None:
+        return {}
+    for f in cand["requirements"]:
+        if f["facet"] != "property":
+            continue
+        dt = (f.get("dataType") or "").upper()
+        ps, bn = f.get("propertySet") or "", f.get("baseName") or ""
+        known = (ptypes.get(ps) or {}).get(bn)
+        if not dt:
+            out["dt_omitted"] += 1
+        elif known and known[0] and dt == known[0].upper():
+            out["dt_from_graph"] += 1
+            out[f"dt_src_{known[1]}"] += 1
+        elif known and not known[0]:
+            out["dt_model_choice_no_graph_type"] += 1
+        else:
+            out["dt_model_choice"] += 1
+    return dict(out)
+
+
 ERROR_COLS = ["no_file", "wrong_datatype", "hallucinated_pset", "wrong_pset", "missing_requirement",
               "extra_requirement", "applicability_too_broad", "applicability_too_narrow",
               "applicability_disjoint", "wrong_cardinality", "wrong_value", "bad_ifcversion",
-              "empty_restriction", "placeholder_value", "invalid_datatype"]
+              "empty_restriction", "placeholder_value", "invalid_datatype", "ifcversion_excludes_model"]
 FACET_KINDS = ["property", "attribute", "classification", "material", "partOf", "entity"]
 
 
@@ -404,25 +456,40 @@ def main(argv=None):
     ap.add_argument("models_dir")
     ap.add_argument("--out", help="write scores/reference/witness here instead of into run_dir "
                                  "(use this to score a frozen run without touching it)")
+    ap.add_argument("--relaxed", action="store_true",
+                    help="score against the determined-only reference (eval/annotations/determinacy.jsonl)")
+    ap.add_argument("--annotations", default="eval/annotations/determinacy.jsonl")
     args = ap.parse_args(argv if argv is not None else sys.argv[1:])
     run_dir, tasks_path, models_dir = Path(args.run_dir), Path(args.tasks), Path(args.models_dir)
     out_dir = Path(args.out) if args.out else run_dir
     out_dir.mkdir(parents=True, exist_ok=True)
-    gen_dir, ref_dir = run_dir / "generated", out_dir / "reference"
-    ref_dir.mkdir(exist_ok=True)
 
     tasks = {t["id"]: t for t in load_tasks(tasks_path)}
+    suffix = ""
+    if args.relaxed:
+        ann = load_annotations(Path(args.annotations))
+        if not ann:
+            sys.exit(f"no annotations at {args.annotations}; run python -m eval.determinacy first")
+        n_before = sum(len(t["target"]) for t in tasks.values())
+        tasks = {i: (relax(t, ann[i]) if i in ann else t) for i, t in tasks.items()}
+        n_after = sum(len(t["target"]) for t in tasks.values())
+        suffix = "_relaxed"
+        print(f"determined-only reference: {n_before - n_after} requirements dropped, "
+              f"{sum(1 for v in ann.values() for a in v if a['scope'] == 'value')} value constraints removed")
     log = {}
     if (run_dir / "log.jsonl").exists():
         for line in open(run_dir / "log.jsonl", encoding="utf-8"):
             r = json.loads(line)
             log[r["id"]] = r                          # last attempt wins
+    gen_dir, ref_dir = run_dir / "generated", out_dir / ("reference" + suffix)
+    ref_dir.mkdir(exist_ok=True)
     models = {}
     for p in sorted(models_dir.glob("*.ifc")):
         m = ifcopenshell.open(str(p))
         models[p.stem] = m
     print(f"{len(models)} models: " + ", ".join(f"{k} ({m.schema_identifier})" for k, m in models.items()))
     psets = graph_psets(out_dir) if (out_dir / "graph_psets.json").exists() else graph_psets(run_dir)
+    ptypes = graph_property_types(out_dir)
 
     rows, pair_rows, cross_checked = [], [], 0
     not_generated = 0
@@ -517,7 +584,7 @@ def main(argv=None):
                 row[pre + "outcome_equiv"] = None
 
         # ---------------- B'. graded, symmetric test models (eval/witness.py)
-        wit = witness.build(item, out_dir / "witness" / f"{name}.ifc", candidate=cand)
+        wit = witness.build(item, out_dir / ("witness" + suffix) / f"{name}.ifc", candidate=cand)
         row["wit_unsupported"] = " | ".join(wit["unsupported"])[:400]
         row["wit_candidate_note"] = wit.get("candidate_note")
         row["wit_sides"] = json.dumps(wit.get("sides", {}))
@@ -562,6 +629,7 @@ def main(argv=None):
         ext = ({"over_applicable": row.get(f"{src}_over_applicable"),
                 "under_applicable": row.get(f"{src}_under_applicable")}
                if row.get(f"{src}_outcome_equiv") is not None else None)
+        row.update(datatype_provenance(cand, ptypes))
         tax = taxonomy(item, cand, psets, ext)
         row.update({f"err_{k}": tax.get(k, 0) for k in ERROR_COLS})
         if psets is not None:
@@ -574,12 +642,12 @@ def main(argv=None):
     cols = []
     for r_ in rows:
         cols += [k for k in r_ if k not in cols]
-    with open(out_dir / "scores.csv", "w", newline="", encoding="utf-8") as fh:
+    with open(out_dir / f"scores{suffix}.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=cols)
         w.writeheader()
         w.writerows(rows)
     if pair_rows:
-        with open(out_dir / "pairs.csv", "w", newline="", encoding="utf-8") as fh:
+        with open(out_dir / f"pairs{suffix}.csv", "w", newline="", encoding="utf-8") as fh:
             w = csv.DictWriter(fh, fieldnames=list(pair_rows[0]))
             w.writeheader()
             w.writerows(pair_rows)
@@ -588,7 +656,7 @@ def main(argv=None):
     if out_dir != run_dir:                        # remember where the generated files came from
         (out_dir / "score_meta.json").write_text(json.dumps(
             {"source_run": str(run_dir), "scored": dt_now()}, indent=1))
-    print(f"-> {out_dir / 'scores.csv'}")
+    print(f"-> {out_dir / f'scores{suffix}.csv'}")
 
 
 if __name__ == "__main__":

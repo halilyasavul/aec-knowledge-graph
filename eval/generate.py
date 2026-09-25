@@ -42,6 +42,12 @@ PRICE_OUT_PER_M = 2.50
 
 ALLOWED_PROMPT_KEYS = {"applies_to", "requirements"}
 
+# The schema of the models every candidate is executed against. Stated in the request because
+# 19% of v5 behavioural failures were specs whose declared ifcVersion excluded the test model —
+# a question about the delivery context, not about the requirements. It is the same constant for
+# every item, so it carries no information about any individual item's answer.
+TARGET_SCHEMA = "IFC4X3_ADD2"
+
 
 class PinViolation(RuntimeError):
     pass
@@ -55,7 +61,8 @@ def build_message(prompt: dict) -> str:
     target = app.get("entity", "")
     if app.get("predefinedType"):
         target += f" (predefined type: {app['predefinedType']})"
-    lines = ["Generate an IDS specification.", f"Applies to: {target}", "Requirements:"]
+    lines = ["Generate an IDS specification.", f"Target schema: {TARGET_SCHEMA}",
+             f"Applies to: {target}", "Requirements:"]
     lines += [f"{i}. {r}" for i, r in enumerate(prompt["requirements"], 1)]
     return "\n".join(lines)
 
@@ -228,11 +235,14 @@ def main(argv=None):
     ap.add_argument("--temperature", type=float, default=0.0, help="0 for eval reproducibility (the app leaves it unset)")
     ap.add_argument("--no-truncation-fix", action="store_true", help="ablation: restore the pre-v5 tool-result trimming")
     ap.add_argument("--no-model-guards", action="store_true", help="ablation: restore lenient IDS models (unknown keys ignored)")
+    ap.add_argument("--no-datatype-fix", action="store_true",
+                    help="ablation: hide the graph's ifc_type and restore the String->IFCTEXT mapping")
     args = ap.parse_args(argv)
 
     import aec_kg.ids.validator as validator
     validator.STRICT = True                       # a missing XSD must raise, never pass
     import aec_kg.ids.models as ids_models
+    import aec_kg.neuro_agent as neuro
     import aec_kg.main_orchestrator as mo
     logging.getLogger().setLevel(logging.WARNING)  # after aec_kg.config's basicConfig(INFO)
     mo.GEMINI_MODEL = PINNED_MODEL                # explicit, independent of .env
@@ -240,7 +250,10 @@ def main(argv=None):
         mo.LEGACY_TRUNCATION = True               # v4 behaviour: whole property sets can vanish
     if args.no_model_guards:
         ids_models.set_guards(False)              # v4 behaviour: unknown keys silently ignored
+    neuro.INCLUDE_IFC_TYPE = not args.no_datatype_fix
+    mo.set_datatype_mode(not args.no_datatype_fix)
     fixes = {"truncation_fix": not args.no_truncation_fix, "model_guards": not args.no_model_guards,
+             "datatype_fix": not args.no_datatype_fix,
              "temperature": args.temperature, "max_tool_result_chars": mo.MAX_TOOL_RESULT_CHARS,
              "legacy_truncation": mo.LEGACY_TRUNCATION, "strict_xsd": True}
 

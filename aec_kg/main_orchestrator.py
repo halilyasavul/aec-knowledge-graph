@@ -170,9 +170,13 @@ For custom properties without an IFC match, suggest a PropertySet name like
   1. Use query_class to find exact PropertySet/Property names.
   2. Call generate_ids with structured JSON.
   - Entity names MUST be UPPERCASE (e.g. "IFCWALL").
-  - dataType MUST be UPPERCASE IFC type (e.g. "IFCTEXT", "IFCBOOLEAN").
-  - Data type mapping: String->IFCTEXT, Real->IFCREAL, Boolean->IFCBOOLEAN,
-    Integer->IFCINTEGER, Character->IFCLABEL.
+  - dataType MUST be UPPERCASE IFC type (e.g. "IFCLABEL", "IFCBOOLEAN").
+  - Each property returned by query_class carries "ifc_type": the exact IFC
+    data type for that property. COPY IT EXACTLY as the dataType. Do NOT
+    derive the dataType from "data_type" (bSDD's coarse kind: String, Real,
+    ...) — "String" is IFCLABEL, IFCIDENTIFIER or IFCTEXT depending on the
+    property, and only "ifc_type" says which.
+  - If a property has no "ifc_type", omit dataType rather than guessing.
   - NEVER paste the IDS XML into your reply. When generate_ids returns
     success, the file is attached to the chat as a downloadable .ids file
     automatically — briefly summarize what the specification requires
@@ -195,6 +199,31 @@ For custom properties without an IFC match, suggest a PropertySet name like
     you truly have nothing to work from, ask the user which IFC class or
     concept the specification is for.
 """
+
+SYSTEM_PROMPT_PRE_V6 = SYSTEM_PROMPT.replace(
+    """  - dataType MUST be UPPERCASE IFC type (e.g. "IFCLABEL", "IFCBOOLEAN").
+  - Each property returned by query_class carries "ifc_type": the exact IFC
+    data type for that property. COPY IT EXACTLY as the dataType. Do NOT
+    derive the dataType from "data_type" (bSDD's coarse kind: String, Real,
+    ...) — "String" is IFCLABEL, IFCIDENTIFIER or IFCTEXT depending on the
+    property, and only "ifc_type" says which.
+  - If a property has no "ifc_type", omit dataType rather than guessing.
+""",
+    """  - dataType MUST be UPPERCASE IFC type (e.g. "IFCTEXT", "IFCBOOLEAN").
+  - Data type mapping: String->IFCTEXT, Real->IFCREAL, Boolean->IFCBOOLEAN,
+    Integer->IFCINTEGER, Character->IFCLABEL.
+""")
+
+
+def set_datatype_mode(use_graph_types: bool) -> None:
+    """Choose the dataType guidance: the v6 graph-supplied ifc_type, or the old mapping
+    table that produced IFCTEXT wherever bSDD said "String"."""
+    global SYSTEM_PROMPT
+    SYSTEM_PROMPT = _SYSTEM_PROMPT_V6 if use_graph_types else SYSTEM_PROMPT_PRE_V6
+
+
+_SYSTEM_PROMPT_V6 = SYSTEM_PROMPT
+
 
 # ---------------------------------------------------------------------------
 # Tool declarations (Gemini function calling format)

@@ -18,6 +18,7 @@ Usage:
 """
 
 import json
+import re
 import logging
 import time
 
@@ -94,14 +95,65 @@ def _run_in_batches(driver: neo4j.Driver, query: str, param_name: str, items: li
     return total
 
 
-def create_property_nodes(driver: neo4j.Driver, properties: list) -> None:
+# ---------------------------------------------------------------------------
+# IFC data types
+# ---------------------------------------------------------------------------
+# bSDD's structured DataType is too coarse for IDS: it says "String" where IFC wants
+# IfcLabel, IfcIdentifier or IfcText. The exact type is only in the free-text description
+# ("Technical note: in IFC this property takes 'IfcLabel' as value."), so parse it out.
+
+_IFC_TYPE_SENTENCE = re.compile(r"takes '(Ifc\w+)' as value", re.IGNORECASE)
+
+# Quantity sets carry no type sentence; a quantity's kind is unambiguous from its name.
+_QTO_KIND = [
+    ("area", "IfcAreaMeasure"), ("volume", "IfcVolumeMeasure"), ("weight", "IfcMassMeasure"),
+    ("perimeter", "IfcLengthMeasure"), ("length", "IfcLengthMeasure"), ("width", "IfcLengthMeasure"),
+    ("height", "IfcLengthMeasure"), ("depth", "IfcLengthMeasure"), ("thickness", "IfcLengthMeasure"),
+    ("diameter", "IfcLengthMeasure"), ("count", "IfcCountMeasure"), ("number", "IfcCountMeasure"),
+    ("time", "IfcTimeMeasure"), ("duration", "IfcTimeMeasure"),
+]
+
+
+def resolve_ifc_type(prop: dict, qto_only: bool) -> tuple:
+    """Return (ifc_type, source). None means: say nothing rather than guess."""
+    text = f"{prop.get('Description') or ''} {prop.get('Definition') or ''}"
+    m = _IFC_TYPE_SENTENCE.search(text)
+    if m:
+        return m.group(1).upper(), "bsdd_text"
+    if qto_only:
+        name = (prop.get("Code") or "").casefold()
+        hits = {t for kind, t in _QTO_KIND if kind in name}
+        if len(hits) == 1:
+            return hits.pop().upper(), "qto_kind"
+    if (prop.get("DataType") or "") == "String":
+        return "IFCLABEL", "string_default"
+    return None, "omitted"
+
+
+def qto_only_codes(data: dict) -> set:
+    """Property codes used only by Qto_ sets."""
+    use = {}
+    for c in data.get("Classes", []):
+        for cp in (c.get("ClassProperties") or []):
+            ps = cp.get("PropertySet")
+            if ps:
+                use.setdefault(cp["PropertyCode"], set()).add(ps)
+    return {k for k, v in use.items() if v and all(x.startswith("Qto_") for x in v)}
+
+
+def create_property_nodes(driver: neo4j.Driver, properties: list, qto_only: set | None = None) -> None:
     """Create Property nodes from the top-level Properties array."""
     logger.info("Creating %d Property nodes...", len(properties))
 
-    rows = []
+    qto_only = qto_only or set()
+    rows, sources = [], {}
     for p in properties:
         allowed = p.get("AllowedValues")
+        ifc_type, source = resolve_ifc_type(p, p["Code"] in qto_only)
+        sources[source] = sources.get(source, 0) + 1
         rows.append({
+            "ifc_type": ifc_type,
+            "ifc_type_source": source,
             "code": p["Code"],
             "name": p.get("Name", ""),
             "definition": p.get("Definition", ""),
@@ -119,10 +171,12 @@ def create_property_nodes(driver: neo4j.Driver, properties: list) -> None:
         prop.data_type         = r.data_type,
         prop.property_value_kind = r.property_value_kind,
         prop.description       = r.description,
-        prop.allowed_values    = r.allowed_values
+        prop.allowed_values    = r.allowed_values,
+        prop.ifc_type          = r.ifc_type,
+        prop.ifc_type_source   = r.ifc_type_source
     """
     count = _run_in_batches(driver, query, "rows", rows)
-    logger.info("Created %d Property nodes.", count)
+    logger.info("Created %d Property nodes. IFC type sources: %s", count, sources)
 
 
 def create_property_set_nodes(driver: neo4j.Driver, group_of_properties: list) -> None:
@@ -678,7 +732,7 @@ def main() -> None:
     classes, property_sets = split_classes(data["Classes"])
     properties = data["Properties"]
 
-    create_property_nodes(driver, properties)
+    create_property_nodes(driver, properties, qto_only_codes(data))
     create_property_set_nodes(driver, property_sets)
     create_class_nodes(driver, classes)
 
