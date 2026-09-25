@@ -144,6 +144,17 @@ def cast(kind: str, v):
     return str(v)
 
 
+def _safe(fn):
+    """Candidate specifications are arbitrary: an unrepresentable value means 'no such test
+    object', never a crash."""
+    def wrap(*a, **kw):
+        try:
+            return fn(*a, **kw)
+        except Exception:
+            return None
+    return wrap
+
+
 def ok_value(kind: str, r: dict | None):
     """A value of `kind` satisfying restriction r (None = unconstrained)."""
     if r is None:
@@ -212,6 +223,9 @@ def bad_value(kind: str, r: dict | None):
         return "W" * max(int(r["minLength"]) - 1, 0) or None
     return None
 
+
+ok_value = _safe(ok_value)
+bad_value = _safe(bad_value)
 
 ALT_TYPE = {"IFCLABEL": "IFCTEXT", "IFCTEXT": "IFCLABEL", "IFCIDENTIFIER": "IFCLABEL",
             "IFCBOOLEAN": "IFCLOGICAL", "IFCLOGICAL": "IFCBOOLEAN", "IFCREAL": "IFCINTEGER",
@@ -328,6 +342,14 @@ def _attr_kind(cls: str, name: str):
 
 
 def apply_facet(b: Builder, el, f: dict, mode: str = "ok", r_override: dict | None = None) -> bool:
+    try:
+        return _apply_facet(b, el, f, mode, r_override)
+    except Exception as e:                           # never let one odd facet kill the run
+        b.unsupported.append(f"facet {f.get('facet')} {mode}: {type(e).__name__}: {e}"[:160])
+        return False
+
+
+def _apply_facet(b: Builder, el, f: dict, mode: str = "ok", r_override: dict | None = None) -> bool:
     """Put requirement f on element el. mode: ok | bad (violating value) | badtype. False = couldn't."""
     kind_ = f["facet"]
     r = r_override if r_override is not None else parse(f.get("value"))

@@ -392,11 +392,18 @@ FACET_KINDS = ["property", "attribute", "classification", "material", "partOf", 
 
 # =========================================================================== main
 def main(argv=None):
-    argv = argv if argv is not None else sys.argv[1:]
-    if len(argv) != 3:
-        sys.exit(__doc__)
-    run_dir, tasks_path, models_dir = Path(argv[0]), Path(argv[1]), Path(argv[2])
-    gen_dir, ref_dir = run_dir / "generated", run_dir / "reference"
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("run_dir")
+    ap.add_argument("tasks")
+    ap.add_argument("models_dir")
+    ap.add_argument("--out", help="write scores/reference/witness here instead of into run_dir "
+                                 "(use this to score a frozen run without touching it)")
+    args = ap.parse_args(argv if argv is not None else sys.argv[1:])
+    run_dir, tasks_path, models_dir = Path(args.run_dir), Path(args.tasks), Path(args.models_dir)
+    out_dir = Path(args.out) if args.out else run_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+    gen_dir, ref_dir = run_dir / "generated", out_dir / "reference"
     ref_dir.mkdir(exist_ok=True)
 
     tasks = {t["id"]: t for t in load_tasks(tasks_path)}
@@ -410,7 +417,7 @@ def main(argv=None):
         m = ifcopenshell.open(str(p))
         models[p.stem] = m
     print(f"{len(models)} models: " + ", ".join(f"{k} ({m.schema_identifier})" for k, m in models.items()))
-    psets = graph_psets(run_dir)
+    psets = graph_psets(out_dir) if (out_dir / "graph_psets.json").exists() else graph_psets(run_dir)
 
     rows, pair_rows, cross_checked = [], [], 0
     not_generated = 0
@@ -505,7 +512,7 @@ def main(argv=None):
                 row[pre + "outcome_equiv"] = None
 
         # ---------------- B'. graded, symmetric test models (eval/witness.py)
-        wit = witness.build(item, run_dir / "witness" / f"{name}.ifc", candidate=cand)
+        wit = witness.build(item, out_dir / "witness" / f"{name}.ifc", candidate=cand)
         row["wit_unsupported"] = " | ".join(wit["unsupported"])[:400]
         row["wit_candidate_note"] = wit.get("candidate_note")
         row["wit_sides"] = json.dumps(wit.get("sides", {}))
@@ -562,18 +569,18 @@ def main(argv=None):
     cols = []
     for r_ in rows:
         cols += [k for k in r_ if k not in cols]
-    with open(run_dir / "scores.csv", "w", newline="", encoding="utf-8") as fh:
+    with open(out_dir / "scores.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=cols)
         w.writeheader()
         w.writerows(rows)
     if pair_rows:
-        with open(run_dir / "pairs.csv", "w", newline="", encoding="utf-8") as fh:
+        with open(out_dir / "pairs.csv", "w", newline="", encoding="utf-8") as fh:
             w = csv.DictWriter(fh, fieldnames=list(pair_rows[0]))
             w.writeheader()
             w.writerows(pair_rows)
     print(f"\nscored {len(rows)} items ({not_generated} task items not generated yet); "
           f"executor cross-checked against harness.run on {cross_checked} (item, model) pairs")
-    print(f"-> {run_dir / 'scores.csv'}")
+    print(f"-> {out_dir / 'scores.csv'}")
 
 
 if __name__ == "__main__":
