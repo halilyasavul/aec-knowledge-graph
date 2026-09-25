@@ -87,7 +87,8 @@ def assert_no_leak(item: dict, message: str) -> None:
 
 # --------------------------------------------------------------------------- instrumentation
 class Recorder:
-    def __init__(self):
+    def __init__(self, temperature: float | None = None):
+        self.temperature = temperature
         self.reset()
 
     def reset(self):
@@ -95,7 +96,7 @@ class Recorder:
         self.tool_calls: list[dict] = []
         self.api_retries = 0
         self.empty_retries = 0
-        self.temperature = "unset"
+        self.guards_before = None
 
 
 class _RetryCounter(logging.Handler):
@@ -117,7 +118,8 @@ def instrument(mo, rec: Recorder) -> None:
     def call(client, model, contents, config):
         if model != PINNED_MODEL:
             raise PinViolation(f"orchestrator requested {model!r}, pinned {PINNED_MODEL!r}")
-        rec.temperature = getattr(config, "temperature", None)
+        if rec.temperature is not None and getattr(config, "temperature", None) != rec.temperature:
+            config = config.model_copy(update={"temperature": rec.temperature})
         t0 = time.perf_counter()
         resp = orig_call(client, model, contents, config)
         u = resp.usage_metadata
@@ -139,11 +141,18 @@ def instrument(mo, rec: Recorder) -> None:
         t0 = time.perf_counter()
         result = orig_dispatch(name, args)
         size = len(json.dumps(result, default=str, ensure_ascii=False))
+        delivered = mo.maybe_truncate(result)          # exactly what run_agent will send on
+        dsize = len(json.dumps(delivered, default=str, ensure_ascii=False))
+        sets_in = set((result or {}).get("property_sets") or {})
+        sets_out = set((delivered or {}).get("property_sets") or {})
         rec.tool_calls.append({
             "tool": name, "args": args,
             "result": json.loads(json.dumps(result, default=str, ensure_ascii=False)),
             "ms": round((time.perf_counter() - t0) * 1000),
-            "result_chars": size, "truncated_for_model": size > 25000,
+            "result_chars": size, "delivered_chars": dsize, "truncated_for_model": dsize < size,
+            "property_sets_in": len(sets_in), "property_sets_delivered": len(sets_out),
+            "property_sets_dropped": sorted(sets_in - sets_out),
+            "truncation": (delivered or {}).get("_truncation"),
         })
         return result
 
@@ -215,23 +224,37 @@ def main(argv=None):
     ap.add_argument("--all", action="store_true",
                     help="include items needing project-specific property sets (default: IFC-only items)")
     ap.add_argument("--limit", type=int, default=None, help="only the first N items of the fixed order (completed ones count toward N)")
+    ap.add_argument("--ids-file", help="JSON list of item ids to run (exactly those, in that order)")
+    ap.add_argument("--temperature", type=float, default=0.0, help="0 for eval reproducibility (the app leaves it unset)")
+    ap.add_argument("--no-truncation-fix", action="store_true", help="ablation: restore the pre-v5 tool-result trimming")
+    ap.add_argument("--no-model-guards", action="store_true", help="ablation: restore lenient IDS models (unknown keys ignored)")
     args = ap.parse_args(argv)
 
     import aec_kg.ids.validator as validator
     validator.STRICT = True                       # a missing XSD must raise, never pass
+    import aec_kg.ids.models as ids_models
     import aec_kg.main_orchestrator as mo
     logging.getLogger().setLevel(logging.WARNING)  # after aec_kg.config's basicConfig(INFO)
     mo.GEMINI_MODEL = PINNED_MODEL                # explicit, independent of .env
+    if args.no_truncation_fix:
+        mo.LEGACY_TRUNCATION = True               # v4 behaviour: whole property sets can vanish
+    if args.no_model_guards:
+        ids_models.set_guards(False)              # v4 behaviour: unknown keys silently ignored
+    fixes = {"truncation_fix": not args.no_truncation_fix, "model_guards": not args.no_model_guards,
+             "temperature": args.temperature, "max_tool_result_chars": mo.MAX_TOOL_RESULT_CHARS,
+             "legacy_truncation": mo.LEGACY_TRUNCATION, "strict_xsd": True}
 
     run_dir = RUNS_DIR / args.run_id
     gen_dir = run_dir / "generated"
     gen_dir.mkdir(parents=True, exist_ok=True)
 
     meta = run_metadata(mo)
+    meta["fixes"] = fixes
     meta_path = run_dir / "run.json"
     if meta_path.exists():
         prev = json.loads(meta_path.read_text())
-        for k in ("model", "model_api_version", "system_prompt_sha256", "xsd_sha256", "graph_counts", "message_template"):
+        for k in ("model", "model_api_version", "system_prompt_sha256", "xsd_sha256", "graph_counts",
+                  "message_template", "fixes"):
             if prev.get(k) != meta.get(k):
                 sys.exit(f"refusing to resume {args.run_id}: {k} changed ({prev.get(k)!r} -> {meta.get(k)!r})")
     else:
@@ -239,11 +262,19 @@ def main(argv=None):
         meta["created"] = dt.datetime.now().isoformat(timespec="seconds")
         meta_path.write_text(json.dumps(meta, indent=2, default=str))
 
-    rec = Recorder()
+    rec = Recorder(temperature=args.temperature)
     instrument(mo, rec)
 
     tasks = ordered(load_tasks(args.tasks))
-    if not args.all:
+    if args.ids_file:
+        wanted = json.loads(Path(args.ids_file).read_text())
+        by_id = {t["id"]: t for t in tasks}
+        missing = [i for i in wanted if i not in by_id]
+        if missing:
+            sys.exit(f"ids not found in tasks: {missing}")
+        tasks = [by_id[i] for i in wanted]
+        print(f"explicit id list: {len(tasks)} items")
+    elif not args.all:
         psets = graph_psets(run_dir)
         if psets is None:
             sys.exit("graph needed to select IFC-only items (or pass --all)")
@@ -267,6 +298,7 @@ def main(argv=None):
         assert_no_leak(item, message)
 
         rec.reset()
+        guards0 = dict(ids_models.GUARDS)
         entry = {"id": item["id"], "file": name, "model": PINNED_MODEL, "model_api_version": PINNED_MODEL_VERSION,
                  "temperature": None, "prompt_sent": message, "prompt_chars": len(message),
                  "started": dt.datetime.now().isoformat(timespec="seconds")}
@@ -294,6 +326,10 @@ def main(argv=None):
             "thinking_tokens": sum(c["thinking_tokens"] for c in rec.llm_calls),
             "cost_usd": round(tin / 1e6 * PRICE_IN_PER_M + tout / 1e6 * PRICE_OUT_PER_M, 6),
             "answer": answer,
+            "guards_fired": {k: v - guards0.get(k, 0) for k, v in ids_models.GUARDS.items()
+                             if v - guards0.get(k, 0)},
+            "property_sets_dropped": sorted({ps for c in rec.tool_calls for ps in c.get("property_sets_dropped", [])}),
+            "tool_result_chars_max": max((c["result_chars"] for c in rec.tool_calls), default=0),
         })
         if error:
             entry.update(status="error", error=error)
@@ -304,7 +340,7 @@ def main(argv=None):
         else:
             reason = (gen_calls[-1]["result"].get("error") if gen_calls else "generate_ids never called")
             out_fail.write_text(json.dumps({"id": item["id"], "reason": reason, "answer": answer}, indent=1))
-            entry.update(status="no_ids", error=reason, output=str(out_fail.relative_to(run_dir)))
+            entry.update(status="no_file", error=reason, output=str(out_fail.relative_to(run_dir)))
         with open(log_path, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(entry, ensure_ascii=False, default=str) + "\n")
         id_map_path.write_text(json.dumps(id_map, indent=1))

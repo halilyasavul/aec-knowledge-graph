@@ -138,6 +138,67 @@ def multiset_match(ref: list, cand: list):
     return tp, sum(cc.values()) - tp, sum(rc.values()) - tp
 
 
+
+# =========================================================================== graded metrics
+def verdicts(labels: dict, ex: dict) -> dict:
+    """{label: 'pass'|'fail'|'n/a'} for one specification over the test objects."""
+    out = {}
+    for guid, label in labels.items():
+        if guid not in ex["applicable"]:
+            out[label] = "n/a"
+        else:
+            out[label] = "fail" if guid in ex["failed"] else "pass"
+    return out
+
+
+def _mean(xs):
+    xs = [x for x in xs if x is not None]
+    return sum(xs) / len(xs) if xs else None
+
+
+def graded(ref_v: dict, cand_v: dict, side: str | None = None) -> dict:
+    """S1/S2/S3 over labelled test objects.
+
+    S1  identical verdict on every object (the strict, all-or-nothing measure).
+    S2  fraction of objects both specifications judge the same way.
+    S3  decomposed by what each object was built to test:
+        enforce       — objects violating exactly one reference requirement that the
+                        reference rejects: does the candidate reject them too?
+        false_reject  — objects the reference accepts: does the candidate wrongly reject?
+        app_out       — objects the reference ignores: does the candidate ignore them?
+        app_in        — objects in the reference's scope: are they in the candidate's scope?
+    """
+    keys = [k for k in ref_v if side is None or k.startswith(side + ":")]
+    if not keys:
+        return {}
+    same = [ref_v[k] == cand_v.get(k, "n/a") for k in keys]
+    per_req: dict[str, list] = {}
+    false_rej, app_out, app_in = [], [], []
+    for k in keys:
+        r, c = ref_v[k], cand_v.get(k, "n/a")
+        kind = k.split(":")[1] if ":" in k else k
+        if kind in ("missing", "badvalue", "badtype", "present") and r == "fail":
+            per_req.setdefault(k.split(":")[2] if len(k.split(":")) > 2 else kind, []).append(c == "fail")
+        if r == "pass":
+            false_rej.append(c != "pass")
+        if r == "n/a":
+            app_out.append(c == "n/a")
+        else:
+            app_in.append(c != "n/a")
+    return {
+        "s1": int(all(same)), "s2": sum(same) / len(same), "n_objects": len(keys),
+        "enforce": _mean([_mean(v) for v in per_req.values()]),
+        "n_enforce_reqs": len(per_req),
+        "false_reject": _mean(false_rej), "n_conforming": len(false_rej),
+        "app_out": _mean(app_out), "n_out_of_scope": len(app_out),
+        "app_in": _mean(app_in), "n_in_scope": len(app_in),
+    }
+
+
+def length_band(n: int) -> str:
+    return "<=3" if n <= 3 else ("4-9" if n <= 9 else ">=10")
+
+
 # =========================================================================== reference IDS
 def _value(parent, tag, v: str):
     w = etree.SubElement(parent, I(tag))
@@ -260,7 +321,7 @@ def direction(c: dict) -> str:
 def taxonomy(item: dict, cand: dict | None, psets: dict | None, ext: dict | None) -> dict:
     e = Counter()
     if cand is None:
-        e["no_ids"] = 1
+        e["no_file"] = 1
         return dict(e)
     tgt = {loose_key(f): f for f in item["target"]}
     got = {loose_key(f): f for f in cand["requirements"]}
@@ -322,7 +383,7 @@ def _is_ifc_type(name: str) -> bool:
 
 
 PLACEHOLDERS = {"required", "mandatory", "any", "*", "present", "exists", "not empty", "notempty", "yes"}
-ERROR_COLS = ["no_ids", "wrong_datatype", "hallucinated_pset", "wrong_pset", "missing_requirement",
+ERROR_COLS = ["no_file", "wrong_datatype", "hallucinated_pset", "wrong_pset", "missing_requirement",
               "extra_requirement", "applicability_too_broad", "applicability_too_narrow",
               "applicability_disjoint", "wrong_cardinality", "wrong_value", "bad_ifcversion",
               "empty_restriction", "placeholder_value", "invalid_datatype"]
@@ -365,7 +426,7 @@ def main(argv=None):
 
         row = {"id": iid, "source": item["source"], "leak": int(bool(item.get("any_leak"))),
                "ifc_only": (int(ifc_only(item, psets)) if psets is not None else None),
-               "n_target": len(item["target"]), "status": "ok" if cand_path.exists() else "no_ids",
+               "n_target": len(item["target"]), "status": "ok" if cand_path.exists() else "no_file",
                "ref_xsd_valid": int(ref_ok), "ref_xsd_error": ref_err}
         L = log.get(iid, {})
         row.update({k: L.get(k) for k in ("wall_ms", "cost_usd", "input_tokens", "output_tokens")})
@@ -417,7 +478,7 @@ def main(argv=None):
                 used += 1
                 if cand is None or not row.get("xsd_valid"):
                     cand_x = {"applicable": set(), "passed": set(), "failed": set(), "reasons": []}
-                    exec_err = exec_err or ("no_ids" if cand is None else "xsd_invalid")
+                    exec_err = exec_err or ("no_file" if cand is None else "xsd_invalid")
                 else:
                     try:
                         cand_x = execute(cand_path, model, bool(vf))
@@ -443,9 +504,11 @@ def main(argv=None):
             else:
                 row[pre + "outcome_equiv"] = None
 
-        # ---------------- B'. extensional on the witness model built from the reference
-        wit = witness.build(item, run_dir / "witness" / f"{name}.ifc")
+        # ---------------- B'. graded, symmetric test models (eval/witness.py)
+        wit = witness.build(item, run_dir / "witness" / f"{name}.ifc", candidate=cand)
         row["wit_unsupported"] = " | ".join(wit["unsupported"])[:400]
+        row["wit_candidate_note"] = wit.get("candidate_note")
+        row["wit_sides"] = json.dumps(wit.get("sides", {}))
         if wit["path"]:
             wm = ifcopenshell.open(wit["path"])
             ref_w = execute(ref_path, wm, False)
@@ -454,29 +517,34 @@ def main(argv=None):
             row["wit_problems"] = " | ".join(probs)[:400]
             cand_w, err = {"applicable": set(), "passed": set(), "failed": set(), "reasons": []}, ""
             if cand is None or not row.get("xsd_valid"):
-                err = "no_ids" if cand is None else "xsd_invalid"
+                err = "no_file" if cand is None else "xsd_invalid"
             else:
                 try:
                     cand_w = execute(cand_path, wm, False)
                 except Exception as e:
                     err = f"{type(e).__name__}: {e}"[:200]
             row["wit_exec_error"] = err
-            if probs:                                 # the witness can't be trusted for this item
+            ref_v, cand_v = verdicts(wit["labels"], ref_w), verdicts(wit["labels"], cand_w)
+            if probs:                                 # the model can't be trusted for this item
                 row["wit_outcome_equiv"], row["wit_direction"] = None, "witness_unverified"
             elif ref_w["applicable"]:
                 c = compare(ref_w, cand_w)
                 row.update({"wit_" + k: v for k, v in c.items()})
                 row["wit_direction"] = direction(c)
                 row["wit_diverging"] = " ".join(sorted(
-                    wit["labels"][g] for g in wit["labels"]
-                    if (g in ref_w["applicable"]) != (g in cand_w["applicable"])
-                    or (g in ref_w["passed"]) != (g in cand_w["passed"])))[:600]
+                    lab for lab in ref_v if ref_v[lab] != cand_v.get(lab, "n/a")))[:800]
+                for tag, sd in (("", None), ("_ref", "ref"), ("_cand", "cand")):
+                    for k, v in graded(ref_v, cand_v, sd).items():
+                        row[f"wit_{k}{tag}"] = v
+                row["wit_outcome_equiv"] = row.get("wit_s1")     # S1 is the v4 headline measure
                 pair_rows.append({"id": iid, "model": "witness", "vf": 0, "leak": row["leak"], **c,
                                   "direction": direction(c)})
             else:
                 row["wit_outcome_equiv"] = None
         else:
             row["wit_outcome_equiv"] = None
+        row["band"] = length_band(len(item["target"]))
+        row["names_correct"] = int(row.get("loose_f1") == 1.0)
 
         src = "wit" if row.get("wit_outcome_equiv") is not None else "vf0"
         ext = ({"over_applicable": row.get(f"{src}_over_applicable"),

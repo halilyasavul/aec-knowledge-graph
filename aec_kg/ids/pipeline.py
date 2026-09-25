@@ -40,10 +40,17 @@ def generate_ids_from_json(ids_json: dict) -> dict:
             loc = " -> ".join(str(x) for x in err["loc"])
             errors.append(f"{loc}: {err['msg']}")
         logger.warning("IDS Pydantic validation failed: %s", errors)
-        return {
+        out = {
             "error": "Invalid IDS JSON structure. Fix the errors and retry.",
             "validation_errors": errors,
         }
+        if any("Extra inputs are not permitted" in e for e in errors):
+            out["hint"] = (
+                "Unknown keys are rejected so nothing is dropped silently. Shapes: a value is "
+                '{"simpleValue": "EXACT"} or {"restriction": {"enumerations": [...]}} or '
+                '{"restriction": {"pattern": "regex"}} or a min/max bound; a property is '
+                '{"propertySet": {...}, "baseName": {...}, "dataType": "IFCLABEL", "value": {...}}.')
+        return out
 
     # Step 2: Serialize to XML
     try:

@@ -431,14 +431,28 @@ def _ptypes(app: dict) -> list[str]:
     return r.get("enumeration") or ([r["simple"]] if "simple" in r else [])
 
 
-def build(item: dict, out_path: Path) -> dict:
-    """Write the witness .ifc for one task item; return {guid: label} plus build notes."""
-    app, target = item["applicability"], item["target"]
-    b = Builder(item["id"])
+def _loose(f: dict) -> tuple:
+    """Requirement identity ignoring values — to find candidate requirements the reference lacks."""
+    k = f["facet"]
+    if k == "property":
+        return (k, first(f.get("propertySet")) or "", first(f.get("baseName")) or "")
+    if k == "attribute":
+        return (k, first(f.get("name")) or "")
+    if k == "entity":
+        return (k, (first(f.get("name")) or "").upper())
+    return (k, str(f.get("value") or ""))
+
+
+def _emit(b, app: dict, target: list, side: str, mutate: set | None = None,
+          with_decoys: bool = True) -> None:
+    """Add one side's objects to the model. Labels are '<side>:<kind>[:index]'.
+
+    mutate: requirement indices to build violating objects for (None = all).
+    """
     classes = _classes(app)
     if not classes:
-        return {"labels": {}, "unsupported": [f"entity {app['entity']} not a concrete IfcRoot in {SCHEMA_NAME}"],
-                "path": None}
+        b.unsupported.append(f"{side}: entity {app.get('entity')!r} not a concrete IfcRoot")
+        return
     ptypes = _ptypes(app)
     usable = [p for p in ptypes if p not in ("USERDEFINED", "NOTDEFINED")] or ptypes
     ptype = usable[0] if usable else None
@@ -451,7 +465,7 @@ def build(item: dict, out_path: Path) -> dict:
     prohibited = [f for f in target if f.get("cardinality") == "prohibited"]
 
     def full(cls, label, pt, skip=None, override=None, decoy=False):
-        el = b.element(cls, label, pt)
+        el = b.element(cls, f"{side}:{label}", pt)
         for i, f in enumerate(reqs):
             if decoy and f["facet"] == "entity":     # keep the decoy's class / predefined type
                 continue
@@ -469,10 +483,12 @@ def build(item: dict, out_path: Path) -> dict:
                 apply_facet(b, el, f, "ok")
         return el
 
-    for cls in classes:                              # one full witness per allowed class
+    for cls in classes:                              # one conforming object per allowed class
         full(cls, f"full:{cls.upper()}", ptype)
     cls = classes[0]
     for i, f in enumerate(reqs):
+        if mutate is not None and i not in mutate:
+            continue
         if f["facet"] != "entity":                   # an element can't lack its own class
             full(cls, f"missing:{i}", ptype, skip=i)
         if parse(f.get("value")) is not None or (f["facet"] == "entity" and f.get("predefinedType") and not ptypes) or \
@@ -488,7 +504,10 @@ def build(item: dict, out_path: Path) -> dict:
                 _try(b, lambda: full(cls, f"edge:{i}:{bound}", ptype, override=(i, "ok", {"simple": r[bound]})))
     for j, f in enumerate(prohibited):
         el = full(cls, f"present:{j}", ptype)
-        apply_facet(b, el, f, "ok")
+        if el is not None:
+            apply_facet(b, el, f, "ok")
+    if not with_decoys:
+        return
     decoy_cls = "IFCWALL" if cls.upper() == "IFCBUILDINGELEMENTPROXY" else "IFCBUILDINGELEMENTPROXY"
     if decoy_cls not in [c.upper() for c in classes]:
         full(decoy_cls, "decoy:class", None, decoy=True)
@@ -497,9 +516,40 @@ def build(item: dict, out_path: Path) -> dict:
         others = [x for x in (items or []) if x not in ptypes and x not in ("USERDEFINED", "NOTDEFINED")]
         full(cls, "decoy:ptype", others[0] if others else "OtherUserDefinedType", decoy=True)
 
+
+def build(item: dict, out_path: Path, candidate: dict | None = None) -> dict:
+    """Write the test model for one item and return {guid: label} plus build notes.
+
+    Objects come from BOTH specifications so neither side is privileged: the reference
+    contributes conforming objects, one-requirement violations and out-of-scope decoys;
+    the candidate contributes a conforming object of its own plus violations of any
+    requirement the reference does not have. Labels carry the side ('ref:' / 'cand:').
+    """
+    b = Builder(item["id"])
+    _emit(b, item["applicability"], item["target"], "ref")
+    if not b.labels:
+        return {"labels": {}, "unsupported": sorted(set(b.unsupported)) or
+                [f"entity {item['applicability'].get('entity')!r} not a concrete IfcRoot in {SCHEMA_NAME}"],
+                "path": None}
+    cand_note = None
+    if candidate:
+        ref_keys = {_loose(f) for f in item["target"]}
+        cand_reqs = [f for f in candidate["requirements"]
+                     if (f.get("cardinality") or "required") != "prohibited"]
+        extra = {i for i, f in enumerate(cand_reqs) if _loose(f) not in ref_keys}
+        app = candidate["applicability"][0] if candidate.get("applicability") else {}
+        cand_app = {"entity": first(app.get("name")) or item["applicability"].get("entity"),
+                    "predefinedType": app.get("predefinedType")}
+        before = len(b.labels)
+        _emit(b, cand_app, candidate["requirements"], "cand", mutate=extra, with_decoys=False)
+        if len(b.labels) == before:
+            cand_note = "candidate produced no objects (unsatisfiable or unbuildable applicability)"
+            b.unsupported.append("cand: " + cand_note)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     b.f.write(str(out_path))
-    meta = {"labels": b.labels, "unsupported": sorted(set(b.unsupported)), "path": str(out_path)}
+    meta = {"labels": b.labels, "unsupported": sorted(set(b.unsupported)), "path": str(out_path),
+            "candidate_note": cand_note,
+            "sides": {s: sum(1 for v in b.labels.values() if v.startswith(s + ":")) for s in ("ref", "cand")}}
     out_path.with_suffix(".json").write_text(json.dumps(meta, indent=1))
     return meta
 
@@ -515,14 +565,17 @@ def _try(b: Builder, fn):
 
 
 def expected(label: str, target: list, reqs_opt: dict) -> str:
-    """What the reference should do to a variant: pass | fail | n/a | either."""
-    kind, _, idx = label.partition(":")
+    """What the reference should do to a reference-derived variant: pass | fail | n/a | either."""
+    side, _, rest = label.partition(":")
+    if side != "ref":
+        return "either"                              # candidate-derived objects are not predictable
+    kind, _, idx = rest.partition(":")
     if kind in ("full", "altvalue", "edge"):
         return "pass"
     if kind == "decoy":
         return "n/a"
     if kind == "missing":
-        return "either" if reqs_opt.get(int(idx)) else "fail"
+        return "either" if reqs_opt.get(int(idx.split(":")[0])) else "fail"
     if kind == "badvalue" or kind == "badtype":
         return "fail"
     if kind == "present":

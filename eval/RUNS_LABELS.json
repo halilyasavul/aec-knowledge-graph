@@ -1,0 +1,7 @@
+{
+  "v4-baseline": {
+    "dir": "spec_gemini-2.5-flash",
+    "note": "v4 pilot, 21 IFC-only items scored. Frozen: do not modify or delete.",
+    "config": "no pipeline fixes; temperature unset; witness models built from the reference only"
+  }
+}

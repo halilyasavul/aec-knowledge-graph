@@ -16,6 +16,7 @@ Usage:
     python -m aec_kg.main_orchestrator -q "What is IfcActuator?"
 """
 
+import os
 import json
 import logging
 import re
@@ -406,12 +407,26 @@ def _serialize(value):
     return value
 
 
-def _truncate_result(result: dict, max_chars: int = 24000) -> dict:
-    """Intelligently truncate a large tool result to fit within context limits."""
-    # For query_class results: trim property lists within each property set
+# Tool results larger than this are shrunk before going to the model. The old 25k limit
+# was a legacy choice — the model's context is far larger — and shrinking cost the model
+# the property-set names it needs, so the budget is now generous and set-name-preserving.
+MAX_TOOL_RESULT_CHARS = int(os.getenv("MAX_TOOL_RESULT_CHARS", "200000"))
+LEGACY_TRUNCATION = False          # eval ablation switch; see eval/generate.py --no-truncation-fix
+
+
+def _size(obj) -> int:
+    return len(json.dumps(obj, default=str, ensure_ascii=False))
+
+
+def _truncate_result_legacy(result: dict, max_chars: int = 24000) -> dict:
+    """The pre-v5 behaviour, kept only so the fix can be ablated.
+
+    Bug: the loop breaks on the first property set that exceeds the budget, so every set
+    after it is never copied into the output and disappears without a trace.
+    """
     if "property_sets" in result and isinstance(result["property_sets"], dict):
         trimmed = {k: v for k, v in result.items() if k != "property_sets"}
-        trimmed_psets = {}
+        trimmed_psets: dict = {}
         for pset_name, props in result["property_sets"].items():
             if isinstance(props, list) and len(props) > 10:
                 trimmed_psets[pset_name] = props[:10] + [
@@ -419,14 +434,87 @@ def _truncate_result(result: dict, max_chars: int = 24000) -> dict:
                 ]
             else:
                 trimmed_psets[pset_name] = props
-            # Check size after each pset
             trimmed["property_sets"] = trimmed_psets
             if len(json.dumps(trimmed, default=str, ensure_ascii=False)) > max_chars:
                 trimmed_psets[pset_name] = [{"note": f"({len(props)} properties, truncated)"}]
                 break
         trimmed["property_sets"] = trimmed_psets
         trimmed["_truncated"] = True
+        dropped = [k for k in result["property_sets"] if k not in trimmed_psets]
+        trimmed["_truncation"] = {"stages": ["legacy"], "dropped_property_sets": dropped}
         return trimmed
+    return _truncate_result(result, max_chars)
+
+
+def maybe_truncate(result: dict) -> dict:
+    """Shrink a tool result only if it exceeds the budget. Returns it unchanged otherwise."""
+    if LEGACY_TRUNCATION:
+        return _truncate_result_legacy(result) if _size(result) > 25000 else result
+    return _truncate_result(result) if _size(result) > MAX_TOOL_RESULT_CHARS else result
+
+
+def _truncate_class_result(result: dict, max_chars: int) -> dict:
+    """Shrink a query_class result while keeping EVERY property-set name.
+
+    A property set the model never sees is a property set it invents, so names are the
+    last thing to go, not the first. Prose (definitions), then property metadata, then
+    the tails of long property lists are dropped instead — in that order.
+    """
+    out = {k: v for k, v in result.items() if k != "property_sets"}
+    psets = {
+        name: {
+            "properties": [
+                {k: p.get(k) for k in ("code", "data_type", "allowed_values") if p.get(k) is not None}
+                if isinstance(p, dict) else p
+                for p in (body.get("properties") or [] if isinstance(body, dict) else body or [])
+            ],
+            **({"pset_name": body.get("pset_name")} if isinstance(body, dict) and body.get("pset_name") else {}),
+        }
+        for name, body in result["property_sets"].items()
+    }
+    stages = ["dropped definitions"]
+    out.pop("class_definition", None)
+    out["property_sets"] = psets
+    if _size(out) <= max_chars:
+        out["_truncation"] = {"stages": stages, "dropped_property_sets": []}
+        return out
+
+    for name in psets:                                    # allowed_values are the next biggest chunk
+        for p in psets[name]["properties"]:
+            if isinstance(p, dict) and isinstance(p.get("allowed_values"), list) and len(p["allowed_values"]) > 12:
+                p["allowed_values"] = p["allowed_values"][:12] + [{"note": "... more values"}]
+    stages.append("trimmed allowed_values")
+
+    for keep in (40, 20, 10, 5, 2, 1, 0):                 # then property-list tails, never the set name
+        if _size(out) <= max_chars:
+            break
+        for name, body in psets.items():
+            full = result["property_sets"][name]
+            props = (full.get("properties") if isinstance(full, dict) else full) or []
+            if len(props) > keep:
+                codes = [p.get("code") if isinstance(p, dict) else str(p) for p in props]
+                body["properties"] = body["properties"][:keep]
+                body["property_codes_omitted"] = codes[keep:]
+        stages.append(f"kept {keep} properties per set")
+
+    if _size(out) > max_chars:                             # last resort: names only, still all of them
+        for name, body in psets.items():
+            full = result["property_sets"][name]
+            props = (full.get("properties") if isinstance(full, dict) else full) or []
+            psets[name] = {"property_codes": [p.get("code") if isinstance(p, dict) else str(p) for p in props]}
+        stages.append("property codes only")
+
+    out["_truncated"] = True
+    out["_truncation"] = {"stages": stages, "dropped_property_sets": [],
+                          "note": "property lists were shortened; every property set is listed"}
+    return out
+
+
+def _truncate_result(result: dict, max_chars: int | None = None) -> dict:
+    """Shrink a large tool result to fit the context budget, keeping identifiers."""
+    max_chars = MAX_TOOL_RESULT_CHARS if max_chars is None else max_chars
+    if "property_sets" in result and isinstance(result["property_sets"], dict):
+        return _truncate_class_result(result, max_chars)
 
     # For cypher results: trim records list
     if "records" in result and isinstance(result["records"], list):
@@ -597,10 +685,8 @@ def run_agent(user_message: str, history: list | None = None) -> tuple:
 
             result = dispatch_tool(fn_name, fn_args)
 
-            # Truncate large results to stay within Gemini context limits
-            result_str = json.dumps(result, default=str, ensure_ascii=False)
-            if len(result_str) > 25000:
-                result = _truncate_result(result)
+            # Shrink only oversized results, and never at the cost of identifiers
+            result = maybe_truncate(result)
 
             # Log tool usage
             summary = fn_name
