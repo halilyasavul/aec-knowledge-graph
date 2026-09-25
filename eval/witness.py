@@ -581,9 +581,11 @@ def _try(b: Builder, fn):
     el = fn()
     if el is None:                                   # variant couldn't be expressed: forget it
         for g in set(b.labels) - set(n0):
-            inst = b.f.by_guid(g)
             b.labels.pop(g)
-            b.f.remove(inst)
+            try:
+                b.f.remove(b.f.by_guid(g))
+            except Exception:
+                pass                                 # already gone (e.g. the reused project)
 
 
 def expected(label: str, target: list, reqs_opt: dict) -> str:
