@@ -13,4 +13,6 @@ data/*
 eval/runs/
 eval/models/
 eval/models_src/
-eval/reports/
+eval/reports/*.docx
+eval/reports/*.json
+eval/reports/~$*

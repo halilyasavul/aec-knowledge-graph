@@ -459,6 +459,8 @@ def main(argv=None):
     ap.add_argument("--relaxed", action="store_true",
                     help="score against the determined-only reference (eval/annotations/determinacy.jsonl)")
     ap.add_argument("--annotations", default="eval/annotations/determinacy.jsonl")
+    ap.add_argument("--tag", default="", help="suffix for the output files, so annotation variants "
+                                             "do not overwrite each other (e.g. --tag _passA)")
     args = ap.parse_args(argv if argv is not None else sys.argv[1:])
     run_dir, tasks_path, models_dir = Path(args.run_dir), Path(args.tasks), Path(args.models_dir)
     out_dir = Path(args.out) if args.out else run_dir
@@ -473,7 +475,7 @@ def main(argv=None):
         n_before = sum(len(t["target"]) for t in tasks.values())
         tasks = {i: (relax(t, ann[i]) if i in ann else t) for i, t in tasks.items()}
         n_after = sum(len(t["target"]) for t in tasks.values())
-        suffix = "_relaxed"
+        suffix = "_relaxed" + args.tag
         print(f"determined-only reference: {n_before - n_after} requirements dropped, "
               f"{sum(1 for v in ann.values() for a in v if a['scope'] == 'value')} value constraints removed")
     log = {}

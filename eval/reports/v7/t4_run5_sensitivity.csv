@@ -1,0 +1,5 @@
+variant,scores_file,items_testable_per_repeat,exact_per_repeat,exact_rate,items_3of3,items_2of3,items_1of3,items_0of3
+strict (no annotations),scores.csv,44.0,8.0,0.182,6,2,2,34
+pass B (final),scores_relaxed.csv,44.0,28.7,0.652,23,6,5,10
+pass A (script),scores_relaxed_passA.csv,44.0,28.7,0.652,23,6,5,10
+"values kept, only unmentioned dropped",scores_relaxed_valueskept.csv,44.0,8.0,0.182,6,2,2,34

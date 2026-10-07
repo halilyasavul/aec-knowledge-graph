@@ -1,0 +1,3 @@
+group,items,mean_requirements,max_requirements,share_undetermined_facets,facets_attribute,facets_property,facets_entity,facets_material
+names-correct,7,1.71,5,0.743,0.667,0.333,,
+names-wrong,14,3.07,9,0.449,0.209,0.628,0.14,0.023

@@ -1,0 +1,17 @@
+group,metric,items,before_lookup_off,after_lookup_on,change
+names fixed by the lookup fix,S1 strict (behaviour),0,,,
+names already correct,S1 strict (behaviour),7,0.222,0.222,0.0
+names wrong in both,S1 strict (behaviour),13,0.0,0.0,0.0
+names broken by the lookup fix,S1 strict (behaviour),1,0.0,0.0,0.0
+names fixed by the lookup fix,S1 determined-only (behaviour),0,,,
+names already correct,S1 determined-only (behaviour),7,0.833,0.722,-0.111
+names wrong in both,S1 determined-only (behaviour),13,0.242,0.212,-0.03
+names broken by the lookup fix,S1 determined-only (behaviour),1,1.0,0.333,-0.667
+names fixed by the lookup fix,S2 reference objects (behaviour),0,,,
+names already correct,S2 reference objects (behaviour),7,0.908,0.869,-0.038
+names wrong in both,S2 reference objects (behaviour),13,0.456,0.56,0.104
+names broken by the lookup fix,S2 reference objects (behaviour),1,0.938,0.354,-0.583
+names fixed by the lookup fix,"false rejection (behaviour, lower better)",0,,,
+names already correct,"false rejection (behaviour, lower better)",7,0.111,0.222,0.111
+names wrong in both,"false rejection (behaviour, lower better)",13,0.706,0.62,-0.086
+names broken by the lookup fix,"false rejection (behaviour, lower better)",1,0.0,0.667,0.667
