@@ -442,6 +442,12 @@ def _serialize(value):
 MAX_TOOL_RESULT_CHARS = int(os.getenv("MAX_TOOL_RESULT_CHARS", "200000"))
 LEGACY_TRUNCATION = False          # eval ablation switch; see eval/generate.py --no-truncation-fix
 
+# Prototype (v8): send identifiers and constraints, not prose. Complete retrieval roughly
+# triples input tokens per item, and input is ~68% of spend, so dropping definitions and
+# descriptions is the obvious lever. Off by default: it changes what the model sees.
+COMPACT_TOOL_RESULTS = False
+_KEEP_PROPERTY_KEYS = ("code", "ifc_type", "data_type", "allowed_values", "property_value_kind")
+
 
 def _size(obj) -> int:
     return len(json.dumps(obj, default=str, ensure_ascii=False))
@@ -477,6 +483,8 @@ def _truncate_result_legacy(result: dict, max_chars: int = 24000) -> dict:
 
 def maybe_truncate(result: dict) -> dict:
     """Shrink a tool result only if it exceeds the budget. Returns it unchanged otherwise."""
+    if COMPACT_TOOL_RESULTS:
+        result = compact_class_result(result)
     if LEGACY_TRUNCATION:
         return _truncate_result_legacy(result) if _size(result) > 25000 else result
     return _truncate_result(result) if _size(result) > MAX_TOOL_RESULT_CHARS else result
@@ -536,6 +544,28 @@ def _truncate_class_result(result: dict, max_chars: int) -> dict:
     out["_truncated"] = True
     out["_truncation"] = {"stages": stages, "dropped_property_sets": [],
                           "note": "property lists were shortened; every property set is listed"}
+    return out
+
+
+def compact_class_result(result: dict) -> dict:
+    """Keep every name, type and allowed value; drop the prose.
+
+    Property-set names, property names, IFC types and allowed values are what an IDS needs;
+    definitions and descriptions are what makes a lookup result large.
+    """
+    if "property_sets" not in result or not isinstance(result["property_sets"], dict):
+        return result
+    out = {k: v for k, v in result.items() if k not in ("property_sets", "class_definition")}
+    psets = {}
+    for name, body in result["property_sets"].items():
+        props = (body.get("properties") if isinstance(body, dict) else body) or []
+        psets[name] = [
+            {k: p[k] for k in _KEEP_PROPERTY_KEYS if isinstance(p, dict) and p.get(k) is not None}
+            if isinstance(p, dict) else p
+            for p in props
+        ]
+    out["property_sets"] = psets
+    out["_compact"] = True
     return out
 
 

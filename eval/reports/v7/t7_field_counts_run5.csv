@@ -1,0 +1,16 @@
+measure,run5-rep1,run5-rep2,run5-rep3
+extra candidate requirements,13,15,12
+field baseName: agree,41,42,38
+field baseName: compared,41,42,38
+field cardinality: agree,53,54,50
+field cardinality: compared,55,56,52
+field dataType: agree,40,41,37
+field dataType: compared,41,42,38
+field name: agree,14,14,14
+field name: compared,14,14,14
+field propertySet: agree,41,42,38
+field propertySet: compared,41,42,38
+field value: compared,45,41,40
+matched by name,55,56,52
+reference requirements,71,80,73
+unmatched (missing requirement),16,24,21

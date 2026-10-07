@@ -1,0 +1,9 @@
+field,compared,agree,agreement_rate
+propertySet,121.0,121,1.0
+baseName,121.0,121,1.0
+name,42.0,42,1.0
+dataType,121.0,118,0.975
+value,126.0,0,0.0
+cardinality,163.0,157,0.963
+— name match (denominator for the rows above),224.0,163,0.728
+— extra candidate requirements,,40,
