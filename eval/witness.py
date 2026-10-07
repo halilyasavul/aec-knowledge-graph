@@ -539,7 +539,90 @@ def _emit(b, app: dict, target: list, side: str, mutate: set | None = None,
         full(cls, "decoy:ptype", others[0] if others else "OtherUserDefinedType", decoy=True)
 
 
-def build(item: dict, out_path: Path, candidate: dict | None = None) -> dict:
+def _enum_of(v: str | None) -> list:
+    r = parse(v)
+    if r is None:
+        return []
+    if r.get("enumeration"):
+        return list(r["enumeration"])
+    if "simple" in r:
+        return [r["simple"]]
+    return []
+
+
+def _emit_probes(b, item: dict, candidate: dict, app: dict) -> int:
+    """One object per value that tells the two value lists apart.
+
+    Scoring on the standard object set can miss a value-list difference entirely. Two blind
+    spots, both of which this closes:
+
+      * the reference allows {A,B,C} and the candidate {A,B,D}: no object built from either
+        list alone ever uses C or D, so both files agree on every object;
+      * the reference leaves a value free and the candidate pins it to TRUE: every object the
+        two sides build happens to carry TRUE, so the extra constraint is never exercised.
+
+    For the first, objects come from the SYMMETRIC DIFFERENCE of the two lists, each accepted by
+    exactly one file. For the second, one object carries a value OUTSIDE the candidate's
+    constraint while still satisfying every reference requirement: the reference accepts it and
+    the candidate rejects it. Candidate-only requirements are satisfied too, so each probe
+    isolates the one value difference it was built for.
+    """
+    classes = _classes(app)
+    if not classes:
+        return 0
+    ptypes = _ptypes(app)
+    usable = [x for x in ptypes if x not in ("USERDEFINED", "NOTDEFINED")] or ptypes
+    ptype = usable[0] if usable else None
+    if len(ptypes) > 1 and "USERDEFINED" in ptypes:
+        ptype = "WitnessUserDefinedType"
+    cls = classes[0]
+    reqs = [f for f in item["target"] if (f.get("cardinality") or "required") != "prohibited"]
+    ref_keys = {_loose(f) for f in reqs}
+    cand_by_key: dict = {}
+    for f in candidate["requirements"]:
+        cand_by_key.setdefault(_loose(f), []).append(f)
+    cand_only = [f for f in candidate["requirements"]
+                 if _loose(f) not in ref_keys and (f.get("cardinality") or "required") != "prohibited"]
+    added = 0
+    for i, rf in enumerate(reqs):
+        cf = (cand_by_key.get(_loose(rf)) or [None])[0]
+        if cf is None:
+            continue
+        ref_r, cand_r = parse(rf.get("value")), parse(cf.get("value"))
+        ref_vals, cand_vals = _enum_of(rf.get("value")), _enum_of(cf.get("value"))
+        # (side label, mode, value restriction to use for this facet)
+        jobs: list = []
+        if ref_vals and cand_vals:
+            jobs += [("ref_only", "ok", {"enumeration": [v]}) for v in ref_vals if v not in cand_vals]
+            jobs += [("cand_only", "ok", {"enumeration": [v]}) for v in cand_vals if v not in ref_vals]
+        elif ref_vals and cand_r:
+            # candidate constrains by pattern or bound: a listed reference value may violate it
+            jobs += [("ref_only", "ok", {"enumeration": [v]}) for v in ref_vals]
+        if cand_r and not ref_r:
+            # the reference leaves this value free and the candidate does not: one object outside
+            # the candidate's constraint, built from the reference facet so the reference accepts it
+            jobs.append(("outside_cand", "bad", cand_r))
+        elif ref_r and not cand_r:
+            jobs.append(("outside_ref", "bad", ref_r))
+        for k, (side, mode, override) in enumerate(jobs[:20]):
+            def make(i=i, k=k, side=side, mode=mode, override=override):
+                el = b.element(cls, f"probe:{i}:{k}:{side}", ptype)
+                for j, g in enumerate(reqs):
+                    if j == i:
+                        if not apply_facet(b, el, g, mode, override):
+                            return None
+                    else:
+                        apply_facet(b, el, g, "ok")
+                for g in cand_only:
+                    apply_facet(b, el, g, "ok")
+                return el
+            before = len(b.labels)
+            _try(b, make)
+            added += int(len(b.labels) > before)
+    return added
+
+
+def build(item: dict, out_path: Path, candidate: dict | None = None, probe: bool = False) -> dict:
     """Write the test model for one item and return {guid: label} plus build notes.
 
     Objects come from BOTH specifications so neither side is privileged: the reference
@@ -567,11 +650,15 @@ def build(item: dict, out_path: Path, candidate: dict | None = None) -> dict:
         if len(b.labels) == before:
             cand_note = "candidate produced no objects (unsatisfiable or unbuildable applicability)"
             b.unsupported.append("cand: " + cand_note)
+        if probe:
+            n_probe = _emit_probes(b, item, candidate, item["applicability"])
+            b.unsupported.append(f"probe objects added: {n_probe}") if n_probe == 0 else None
     out_path.parent.mkdir(parents=True, exist_ok=True)
     b.f.write(str(out_path))
     meta = {"labels": b.labels, "unsupported": sorted(set(b.unsupported)), "path": str(out_path),
             "candidate_note": cand_note,
-            "sides": {s: sum(1 for v in b.labels.values() if v.startswith(s + ":")) for s in ("ref", "cand")}}
+            "sides": {s: sum(1 for v in b.labels.values() if v.startswith(s + ":"))
+                      for s in ("ref", "cand", "probe")}}
     out_path.with_suffix(".json").write_text(json.dumps(meta, indent=1))
     return meta
 

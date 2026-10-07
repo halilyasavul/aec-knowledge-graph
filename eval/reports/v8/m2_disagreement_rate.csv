@@ -1,0 +1,17 @@
+group,scoring,object set,item_runs,both exact,"text exact, behaviour differs","text differs, behaviour exact",both differ,disagreement rate
+"Run 5 (2.5 Flash, 47 items x 3)",strict,standard,132,4,0,20,108,0.152
+"Run 5 (2.5 Flash, 47 items x 3)",strict,probe,132,4,0,5,123,0.038
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,standard,132,49,0,37,46,0.28
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,probe,132,49,0,22,61,0.167
+"Run 6 (3.8 Flash, 47 items x 2)",strict,standard,80,14,0,5,61,0.062
+"Run 6 (3.8 Flash, 47 items x 2)",strict,probe,80,14,0,2,64,0.025
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,standard,80,61,0,3,16,0.037
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,probe,80,61,0,0,19,0.0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,sample buildings (no version filter),81,3,0,52,26,0.642
+"Run 5 (2.5 Flash, 47 items x 3)",strict,sample buildings (version filtered),81,3,0,52,26,0.642
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,sample buildings (no version filter),81,38,0,27,16,0.333
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,sample buildings (version filtered),81,38,0,27,16,0.333
+"Run 6 (3.8 Flash, 47 items x 2)",strict,sample buildings (no version filter),50,4,0,29,17,0.58
+"Run 6 (3.8 Flash, 47 items x 2)",strict,sample buildings (version filtered),50,4,0,29,17,0.58
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,sample buildings (no version filter),50,35,0,8,7,0.16
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,sample buildings (version filtered),50,35,0,8,7,0.16

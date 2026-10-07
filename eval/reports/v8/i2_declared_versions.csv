@@ -1,0 +1,12 @@
+group,declared ifcVersion,item_runs,matches the reference declaration
+"Run 5 (2.5 Flash, 47 items x 3)",IFC4X3_ADD2,127,False
+"Run 5 (2.5 Flash, 47 items x 3)",(no file),11,False
+"Run 5 (2.5 Flash, 47 items x 3)",IFC4X3_ADD2|IFC4X3_ADD2,3,False
+"Run 6 (3.8 Flash, 47 items x 2)",IFC4X3_ADD2,81,False
+"Run 6 (3.8 Flash, 47 items x 2)",(no file),5,False
+"2x2 cell lk1dt1 (all fixes, 21 items x 3)",IFC4X3_ADD2,50,False
+"2x2 cell lk1dt1 (all fixes, 21 items x 3)",(no file),10,False
+"2x2 cell lk1dt1 (all fixes, 21 items x 3)",IFC4X3_ADD2|IFC4X3_ADD2,3,False
+"2x2 cell lk0dt0 (no fixes, 21 items x 3)",IFC4X3_ADD2,54,False
+"2x2 cell lk0dt0 (no fixes, 21 items x 3)",(no file),6,False
+"2x2 cell lk0dt0 (no fixes, 21 items x 3)",IFC4X3_ADD2|IFC4X3_ADD2,3,False

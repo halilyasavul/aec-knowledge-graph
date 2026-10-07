@@ -1,0 +1,5 @@
+scoring,object set,exact,n_all_attempted,S1_budget_counted,n_budget_set_aside,S1_budget_excluded,n_executed_only,S1_executed_only,budget_exceeded_item_runs
+strict,standard,19,86,0.2209,83,0.2289,80,0.2375,3
+strict,probe,16,86,0.186,83,0.1928,80,0.2,3
+determined-only,standard,64,86,0.7442,83,0.7711,80,0.8,3
+determined-only,probe,61,86,0.7093,83,0.7349,80,0.7625,3

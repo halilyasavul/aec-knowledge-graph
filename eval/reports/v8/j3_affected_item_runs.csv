@@ -1,0 +1,47 @@
+group,object set,run,id,exact with the 8 dropped,exact with the 8 kept
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep1,IDS4ALL-Template_Example specifications.ids#16,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep1,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep1,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep2,IDS4ALL-Template_Example specifications.ids#16,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep2,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep2,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep3,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep3,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep3,IDS_oma_input.ids#2,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,0,1
+"Run 5 (2.5 Flash, 47 items x 3)",standard,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep1,IDS4ALL-Template_Example specifications.ids#16,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep1,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep1,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep2,IDS4ALL-Template_Example specifications.ids#16,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep2,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep2,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep3,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep3,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep3,IDS_oma_input.ids#2,1,0
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,0,1
+"Run 5 (2.5 Flash, 47 items x 3)",probe,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#16,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep1,NL_BIM_Basis_ILS_v2.ids#1,0,1
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#16,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep2,IDS_oma_input.ids#2,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep2,NL_BIM_Basis_ILS_v2.ids#1,0,1
+"Run 6 (3.8 Flash, 47 items x 2)",standard,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#16,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep1,NL_BIM_Basis_ILS_v2.ids#1,0,1
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#16,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#17,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#18,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep2,IDS_oma_input.ids#2,1,0
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep2,NL_BIM_Basis_ILS_v2.ids#1,0,1
+"Run 6 (3.8 Flash, 47 items x 2)",probe,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,0

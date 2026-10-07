@@ -1,0 +1,9 @@
+group,scoring,object set,item_runs,items,S1,S1_ci_low,S1_ci_high,S1_exact_count,S2_ref,S2_ci_low,S2_ci_high,probe_objects_total
+"Run 5 (2.5 Flash, 47 items x 3)",strict,standard,132,44,0.1818,0.0833,0.2879,24,0.765,0.694,0.831,0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,probe,132,44,0.0682,0.0227,0.1212,9,0.765,0.6976,0.8315,323
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,standard,132,44,0.6515,0.5227,0.7727,86,0.8542,0.7971,0.9086,0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,probe,132,44,0.5379,0.4091,0.6667,71,0.8542,0.797,0.9121,76
+"Run 6 (3.8 Flash, 47 items x 2)",strict,standard,80,44,0.2375,0.12,0.3718,19,0.8182,0.7342,0.8909,0
+"Run 6 (3.8 Flash, 47 items x 2)",strict,probe,80,44,0.2,0.0933,0.3205,16,0.8182,0.7351,0.8912,90
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,standard,80,44,0.8,0.6747,0.9114,64,0.8998,0.8262,0.9587,0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,probe,80,44,0.7625,0.625,0.8861,61,0.8998,0.8289,0.9593,37

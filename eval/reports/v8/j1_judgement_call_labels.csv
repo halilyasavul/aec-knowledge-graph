@@ -1,0 +1,9 @@
+item,spec,facet,reference value,reason given,what the request says about it
+IDS4ALL-Template_Example specifications.ids#16,16,property Pset_SlabCommon.FireRating,"RESTRICTION(pattern=REI\s[0-9]{2,3})","pattern 'REI\\s[0-9]{2,3}' is not derivable from the request text",FireRating: Fire resistance class according to national or regional fire protection regulations.
+IDS4ALL-Template_Example specifications.ids#17,17,property Pset_WallCommon.FireRating,REI 90,exact value 'REI 90' is not stated in the request,FireRating: Fire resistance class according to national or regional fire protection regulations.
+IDS4ALL-Template_Example specifications.ids#18,18,property Pset_WallCommon.FireRating,REI 120,exact value 'REI 120' is not stated in the request,FireRating: Fire resistance class according to national or regional fire protection regulations.
+IDS_ArcDox.ids#4,4,attribute Country,Ireland,exact value 'Ireland' is not stated in the request,Country
+IDS_oma_input.ids#2,2,attribute Name,RESTRICTION(pattern=[\S\s]+[\S]+),pattern '[\\S\\s]+[\\S]+' is not derivable from the request text,Storey name/number
+IDS_oma_input.ids#10,10,attribute Name,RESTRICTION(pattern=[\S\s]+[\S]+),pattern '[\\S\\s]+[\\S]+' is not derivable from the request text,Descriptive name
+NL_BIM_Basis_ILS_v2.ids#1,1,attribute Name,RESTRICTION(pattern=-?\d{2}\s.*),pattern '-?\\d{2}\\s.*' is not derivable from the request text,(the request never names this property)
+Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,84,property Pset_RampCommon.RequiredSlope,RESTRICTION(maxInclusive=0.06),bound {'maxInclusive': ['0.06']} not stated in the request (no number and no comparative wording),(the request never names this property)

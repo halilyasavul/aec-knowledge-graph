@@ -1,0 +1,9 @@
+group,IFC-version block,item_runs,items,FacetF1_macro_IDSBench,ci_low,ci_high,our_facet_f1_macro
+"Run 5 (2.5 Flash, 47 items x 3)",counted,141,47,0.3063,0.2692,0.3489,0.0665
+"Run 5 (2.5 Flash, 47 items x 3)",excluded,141,47,0.4383,0.3857,0.4897,0.0665
+"Run 6 (3.8 Flash, 47 items x 2)",counted,86,47,0.3771,0.3285,0.4284,0.2188
+"Run 6 (3.8 Flash, 47 items x 2)",excluded,86,47,0.5416,0.4707,0.6129,0.2188
+"2x2 cell lk1dt1 (all fixes, 21 items x 3)",counted,63,21,0.2716,0.1954,0.3541,0.1203
+"2x2 cell lk1dt1 (all fixes, 21 items x 3)",excluded,63,21,0.3648,0.2636,0.4702,0.1203
+"2x2 cell lk0dt0 (no fixes, 21 items x 3)",counted,63,21,0.282,0.2062,0.3675,0.1186
+"2x2 cell lk0dt0 (no fixes, 21 items x 3)",excluded,63,21,0.381,0.2763,0.4906,0.1186

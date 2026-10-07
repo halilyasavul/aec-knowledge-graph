@@ -1,0 +1,13 @@
+measure,effect,estimate,ci_low,ci_high,excludes_zero,n_items,repeats_per_cell,cell_lk0dt0,cell_lk1dt0,cell_lk0dt1,cell_lk1dt1
+"facet F1, strict (text)",lookup fix,0.0025,-0.0213,0.0272,False,21,3,0.1186,0.1209,0.1175,0.1203
+"facet F1, strict (text)",dataType fix,-0.0008,-0.0561,0.0482,False,21,3,0.1186,0.1209,0.1175,0.1203
+"S1, strict (behaviour)",lookup fix,-0.0093,-0.0278,0.0,False,18,3,0.0556,0.037,0.0741,0.0741
+"S1, strict (behaviour)",dataType fix,0.0278,0.0,0.0741,False,18,3,0.0556,0.037,0.0741,0.0741
+"facet F1, determined-only (text)",lookup fix,0.0289,-0.0306,0.1032,False,21,3,0.1482,0.1526,0.3069,0.3604
+"facet F1, determined-only (text)",dataType fix,0.1832,0.0454,0.3136,True,21,3,0.1482,0.1526,0.3069,0.3604
+"S1, determined-only (behaviour)",lookup fix,-0.0556,-0.1113,0.0,False,18,3,0.1111,0.0926,0.4815,0.3889
+"S1, determined-only (behaviour)",dataType fix,0.3333,0.1111,0.5463,True,18,3,0.1111,0.0926,0.4815,0.3889
+"names-correct rate, strict (text)",lookup fix,-0.0397,-0.0794,-0.0079,True,21,3,0.381,0.3651,0.381,0.3175
+"names-correct rate, strict (text)",dataType fix,-0.0238,-0.0873,0.0317,False,21,3,0.381,0.3651,0.381,0.3175
+"S2 on reference objects, strict (behaviour)",lookup fix,-0.0,-0.0545,0.0516,False,18,3,0.4925,0.474,0.6332,0.6517
+"S2 on reference objects, strict (behaviour)",dataType fix,0.1592,-0.0017,0.3212,False,18,3,0.4925,0.474,0.6332,0.6517

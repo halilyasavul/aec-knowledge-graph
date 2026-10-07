@@ -459,6 +459,9 @@ def main(argv=None):
     ap.add_argument("--relaxed", action="store_true",
                     help="score against the determined-only reference (eval/annotations/determinacy.jsonl)")
     ap.add_argument("--annotations", default="eval/annotations/determinacy.jsonl")
+    ap.add_argument("--probe", action="store_true",
+                    help="add test objects from the symmetric difference of differing value lists "
+                         "(writes scores*_probe.csv; the standard scoring is left untouched)")
     ap.add_argument("--tag", default="", help="suffix for the output files, so annotation variants "
                                              "do not overwrite each other (e.g. --tag _passA)")
     args = ap.parse_args(argv if argv is not None else sys.argv[1:])
@@ -483,6 +486,8 @@ def main(argv=None):
         for line in open(run_dir / "log.jsonl", encoding="utf-8"):
             r = json.loads(line)
             log[r["id"]] = r                          # last attempt wins
+    if args.probe:
+        suffix += "_probe"
     gen_dir, ref_dir = run_dir / "generated", out_dir / ("reference" + suffix)
     ref_dir.mkdir(exist_ok=True)
     models = {}
@@ -586,7 +591,8 @@ def main(argv=None):
                 row[pre + "outcome_equiv"] = None
 
         # ---------------- B'. graded, symmetric test models (eval/witness.py)
-        wit = witness.build(item, out_dir / ("witness" + suffix) / f"{name}.ifc", candidate=cand)
+        wit = witness.build(item, out_dir / ("witness" + suffix) / f"{name}.ifc", candidate=cand,
+                            probe=args.probe)
         row["wit_unsupported"] = " | ".join(wit["unsupported"])[:400]
         row["wit_candidate_note"] = wit.get("candidate_note")
         row["wit_sides"] = json.dumps(wit.get("sides", {}))

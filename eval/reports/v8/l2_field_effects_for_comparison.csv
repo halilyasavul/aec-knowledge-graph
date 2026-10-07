@@ -1,0 +1,7 @@
+measure,effect,estimate,ci_low,ci_high,excludes_zero,n_items
+name-match rate over reference requirements,lookup fix,0.0312,0.0,0.0938,False,14
+name-match rate over reference requirements,dataType fix,0.0045,0.0,0.0134,False,14
+"dataType field, among name-matched requirements",lookup fix,-0.0119,-0.0357,0.0,False,14
+"dataType field, among name-matched requirements",dataType fix,0.5024,0.2286,0.7738,True,14
+"value field (normalised), among name-matched requirements",lookup fix,0.0,0.0,0.0,False,12
+"value field (normalised), among name-matched requirements",dataType fix,0.0,0.0,0.0,False,12

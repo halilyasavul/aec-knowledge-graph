@@ -1,0 +1,9 @@
+group,treatment,object set,item_runs,exact,S1 determined-only,ci_low,ci_high
+"Run 5 (2.5 Flash, 47 items x 3)",the 8 treated as not derivable (published variant),standard,132,86,0.6515,0.5303,0.7727
+"Run 5 (2.5 Flash, 47 items x 3)",the 8 treated as not derivable (published variant),probe,132,71,0.5379,0.4091,0.6667
+"Run 5 (2.5 Flash, 47 items x 3)",the 8 treated as derivable (value constraints kept),standard,132,78,0.5909,0.4545,0.7197
+"Run 5 (2.5 Flash, 47 items x 3)",the 8 treated as derivable (value constraints kept),probe,132,63,0.4773,0.3485,0.5987
+"Run 6 (3.8 Flash, 47 items x 2)",the 8 treated as not derivable (published variant),standard,80,64,0.8,0.675,0.9059
+"Run 6 (3.8 Flash, 47 items x 2)",the 8 treated as not derivable (published variant),probe,80,61,0.7625,0.6296,0.8904
+"Run 6 (3.8 Flash, 47 items x 2)",the 8 treated as derivable (value constraints kept),standard,80,57,0.7125,0.5731,0.8481
+"Run 6 (3.8 Flash, 47 items x 2)",the 8 treated as derivable (value constraints kept),probe,80,54,0.675,0.5421,0.8096

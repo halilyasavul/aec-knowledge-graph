@@ -1,0 +1,7 @@
+run,id,item_runs,undetermined labels on this item,label scopes,model said
+run5-rep1,IDS_ArcDox.ids#3,1,0,none,"I cannot directly generate an IDS specification with ""Area Units"" and ""Linear Units"" as separate attributes for `IFCUNITASSIGNMENT`.  The `IFCUNITASSIGNMENT` cl"
+run5-rep1,IDS_oma_input.ids#13,1,1,value,"I can help you generate an IDS specification. However, the `RESTRICTION(enumeration=IFCALARM)` is not a valid IFC entity. Could you please specify which IFC ent"
+run5-rep2,IDS_ArcDox.ids#3,1,0,none,"The `IfcUnitAssignment` class in IFC 4.3 has a single attribute called `Units`, which is a set of `IfcUnit` objects. It does not have separate attributes named "
+run5-rep2,IDS_oma_input.ids#13,1,1,value,"I can help you generate an IDS specification. However, the `RESTRICTION(enumeration=IFCALARM)` is not a valid IFC entity. Could you please specify which IFC ent"
+run5-rep3,IDS_ArcDox.ids#3,1,0,none,"I cannot directly generate an IDS specification that adds ""Area Units"" and ""Linear Units"" as distinct attributes to `IFCUNITASSIGNMENT` in the way you've descri"
+run5-rep3,IDS_oma_input.ids#13,1,1,value,"I can help you generate an IDS specification. However, the `RESTRICTION(enumeration=IFCALARM)` is not a valid IFC entity. Could you please specify which IFC ent"

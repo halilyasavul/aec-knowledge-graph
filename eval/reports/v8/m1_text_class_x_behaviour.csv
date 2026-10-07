@@ -1,0 +1,49 @@
+group,scoring,object set,text class,item_runs,items,behaviour exact,behaviour differs,P(behaviour exact),ci_low,ci_high
+"Run 5 (2.5 Flash, 47 items x 3)",strict,standard,text exact,4,2,4,0,1.0,1.0,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,standard,"names correct, text not exact",80,31,20,60,0.25,0.111,0.405
+"Run 5 (2.5 Flash, 47 items x 3)",strict,standard,names wrong,48,21,0,48,0.0,0.0,0.0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,standard,[conditional] text exact (any),4,2,4,0,1.0,1.0,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,standard,[conditional] text NOT exact,128,43,20,108,0.156,0.063,0.268
+"Run 5 (2.5 Flash, 47 items x 3)",strict,standard,[conditional] names wrong,48,21,0,48,0.0,0.0,0.0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,probe,text exact,4,2,4,0,1.0,1.0,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,probe,"names correct, text not exact",80,31,5,75,0.062,0.014,0.114
+"Run 5 (2.5 Flash, 47 items x 3)",strict,probe,names wrong,48,21,0,48,0.0,0.0,0.0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,probe,[conditional] text exact (any),4,2,4,0,1.0,1.0,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",strict,probe,[conditional] text NOT exact,128,43,5,123,0.039,0.008,0.071
+"Run 5 (2.5 Flash, 47 items x 3)",strict,probe,[conditional] names wrong,48,21,0,48,0.0,0.0,0.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,standard,text exact,49,26,49,0,1.0,1.0,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,standard,"names correct, text not exact",42,23,37,5,0.881,0.702,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,standard,names wrong,41,19,0,41,0.0,0.0,0.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,standard,[conditional] text exact (any),49,26,49,0,1.0,1.0,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,standard,[conditional] text NOT exact,83,36,37,46,0.446,0.295,0.605
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,standard,[conditional] names wrong,41,19,0,41,0.0,0.0,0.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,probe,text exact,49,26,49,0,1.0,1.0,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,probe,"names correct, text not exact",42,23,22,20,0.524,0.348,0.737
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,probe,names wrong,41,19,0,41,0.0,0.0,0.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,probe,[conditional] text exact (any),49,26,49,0,1.0,1.0,1.0
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,probe,[conditional] text NOT exact,83,36,22,61,0.265,0.163,0.388
+"Run 5 (2.5 Flash, 47 items x 3)",determined-only,probe,[conditional] names wrong,41,19,0,41,0.0,0.0,0.0
+"Run 6 (3.8 Flash, 47 items x 2)",strict,standard,text exact,14,8,14,0,1.0,1.0,1.0
+"Run 6 (3.8 Flash, 47 items x 2)",strict,standard,"names correct, text not exact",44,25,2,42,0.045,0.0,0.14
+"Run 6 (3.8 Flash, 47 items x 2)",strict,standard,names wrong,22,11,3,19,0.136,0.0,0.364
+"Run 6 (3.8 Flash, 47 items x 2)",strict,standard,[conditional] text exact (any),14,8,14,0,1.0,1.0,1.0
+"Run 6 (3.8 Flash, 47 items x 2)",strict,standard,[conditional] text NOT exact,66,36,5,61,0.076,0.0,0.172
+"Run 6 (3.8 Flash, 47 items x 2)",strict,standard,[conditional] names wrong,22,11,3,19,0.136,0.0,0.319
+"Run 6 (3.8 Flash, 47 items x 2)",strict,probe,text exact,14,8,14,0,1.0,1.0,1.0
+"Run 6 (3.8 Flash, 47 items x 2)",strict,probe,"names correct, text not exact",44,25,2,42,0.045,0.0,0.143
+"Run 6 (3.8 Flash, 47 items x 2)",strict,probe,names wrong,22,11,0,22,0.0,0.0,0.0
+"Run 6 (3.8 Flash, 47 items x 2)",strict,probe,[conditional] text exact (any),14,8,14,0,1.0,1.0,1.0
+"Run 6 (3.8 Flash, 47 items x 2)",strict,probe,[conditional] text NOT exact,66,36,2,64,0.03,0.0,0.094
+"Run 6 (3.8 Flash, 47 items x 2)",strict,probe,[conditional] names wrong,22,11,0,22,0.0,0.0,0.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,standard,text exact,61,35,61,0,1.0,1.0,1.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,standard,"names correct, text not exact",2,1,0,2,0.0,0.0,0.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,standard,names wrong,17,9,3,14,0.176,0.0,0.438
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,standard,[conditional] text exact (any),61,35,61,0,1.0,1.0,1.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,standard,[conditional] text NOT exact,19,10,3,16,0.158,0.0,0.4
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,standard,[conditional] names wrong,17,9,3,14,0.176,0.0,0.412
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,probe,text exact,61,35,61,0,1.0,1.0,1.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,probe,"names correct, text not exact",2,1,0,2,0.0,0.0,0.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,probe,names wrong,17,9,0,17,0.0,0.0,0.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,probe,[conditional] text exact (any),61,35,61,0,1.0,1.0,1.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,probe,[conditional] text NOT exact,19,10,0,19,0.0,0.0,0.0
+"Run 6 (3.8 Flash, 47 items x 2)",determined-only,probe,[conditional] names wrong,17,9,0,17,0.0,0.0,0.0

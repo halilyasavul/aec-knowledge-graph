@@ -1,0 +1,11 @@
+measure,items paired,run5_25flash,run6_38flash,difference,ci_low,ci_high,excludes_zero
+facet F1 (text),47,0.0665,0.2219,0.1554,0.0602,0.2591,True
+names-correct rate (text),47,0.617,0.7234,0.1064,0.0496,0.1702,True
+"S1 strict, standard objects",44,0.1818,0.2386,0.0568,0.0038,0.125,True
+"S1 strict, probe objects",44,0.0682,0.2045,0.1364,0.0455,0.2424,True
+"S1 determined-only, standard objects",44,0.6515,0.8182,0.1667,0.0871,0.2538,True
+"S1 determined-only, probe objects",44,0.5379,0.7841,0.2462,0.1439,0.3523,True
+S2 on reference objects,44,0.765,0.8301,0.0652,-0.004,0.1339,False
+cost per item-run (US$),47,0.0397,0.0967,0.057,0.0445,0.0713,True
+input tokens per item-run,47,100711.3759,115549.9894,14838.6135,-3206.4462,33873.5971,False
+output tokens per item-run,47,3806.0071,2687.0106,-1118.9965,-3832.5816,536.0824,False

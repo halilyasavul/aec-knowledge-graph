@@ -1,0 +1,7 @@
+group,reference value is,matched reqs with a reference value,value omitted,omission rate,value present but different,value present and equal
+Run 5 (2.5 Flash),derivable from the request,14,0,0.0,14,0
+Run 5 (2.5 Flash),value not derivable from the request,80,53,0.662,27,0
+Run 5 (2.5 Flash),ALL,94,53,0.564,41,0
+Run 6 (3.8 Flash),derivable from the request,7,0,0.0,7,0
+Run 6 (3.8 Flash),value not derivable from the request,52,50,0.962,2,0
+Run 6 (3.8 Flash),ALL,59,50,0.847,9,0
