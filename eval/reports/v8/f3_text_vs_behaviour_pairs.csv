@@ -1,0 +1,425 @@
+group,scoring,run,id,text_exact,names_correct,behaviour_exact,s2
+Run 5 (2.5 Flash),strict,run5-rep1,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.0476190476190476
+Run 5 (2.5 Flash),strict,run5-rep1,IDS4ALL-Template_Example specifications.ids#4,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,IDS4ALL-Template_Example specifications.ids#5,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,IDS4ALL-Template_Example specifications.ids#14,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,IDS4ALL-Template_Example specifications.ids#15,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,IDS4ALL-Template_Example specifications.ids#16,0,1,0,0.6666666666666666
+Run 5 (2.5 Flash),strict,run5-rep1,IDS4ALL-Template_Example specifications.ids#17,0,0,0,0.2222222222222222
+Run 5 (2.5 Flash),strict,run5-rep1,IDS4ALL-Template_Example specifications.ids#18,0,0,0,0.4444444444444444
+Run 5 (2.5 Flash),strict,run5-rep1,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep1,IDS_oma_input.ids#2,0,0,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep1,IDS_oma_input.ids#10,0,0,0,0.5909090909090909
+Run 5 (2.5 Flash),strict,run5-rep1,IDS_oma_input.ids#13,0,0,0,0.0909090909090909
+Run 5 (2.5 Flash),strict,run5-rep1,NL_BIM_Basis_ILS_v2.ids#1,0,1,0,0.6
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,0,0.8125
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.4375
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.6666666666666666
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,0,1,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,0,0,0.3157894736842105
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1,0,0.7142857142857143
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,0,0,0.3157894736842105
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,0,0,0.4285714285714285
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.9130434782608696
+Run 5 (2.5 Flash),strict,run5-rep2,IDS4ALL-Template_Example specifications.ids#4,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,IDS4ALL-Template_Example specifications.ids#5,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,IDS4ALL-Template_Example specifications.ids#14,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,IDS4ALL-Template_Example specifications.ids#15,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,IDS4ALL-Template_Example specifications.ids#16,0,1,0,0.6666666666666666
+Run 5 (2.5 Flash),strict,run5-rep2,IDS4ALL-Template_Example specifications.ids#17,0,0,0,0.2222222222222222
+Run 5 (2.5 Flash),strict,run5-rep2,IDS4ALL-Template_Example specifications.ids#18,0,0,0,0.4444444444444444
+Run 5 (2.5 Flash),strict,run5-rep2,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep2,IDS_oma_input.ids#2,0,0,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep2,IDS_oma_input.ids#10,0,0,0,0.85
+Run 5 (2.5 Flash),strict,run5-rep2,IDS_oma_input.ids#13,0,0,0,0.0909090909090909
+Run 5 (2.5 Flash),strict,run5-rep2,NL_BIM_Basis_ILS_v2.ids#1,0,1,0,0.6
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,0,0.8125
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.5
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.5833333333333334
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,0,1,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,0,0,0.3157894736842105
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1,0,0.7142857142857143
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,0,0,0,0.5714285714285714
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,1,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,0,0,0.3157894736842105
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,0,0,0.4285714285714285
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.9130434782608696
+Run 5 (2.5 Flash),strict,run5-rep3,IDS4ALL-Template_Example specifications.ids#4,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,IDS4ALL-Template_Example specifications.ids#5,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,IDS4ALL-Template_Example specifications.ids#14,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,IDS4ALL-Template_Example specifications.ids#15,0,0,0,0.0625
+Run 5 (2.5 Flash),strict,run5-rep3,IDS4ALL-Template_Example specifications.ids#16,0,0,0,0.2
+Run 5 (2.5 Flash),strict,run5-rep3,IDS4ALL-Template_Example specifications.ids#17,0,0,0,0.2222222222222222
+Run 5 (2.5 Flash),strict,run5-rep3,IDS4ALL-Template_Example specifications.ids#18,0,0,0,0.4444444444444444
+Run 5 (2.5 Flash),strict,run5-rep3,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,IDS_oma_input.ids#2,0,0,0,0.4285714285714285
+Run 5 (2.5 Flash),strict,run5-rep3,IDS_oma_input.ids#10,0,0,0,0.5909090909090909
+Run 5 (2.5 Flash),strict,run5-rep3,IDS_oma_input.ids#13,0,0,0,0.0909090909090909
+Run 5 (2.5 Flash),strict,run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,0,0.0666666666666666
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.4375
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,0,0.375
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.6153846153846154
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,0,1,0,0.75
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,0,0,0,0.0625
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,0,0,0,0.3157894736842105
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,0,1,1,1.0
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,0,0,0,0.5714285714285714
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,1,0,0.8333333333333334
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),strict,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,0,1,0,0.8823529411764706
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.5
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS4ALL-Template_Example specifications.ids#4,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS4ALL-Template_Example specifications.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS4ALL-Template_Example specifications.ids#14,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS4ALL-Template_Example specifications.ids#15,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS4ALL-Template_Example specifications.ids#16,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS4ALL-Template_Example specifications.ids#17,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS4ALL-Template_Example specifications.ids#18,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS_oma_input.ids#2,0,0,0,0.6
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS_oma_input.ids#10,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep1,IDS_oma_input.ids#13,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),determined-only,run5-rep1,NL_BIM_Basis_ILS_v2.ids#1,0,1,0,0.75
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,0,0.8125
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.4375
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,0,0.75
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.75
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.6666666666666666
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.1428571428571428
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS4ALL-Template_Example specifications.ids#4,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS4ALL-Template_Example specifications.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS4ALL-Template_Example specifications.ids#14,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS4ALL-Template_Example specifications.ids#15,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS4ALL-Template_Example specifications.ids#16,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS4ALL-Template_Example specifications.ids#17,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS4ALL-Template_Example specifications.ids#18,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS_oma_input.ids#2,0,0,0,0.6
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS_oma_input.ids#10,0,0,0,0.8333333333333334
+Run 5 (2.5 Flash),determined-only,run5-rep2,IDS_oma_input.ids#13,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),determined-only,run5-rep2,NL_BIM_Basis_ILS_v2.ids#1,0,1,0,0.75
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,0,0.8125
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.5
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.75
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.75
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.5833333333333334
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1,0,0.8
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,0,0,0,0.5714285714285714
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.1428571428571428
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS4ALL-Template_Example specifications.ids#4,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS4ALL-Template_Example specifications.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS4ALL-Template_Example specifications.ids#14,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS4ALL-Template_Example specifications.ids#15,0,0,0,0.25
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS4ALL-Template_Example specifications.ids#16,0,0,0,0.25
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS4ALL-Template_Example specifications.ids#17,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS4ALL-Template_Example specifications.ids#18,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS_oma_input.ids#2,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS_oma_input.ids#10,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep3,IDS_oma_input.ids#13,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),determined-only,run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,0,1,0,0.75
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,0,0.0666666666666666
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.4375
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.3333333333333333
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,0,0.375
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.75
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.6153846153846154
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,0,0,0,0.25
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,0,0,0,0.7142857142857143
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1,0,0.8
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,0,0,0,0.5714285714285714
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,0,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,1,1,1,1.0
+Run 5 (2.5 Flash),determined-only,run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.0476190476190476
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#4,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#5,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#14,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#15,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#16,0,1,0,0.6666666666666666
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#17,0,0,0,0.2222222222222222
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#18,0,0,0,0.4444444444444444
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS_oma_input.ids#2,0,0,0,0.75
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS_oma_input.ids#10,0,0,0,0.0526315789473684
+Run 6 (3.8 Flash),strict,run6-flash-rep1,IDS_oma_input.ids#13,0,1,0,0.9166666666666666
+Run 6 (3.8 Flash),strict,run6-flash-rep1,NL_BIM_Basis_ILS_v2.ids#1,0,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.5625
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.6666666666666666
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,0,0.0909090909090909
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.625
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.5357142857142857
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,0,1,0,0.75
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1,0,0.7142857142857143
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,1,0,0.8333333333333334
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.0476190476190476
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#4,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#5,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#14,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#15,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#16,0,1,0,0.6666666666666666
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#17,0,0,0,0.2222222222222222
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#18,0,0,0,0.4444444444444444
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS_oma_input.ids#2,0,0,0,0.4285714285714285
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS_oma_input.ids#10,0,0,0,0.0526315789473684
+Run 6 (3.8 Flash),strict,run6-flash-rep2,IDS_oma_input.ids#13,0,1,0,0.9166666666666666
+Run 6 (3.8 Flash),strict,run6-flash-rep2,NL_BIM_Basis_ILS_v2.ids#1,0,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.875
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.75
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.625
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.8235294117647058
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,0,1,0,0.75
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,1,0,0.8823529411764706
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,0,1,0,0.7142857142857143
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,1,1,1,1.0
+Run 6 (3.8 Flash),strict,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.5
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#4,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#5,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#14,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#15,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#16,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#17,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#18,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS_oma_input.ids#2,0,0,0,0.6
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS_oma_input.ids#10,0,0,0,0.0909090909090909
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,IDS_oma_input.ids#13,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,NL_BIM_Basis_ILS_v2.ids#1,0,1,0,0.75
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.5625
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.6363636363636364
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,0,0.0909090909090909
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.625
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.5357142857142857
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,0,0,0,0.5
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#4,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#5,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#14,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#15,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#16,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#17,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#18,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS_ArcDox.ids#5,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS_oma_input.ids#2,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS_oma_input.ids#10,0,0,0,0.0909090909090909
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,IDS_oma_input.ids#13,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,NL_BIM_Basis_ILS_v2.ids#1,0,1,0,0.75
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,0,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,0,0,0.875
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,0,0,0.75
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,0,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,0,0,0.625
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,0,0,0.8235294117647058
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,1,1,1,1.0
+Run 6 (3.8 Flash),determined-only,run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,1,1,1,1.0

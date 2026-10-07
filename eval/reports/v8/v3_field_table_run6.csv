@@ -1,0 +1,7 @@
+field,n,agree,rate,note
+name match (property set + property name),96,96,1.0,"by construction: the name is the matching key, so this is not a result"
+dataType,96,94,0.979,
+cardinality,96,96,1.0,
+"value (raw, at least one side has one)",60,0,0.0,exact string equality after canonicalisation
+"value (normalised, at least one side has one)",60,0,0.0,"case/whitespace, numeric, enumeration-as-set, simpleValue == one-item enumeration"
+value (both sides empty),36,36,1.0,trivially equal; excluded from the two rows above

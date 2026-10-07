@@ -1,0 +1,32 @@
+run,id,attempt,first_error
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,1,specifications -> 0 -> applicability: Input should be a valid dictionary or instance of Applicability
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,2,specifications -> 0 -> applicability: Input should be a valid dictionary or instance of Applicability
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,3,specifications -> 0 -> applicability: Input should be a valid dictionary or instance of Applicability
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,4,specifications -> 0 -> applicability: Input should be a valid dictionary or instance of Applicability
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,5,specifications -> 0 -> applicability: Input should be a valid dictionary or instance of Applicability
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,ALL,same error every attempt: True
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,1,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,2,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,3,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,4,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,5,specifications -> 0 -> requirements -> properties -> 0 -> baseName: Field required
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,6,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,7,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,ALL,same error every attempt: False
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,1,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,2,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,3,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,4,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,5,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,ALL,same error every attempt: True
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,1,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,2,specifications -> 0 -> requirements -> properties -> 0 -> baseName: Field required
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,ALL,same error every attempt: False
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,2,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,3,specifications -> 0 -> requirements -> properties -> 0 -> baseName: Field required
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,4,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,5,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,6,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,7,specifications -> 0 -> requirements: Input should be a valid dictionary or instance of Requirements
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,ALL,same error every attempt: False

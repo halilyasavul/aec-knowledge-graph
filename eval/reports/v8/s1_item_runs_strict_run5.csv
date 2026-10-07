@@ -1,0 +1,133 @@
+run,id,scoring,requirements,status,passes,direction,s2,primary_field_cause,all_field_causes
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,strict,9,no_file,0,no_file,0.048,no file,no file
+run5-rep1,IDS4ALL-Template_Example specifications.ids#4,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,IDS4ALL-Template_Example specifications.ids#5,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,IDS4ALL-Template_Example specifications.ids#14,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,IDS4ALL-Template_Example specifications.ids#15,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,IDS4ALL-Template_Example specifications.ids#16,strict,1,ok,0,under_strict,0.667,value list not derivable,value list not derivable
+run5-rep1,IDS4ALL-Template_Example specifications.ids#17,strict,5,ok,0,under_strict,0.222,missing requirement,missing requirement; value list not derivable
+run5-rep1,IDS4ALL-Template_Example specifications.ids#18,strict,2,ok,0,under_strict,0.444,value list not derivable,value list not derivable; missing requirement
+run5-rep1,IDS_ArcDox.ids#5,strict,2,ok,1,equivalent,1.0,none,none
+run5-rep1,IDS_oma_input.ids#2,strict,2,ok,0,over_strict+under_strict,0.75,value list not derivable,value list not derivable; missing requirement; extra requirement
+run5-rep1,IDS_oma_input.ids#10,strict,5,ok,0,over_strict,0.591,extra requirement,extra requirement; value list not derivable; wrong value
+run5-rep1,IDS_oma_input.ids#13,strict,1,no_file,0,no_file,0.091,no file,no file
+run5-rep1,NL_BIM_Basis_ILS_v2.ids#1,strict,1,ok,0,over_strict+under_strict,0.6,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,strict,4,ok,0,over_strict,0.812,wrong value,wrong value; missing requirement
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,strict,4,ok,0,over_strict+under_strict,0.438,wrong value,wrong value; missing requirement; wrong type
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,strict,2,ok,0,over_strict,0.333,missing requirement,missing requirement; wrong value; extra requirement
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,strict,2,ok,0,over_strict,0.75,missing requirement,missing requirement; wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,strict,2,ok,0,over_strict,0.75,missing requirement,missing requirement; wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,strict,1,ok,0,over_strict+under_strict,0.667,extra requirement,extra requirement; missing requirement
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,strict,1,ok,0,under_strict,0.75,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,strict,1,ok,0,over_strict+under_strict,0.316,missing requirement,missing requirement; extra requirement
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,strict,1,ok,0,under_strict,0.714,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,strict,1,ok,0,over_strict+under_strict,0.316,missing requirement,missing requirement; extra requirement
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,strict,1,ok,0,over_strict+under_strict,0.429,missing requirement,missing requirement; extra requirement
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,strict,9,ok,0,over_strict,0.913,missing requirement,missing requirement; wrong value; extra requirement
+run5-rep2,IDS4ALL-Template_Example specifications.ids#4,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,IDS4ALL-Template_Example specifications.ids#5,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,IDS4ALL-Template_Example specifications.ids#14,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,IDS4ALL-Template_Example specifications.ids#15,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,IDS4ALL-Template_Example specifications.ids#16,strict,1,ok,0,under_strict,0.667,value list not derivable,value list not derivable
+run5-rep2,IDS4ALL-Template_Example specifications.ids#17,strict,5,ok,0,under_strict,0.222,missing requirement,missing requirement; value list not derivable
+run5-rep2,IDS4ALL-Template_Example specifications.ids#18,strict,2,ok,0,under_strict,0.444,value list not derivable,value list not derivable; missing requirement
+run5-rep2,IDS_ArcDox.ids#5,strict,2,ok,1,equivalent,1.0,none,none
+run5-rep2,IDS_oma_input.ids#2,strict,2,ok,0,over_strict+under_strict,0.75,value list not derivable,value list not derivable; missing requirement; extra requirement
+run5-rep2,IDS_oma_input.ids#10,strict,5,ok,0,over_strict+under_strict,0.85,extra requirement,extra requirement; value list not derivable
+run5-rep2,IDS_oma_input.ids#13,strict,1,no_file,0,no_file,0.091,no file,no file
+run5-rep2,NL_BIM_Basis_ILS_v2.ids#1,strict,1,ok,0,over_strict+under_strict,0.6,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,strict,4,ok,0,over_strict,0.812,wrong value,wrong value; missing requirement
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,strict,4,ok,0,over_strict+under_strict,0.5,missing requirement,missing requirement; wrong type; wrong value
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,strict,2,ok,0,over_strict,0.75,missing requirement,missing requirement; wrong value
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,strict,2,ok,0,over_strict,0.333,missing requirement,missing requirement; wrong value; extra requirement
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,strict,2,ok,0,over_strict,0.75,missing requirement,missing requirement; wrong value
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,strict,1,ok,0,over_strict+under_strict,0.583,extra requirement,extra requirement; missing requirement
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,strict,1,ok,0,under_strict,0.75,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,strict,1,ok,0,over_strict+under_strict,0.316,missing requirement,missing requirement; extra requirement
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,strict,1,ok,0,over_strict,0.714,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,strict,1,ok,0,over_applicable,0.571,wrong value,wrong value; extra requirement
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,strict,1,ok,1,equivalent,1.0,none,none
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,strict,1,ok,0,over_strict+under_strict,0.316,missing requirement,missing requirement; extra requirement
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,strict,1,ok,0,over_strict+under_strict,0.429,missing requirement,missing requirement; extra requirement
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,strict,9,ok,0,over_strict,0.913,missing requirement,missing requirement; wrong value; extra requirement
+run5-rep3,IDS4ALL-Template_Example specifications.ids#4,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,IDS4ALL-Template_Example specifications.ids#5,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,IDS4ALL-Template_Example specifications.ids#14,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,strict,1,no_file,0,no_file,0.062,no file,no file
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,strict,1,no_file,0,no_file,0.2,no file,no file
+run5-rep3,IDS4ALL-Template_Example specifications.ids#17,strict,5,ok,0,under_strict,0.222,missing requirement,missing requirement; value list not derivable
+run5-rep3,IDS4ALL-Template_Example specifications.ids#18,strict,2,ok,0,under_strict,0.444,value list not derivable,value list not derivable; missing requirement
+run5-rep3,IDS_ArcDox.ids#5,strict,2,ok,1,equivalent,1.0,none,none
+run5-rep3,IDS_oma_input.ids#2,strict,2,ok,0,under_strict,0.429,value list not derivable,value list not derivable; missing requirement
+run5-rep3,IDS_oma_input.ids#10,strict,5,ok,0,over_strict,0.591,extra requirement,extra requirement; value list not derivable
+run5-rep3,IDS_oma_input.ids#13,strict,1,no_file,0,no_file,0.091,no file,no file
+run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,strict,1,ok,1,equivalent,1.0,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,strict,4,no_file,0,no_file,0.067,no file,no file
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,strict,4,ok,0,over_strict+under_strict,0.438,wrong value,wrong value; missing requirement; wrong type
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,strict,2,ok,0,over_strict,0.333,missing requirement,missing requirement; wrong value; extra requirement
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,strict,2,ok,0,over_strict,0.375,missing requirement,missing requirement; wrong value; extra requirement
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,strict,2,ok,0,over_strict,0.75,missing requirement,missing requirement; wrong value
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,strict,1,ok,0,over_strict+under_strict,0.615,extra requirement,extra requirement; missing requirement
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,strict,1,ok,0,under_strict,0.75,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,strict,1,no_file,0,no_file,0.062,no file,no file
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,strict,1,ok,0,over_strict+under_strict,0.316,missing requirement,missing requirement; extra requirement
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,strict,1,ok,1,equivalent,1.0,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,strict,1,ok,1,equivalent,1.0,wrong value,wrong value
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,strict,1,ok,0,over_applicable,0.571,wrong value,wrong value; extra requirement
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,strict,1,ok,0,under_strict,0.833,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,strict,1,ok,0,under_strict,0.882,value list not derivable,value list not derivable

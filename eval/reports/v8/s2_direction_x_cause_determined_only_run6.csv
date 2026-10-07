@@ -1,0 +1,5 @@
+direction,extra requirement,missing requirement,no file,value list not derivable
+no_file,0,0,5,0
+over_strict,0,3,0,3
+over_strict+under_strict,2,1,0,0
+under_strict,0,2,0,0

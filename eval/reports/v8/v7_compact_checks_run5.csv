@@ -1,0 +1,4 @@
+check,result,detail
+ifc_type survives compact mode (Pset_WallCommon),10 of 10 kept,"ifc_type is parsed at ingestion and stored on the node, so compact mode cannot undo the dataType fix; it only drops definition/description"
+bSDD coarse data_type also still present,yes,"kept so the model can see both, as in full mode"
+allowed values that appear only in prose,7 of 2125 properties without a structured list,"examples: QualityHistory, IndicatorsUnit, Quality, ColourTemperature, Relaxations, ToppingType"

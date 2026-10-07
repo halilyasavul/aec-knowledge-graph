@@ -1,0 +1,5 @@
+direction,item_runs,no file,missing requirement,wrong value,extra requirement,value list not derivable,wrong type
+no_file,5,5.0,0.0,0.0,0.0,0.0,0.0
+over_strict,3,0.0,3.0,3.0,2.0,0.0,0.0
+over_strict+under_strict,4,0.0,4.0,0.0,4.0,1.0,0.0
+under_strict,49,0.0,7.0,1.0,0.0,47.0,2.0

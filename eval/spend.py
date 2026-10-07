@@ -65,9 +65,12 @@ def main(argv=None):
           f"${tot_cost:.2f}")
     print(f"  input {df.input_tokens.sum():,} tok  output {df.output_tokens.sum():,} tok "
           f"(of which thinking {df.thinking_tokens.sum():,}, {100 * df.thinking_tokens.sum() / max(df.output_tokens.sum(), 1):.0f}%)")
-    print(f"  thinking tokens alone account for ${tot_think:.2f} ({100 * tot_think / max(tot_cost, 1e-9):.0f}% of logged spend)")
-    print(f"  input cost ${df.input_tokens.sum() / 1e6 * PRICE_IN_PER_M:.2f} | "
-          f"output cost ${df.output_tokens.sum() / 1e6 * PRICE_OUT_PER_M:.2f}")
+    print(f"  thinking tokens alone account for ~${tot_think:.2f} at 2.5-Flash prices "
+          f"(~{100 * tot_think / max(tot_cost, 1e-9):.0f}% of logged spend)")
+    print(f"  indicative split at 2.5-Flash list prices: input ${df.input_tokens.sum() / 1e6 * PRICE_IN_PER_M:.2f} | "
+          f"output ${df.output_tokens.sum() / 1e6 * PRICE_OUT_PER_M:.2f}")
+    print("  (cost_usd per run already uses that run's own model prices; the split above is "
+          "indicative only, since runs used different models)")
     if a.csv:
         Path(a.csv).parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(a.csv, index=False)

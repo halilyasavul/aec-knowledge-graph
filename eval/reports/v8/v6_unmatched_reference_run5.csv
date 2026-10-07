@@ -1,0 +1,62 @@
+run,id,facet_index,facet,reference,kind
+run5-rep1,IDS4ALL-Template_Example specifications.ids#17,0,property,Pset_WallCommon.Combustible,"property set present, different property name"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#17,2,property,Pset_WallCommon.IsExternal,"property set present, different property name"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#17,3,property,Pset_WallCommon.LoadBearing,"property set present, different property name"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#17,4,property,Pset_WallCommon.ThermalTransmittance,"property set present, different property name"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#18,1,property,Pset_WallCommon.LoadBearing,"property set present, different property name"
+run5-rep1,IDS_ArcDox.ids#1,1,attribute,.UnitsInContext,absent entirely
+run5-rep1,IDS_oma_input.ids#2,1,property,Pset_BuildingStoreyCommon.ElevationOfFFLRelative,absent entirely
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,property,Pset_ColumnCommon.FireRating,"property set present, different property name"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,property,Pset_ColumnCommon.FireRating,"property set present, different property name"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,entity,.IFCSOLARDEVICE,absent entirely
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,entity,.IFCPIPESEGMENT,absent entirely
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,entity,.IFCSANITARYTERMINAL,absent entirely
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,entity,.IFCSPACE,absent entirely
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,entity,.IFCMEMBER,absent entirely
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,property,Pset_RampCommon.FireRating,"property set present, different property name"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,entity,.IFCRAILING,absent entirely
+run5-rep2,IDS4ALL-Template_Example specifications.ids#17,0,property,Pset_WallCommon.Combustible,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#17,2,property,Pset_WallCommon.IsExternal,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#17,3,property,Pset_WallCommon.LoadBearing,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#17,4,property,Pset_WallCommon.ThermalTransmittance,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#18,1,property,Pset_WallCommon.LoadBearing,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,0,entity,.IFCSLAB,absent entirely
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,2,property,Pset_SlabCommon.Compartmentation,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,3,property,Pset_SlabCommon.SurfaceSpreadOfFlame,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,4,property,Pset_SlabCommon.ThermalTransmittance,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,5,property,Pset_SlabCommon.IsExternal,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,6,property,Pset_SlabCommon.AcousticRating,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,7,property,Pset_SlabCommon.Combustible,"property set present, different property name"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,8,material,.,absent entirely
+run5-rep2,IDS_ArcDox.ids#1,1,attribute,.UnitsInContext,absent entirely
+run5-rep2,IDS_oma_input.ids#2,1,property,Pset_BuildingStoreyCommon.ElevationOfFFLRelative,absent entirely
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,0,property,Pset_ColumnCommon.FireRating,"property set present, different property name"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,0,property,Pset_ColumnCommon.FireRating,"property set present, different property name"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,entity,.IFCSOLARDEVICE,absent entirely
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,entity,.IFCPIPESEGMENT,absent entirely
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,entity,.IFCSANITARYTERMINAL,absent entirely
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,entity,.IFCSPACE,absent entirely
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,0,entity,.IFCMEMBER,absent entirely
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,0,property,Pset_RampCommon.FireRating,"property set present, different property name"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,entity,.IFCRAILING,absent entirely
+run5-rep3,IDS4ALL-Template_Example specifications.ids#17,0,property,Pset_WallCommon.Combustible,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#17,2,property,Pset_WallCommon.IsExternal,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#17,3,property,Pset_WallCommon.LoadBearing,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#17,4,property,Pset_WallCommon.ThermalTransmittance,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#18,1,property,Pset_WallCommon.LoadBearing,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,0,entity,.IFCSLAB,absent entirely
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,2,property,Pset_SlabCommon.Compartmentation,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,3,property,Pset_SlabCommon.SurfaceSpreadOfFlame,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,4,property,Pset_SlabCommon.ThermalTransmittance,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,5,property,Pset_SlabCommon.IsExternal,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,6,property,Pset_SlabCommon.AcousticRating,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,7,property,Pset_SlabCommon.Combustible,"property set present, different property name"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,8,material,.,absent entirely
+run5-rep3,IDS_ArcDox.ids#1,1,attribute,.UnitsInContext,absent entirely
+run5-rep3,IDS_oma_input.ids#2,1,property,Pset_BuildingStoreyCommon.ElevationOfFFLRelative,absent entirely
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,0,entity,.IFCSOLARDEVICE,absent entirely
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,0,entity,.IFCPIPESEGMENT,absent entirely
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,0,entity,.IFCSANITARYTERMINAL,absent entirely
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,0,entity,.IFCSPACE,absent entirely
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,0,property,Pset_RampCommon.FireRating,"property set present, different property name"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,0,entity,.IFCRAILING,absent entirely

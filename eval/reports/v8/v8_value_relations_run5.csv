@@ -1,0 +1,7 @@
+relation,pairs
+reference only,53
+generated only,32
+list versus pattern/bound,20
+generated is a subset (stricter: fewer values allowed),14
+different kinds (mixed vs mixed),5
+overlapping,2

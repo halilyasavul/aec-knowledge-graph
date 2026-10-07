@@ -1,0 +1,7 @@
+source,items,facet_f1_micro,facet_f1_macro,micro_min,micro_max
+"v5 run2-fixed (lookup on, 1 run)",21,0.1875,0.1214,,
+"v5 run3-no-trunc (lookup off, 1 run)",21,0.087,0.0714,,
+v7 2x2 cell lk0dt0 (3 repeats),21,0.1745,0.1186,0.1616,0.1818
+v7 2x2 cell lk1dt0 (3 repeats),21,0.1995,0.1209,0.16,0.2529
+v7 2x2 cell lk0dt1 (3 repeats),21,0.189,0.1175,0.1538,0.2069
+v7 2x2 cell lk1dt1 (3 repeats),21,0.1885,0.1203,0.1489,0.2105

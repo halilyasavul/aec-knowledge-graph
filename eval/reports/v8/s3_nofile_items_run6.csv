@@ -1,0 +1,6 @@
+run,id,status,cause,generator_attempts,requirements,undetermined_facets,all_requirements_undetermined,question_asked,answer_opening
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#2,no_file,every generator attempt rejected (1),1,9,8,False,,I reached the maximum number of steps. Please try a simpler question.
+run6-flash-rep1,IDS_oma_input.ids#10,budget_exceeded,stopped by the per-item budget,2,5,2,False,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,no_file,declined without calling the generator,0,2,0,False,,I reached the maximum number of steps. Please try a simpler question.
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,budget_exceeded,stopped by the per-item budget,5,9,8,False,,
+run6-flash-rep2,IDS_oma_input.ids#10,budget_exceeded,stopped by the per-item budget,0,5,2,False,,

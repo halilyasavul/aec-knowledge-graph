@@ -1,0 +1,6 @@
+direction,extra requirement,missing requirement,no file,value list not derivable,wrong value
+no_file,0,0,8,0,0
+over_applicable,0,0,0,0,2
+over_strict,2,11,0,1,2
+over_strict+under_strict,4,8,0,4,2
+under_strict,0,3,0,61,0

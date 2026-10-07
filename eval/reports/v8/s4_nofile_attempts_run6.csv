@@ -1,0 +1,12 @@
+run,id,attempt,first_error
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#2,1,info: Field required
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#2,ALL,same error every attempt: True
+run6-flash-rep1,IDS_oma_input.ids#10,1,specifications -> 0 -> requirements -> properties -> 0 -> baseName: Field required
+run6-flash-rep1,IDS_oma_input.ids#10,2,None
+run6-flash-rep1,IDS_oma_input.ids#10,ALL,same error every attempt: False
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,1,specifications -> 0 -> ifcVersion: Input should be a valid string
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,2,None
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,3,None
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,4,None
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,5,None
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,ALL,same error every attempt: False

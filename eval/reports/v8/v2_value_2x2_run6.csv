@@ -1,0 +1,6 @@
+reference has a value,generated has a value,matched pairs,raw agreements,normalised agreements
+True,True,9,0,0
+True,False,50,0,0
+False,True,1,0,0
+False,False,36,36,36
+TOTAL,,96,36,36

@@ -1,0 +1,11 @@
+field,effect,estimate,ci_low,ci_high,excludes_zero,n_items,lk0dt0,lk1dt0,lk0dt1,lk1dt1
+name_match_rate,lookup fix,0.0312,0.0,0.0938,False,14,0.8,0.8357,0.8089,0.8357
+name_match_rate,dataType fix,0.0045,0.0,0.0134,False,14,0.8,0.8357,0.8089,0.8357
+dataType_rate,lookup fix,-0.0119,-0.0357,0.0,False,14,0.4857,0.4619,0.9762,0.9762
+dataType_rate,dataType fix,0.5024,0.2286,0.7738,True,14,0.4857,0.4619,0.9762,0.9762
+cardinality_rate,lookup fix,0.0,0.0,0.0,False,14,0.9714,0.9714,0.9714,0.9714
+cardinality_rate,dataType fix,0.0,0.0,0.0,False,14,0.9714,0.9714,0.9714,0.9714
+value_rate_norm,lookup fix,0.0,0.0,0.0,False,12,0.0,0.0,0.0,0.0
+value_rate_norm,dataType fix,0.0,0.0,0.0,False,12,0.0,0.0,0.0,0.0
+value_omitted_rate,lookup fix,0.1702,0.0452,0.3036,True,14,0.119,0.3214,0.3048,0.4429
+value_omitted_rate,dataType fix,0.1536,0.0511,0.2715,True,14,0.119,0.3214,0.3048,0.4429

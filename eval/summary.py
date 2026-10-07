@@ -47,7 +47,7 @@ def run_stats(run: Path) -> dict:
                         "false_reject": _f(se.wit_false_reject.mean()), "facet_f1": _f(sub.facet_f1.mean())}
     errs = {c[4:]: int(df[c].sum()) for c in df.columns if c.startswith("err_") and df[c].sum()}
     return {
-        "name": run.name, "fixes": r["meta"].get("fixes"),
+        "name": run.name, "fixes": r["meta"].get("fixes"), "model": r["meta"].get("model"),
         "items": m["items"], "with_file": m["with_file"], "testable": m["testable"],
         "s1": list(m["S1"]), "s2": _f(m["S2"]), "s2_ref": _f(m["S2_ref"]), "s2_cand": _f(m["S2_cand"]),
         "enforce": _f(m["enforce"]), "false_reject": _f(m["false_reject"]),
@@ -99,6 +99,12 @@ def cell_stats(runs: list[dict], name: str, det: dict | None = None) -> dict:
         den = [r[k][1] for r in runs]
         out[k] = {"mean": round(sum(num) / len(num), 2), "min": min(num), "max": max(num),
                   "of": round(sum(den) / len(den), 1)}
+    for k in ("cost_per_item", "seconds_per_item"):
+        vals = [r[k] for r in runs if r.get(k) is not None]
+        out[k] = {"mean": round(sum(vals) / len(vals), 4), "min": round(min(vals), 4),
+                  "max": round(max(vals), 4)} if vals else None
+    out["cost_total_all_repeats"] = round(sum((r.get("cost_per_item") or 0) * r["items"] for r in runs), 2)
+    out["model"] = runs[0].get("model")
     for k in ("with_file", "testable", "no_file"):
         vals = [r[k] for r in runs]
         out[k] = {"mean": round(sum(vals) / len(vals), 1), "min": min(vals), "max": max(vals)}
