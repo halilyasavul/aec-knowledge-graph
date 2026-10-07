@@ -53,6 +53,21 @@ class PinViolation(RuntimeError):
     pass
 
 
+class BudgetExceeded(RuntimeError):
+    """One item used more than its share; it is abandoned, not retried."""
+
+
+class RunAborted(RuntimeError):
+    """Stop the whole run: credit exhausted, repeated server errors, or the spend cap."""
+
+
+# Cost controls (work order v8 §2). Run 5 median was 89k tokens per item, so 3x is 267k.
+TOKEN_CEILING_PER_ITEM = 267_000
+MAX_CALLS_PER_ITEM = 10            # same bound as the agent loop's MAX_ITERATIONS
+MAX_CONSECUTIVE_5XX = 3
+SERVED_VERSION: str | None = None   # the exact version string the API served first, pinned per run
+
+
 # --------------------------------------------------------------------------- prompt
 def build_message(prompt: dict) -> str:
     """Render the task prompt as the user turn. A pure function of ``prompt`` only."""
@@ -96,6 +111,8 @@ def assert_no_leak(item: dict, message: str) -> None:
 class Recorder:
     def __init__(self, temperature: float | None = None):
         self.temperature = temperature
+        self.run_cost = 0.0            # cumulative over the whole run
+        self.consecutive_5xx = 0
         self.reset()
 
     def reset(self):
@@ -104,6 +121,7 @@ class Recorder:
         self.api_retries = 0
         self.empty_retries = 0
         self.guards_before = None
+        self.item_tokens = 0
 
 
 class _RetryCounter(logging.Handler):
@@ -125,10 +143,25 @@ def instrument(mo, rec: Recorder) -> None:
     def call(client, model, contents, config):
         if model != PINNED_MODEL:
             raise PinViolation(f"orchestrator requested {model!r}, pinned {PINNED_MODEL!r}")
+        if len(rec.llm_calls) >= MAX_CALLS_PER_ITEM:
+            raise BudgetExceeded(f"item hit {MAX_CALLS_PER_ITEM} model calls")
+        if rec.item_tokens > TOKEN_CEILING_PER_ITEM:
+            raise BudgetExceeded(f"item used {rec.item_tokens:,} tokens (ceiling {TOKEN_CEILING_PER_ITEM:,})")
         if rec.temperature is not None and getattr(config, "temperature", None) != rec.temperature:
             config = config.model_copy(update={"temperature": rec.temperature})
         t0 = time.perf_counter()
-        resp = orig_call(client, model, contents, config)
+        try:
+            resp = orig_call(client, model, contents, config)
+        except Exception as e:
+            msg = str(e)
+            if "402" in msg or "credits are depleted" in msg:
+                raise RunAborted(f"credit depleted: {msg[:160]}") from e
+            if any(c in msg for c in ("500", "502", "503", "504", "INTERNAL", "UNAVAILABLE")):
+                rec.consecutive_5xx += 1
+                if rec.consecutive_5xx >= MAX_CONSECUTIVE_5XX:
+                    raise RunAborted(f"{rec.consecutive_5xx} consecutive server errors: {msg[:160]}") from e
+            raise
+        rec.consecutive_5xx = 0
         u = resp.usage_metadata
         mv = getattr(resp, "model_version", None)
         rec.llm_calls.append({
@@ -140,8 +173,16 @@ def instrument(mo, rec: Recorder) -> None:
             "thinking_tokens": getattr(u, "thoughts_token_count", None) or 0,
             "cached_tokens": getattr(u, "cached_content_token_count", None) or 0,
         })
-        if mv and mv != PINNED_MODEL:
-            raise PinViolation(f"response model_version {mv!r} != pinned {PINNED_MODEL!r}")
+        c = rec.llm_calls[-1]
+        rec.item_tokens += c["prompt_tokens"] + c["output_tokens"] + c["thinking_tokens"]
+        rec.run_cost += (c["prompt_tokens"] / 1e6 * PRICE_IN_PER_M
+                         + (c["output_tokens"] + c["thinking_tokens"]) / 1e6 * PRICE_OUT_PER_M)
+        global SERVED_VERSION
+        if mv:
+            if SERVED_VERSION is None:
+                SERVED_VERSION = mv                  # pin whatever the API actually served
+            elif mv != SERVED_VERSION:
+                raise PinViolation(f"model_version changed mid-run: {SERVED_VERSION!r} -> {mv!r}")
         return resp
 
     def dispatch(name, args):
@@ -182,7 +223,7 @@ def run_metadata(mo) -> dict:
 
     client = genai.Client(api_key=cfg.GEMINI_API_KEY)   # keep a reference: a temporary client closes mid-request
     m = client.models.get(model=PINNED_MODEL)
-    if m.version != PINNED_MODEL_VERSION:
+    if PINNED_MODEL_VERSION and m.version != PINNED_MODEL_VERSION:
         raise PinViolation(f"API reports {PINNED_MODEL} version {m.version!r}, pinned {PINNED_MODEL_VERSION!r}")
     counts = mo._run_cypher_safe(
         "MATCH (c:Class) WITH count(c) AS classes "
@@ -193,6 +234,7 @@ def run_metadata(mo) -> dict:
         raise RuntimeError(f"knowledge graph unavailable or empty: {counts}")
     return {
         "model": PINNED_MODEL, "model_api_version": m.version,
+        "price_in_per_m": PRICE_IN_PER_M, "price_out_per_m": PRICE_OUT_PER_M,
         "model_defaults": {"temperature": m.temperature, "top_p": m.top_p, "top_k": m.top_k,
                            "thinking": getattr(m, "thinking", None)},
         "price_usd_per_m": {"input": PRICE_IN_PER_M, "output": PRICE_OUT_PER_M},
@@ -225,6 +267,7 @@ def ordered(tasks: list[dict]) -> list[dict]:
 
 # --------------------------------------------------------------------------- main
 def main(argv=None):
+    global PINNED_MODEL, PINNED_MODEL_VERSION, PRICE_IN_PER_M, PRICE_OUT_PER_M
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--tasks", default=str(SPEC_TASKS))
     ap.add_argument("--run-id", default=f"spec_{PINNED_MODEL}")
@@ -235,12 +278,29 @@ def main(argv=None):
     ap.add_argument("--temperature", type=float, default=0.0, help="0 for eval reproducibility (the app leaves it unset)")
     ap.add_argument("--no-truncation-fix", action="store_true", help="ablation: restore the pre-v5 tool-result trimming")
     ap.add_argument("--no-model-guards", action="store_true", help="ablation: restore lenient IDS models (unknown keys ignored)")
+    ap.add_argument("--model", default=PINNED_MODEL, help="model id to generate with")
+    ap.add_argument("--model-version", default=None,
+                    help="expected API version string for --model; the run aborts if it differs")
+    ap.add_argument("--price-in", type=float, default=PRICE_IN_PER_M,
+                    help="USD per 1M input tokens for this model (cost figures use it)")
+    ap.add_argument("--price-out", type=float, default=PRICE_OUT_PER_M,
+                    help="USD per 1M output tokens, thinking included")
+    ap.add_argument("--project-items", type=int, default=None,
+                    help="item count to project the pilot cost onto (default: the run's own item list)")
+    ap.add_argument("--pilot", type=int, default=0,
+                    help="run N items, then report measured cost per item and the projection, and stop")
+    ap.add_argument("--max-spend", type=float, default=None,
+                    help="abort the run once cumulative spend reaches this (USD)")
     ap.add_argument("--no-datatype-fix", action="store_true",
                     help="ablation: hide the graph's ifc_type and restore the String->IFCTEXT mapping")
     args = ap.parse_args(argv)
 
     import aec_kg.ids.validator as validator
     validator.STRICT = True                       # a missing XSD must raise, never pass
+    PINNED_MODEL = args.model
+    PINNED_MODEL_VERSION = args.model_version if args.model_version else (
+        PINNED_MODEL_VERSION if args.model == "gemini-2.5-flash" else None)
+    PRICE_IN_PER_M, PRICE_OUT_PER_M = args.price_in, args.price_out
     import aec_kg.ids.models as ids_models
     import aec_kg.neuro_agent as neuro
     import aec_kg.main_orchestrator as mo
@@ -317,11 +377,14 @@ def main(argv=None):
                  "started": dt.datetime.now().isoformat(timespec="seconds")}
         t0 = time.perf_counter()
         error = answer = None
+        budget_hit = False
         try:
             answer, _, _ = mo.run_agent(message)
+        except BudgetExceeded as e:                  # abandon this item, never retry it
+            error, budget_hit = f"BudgetExceeded: {e}", True
         except Exception as e:                       # infra failure: retry on resume
             error = f"{type(e).__name__}: {e}"
-            if isinstance(e, PinViolation):
+            if isinstance(e, (PinViolation, RunAborted)):
                 raise
         entry["wall_ms"] = round((time.perf_counter() - t0) * 1000)
 
@@ -344,7 +407,12 @@ def main(argv=None):
             "property_sets_dropped": sorted({ps for c in rec.tool_calls for ps in c.get("property_sets_dropped", [])}),
             "tool_result_chars_max": max((c["result_chars"] for c in rec.tool_calls), default=0),
         })
-        if error:
+        if budget_hit:
+            out_fail.write_text(json.dumps({"id": item["id"], "reason": error,
+                                            "tokens": rec.item_tokens}, indent=1))
+            entry.update(status="budget_exceeded", error=error,
+                         output=str(out_fail.relative_to(run_dir)))
+        elif error:
             entry.update(status="error", error=error)
         elif success:
             out_ids.write_text(success[-1]["result"]["ids_xml"], encoding="utf-8")
@@ -358,13 +426,29 @@ def main(argv=None):
             fh.write(json.dumps(entry, ensure_ascii=False, default=str) + "\n")
         id_map_path.write_text(json.dumps(id_map, indent=1))
         done += 1
-        print(f"[{done}] {item['id']:<55} {entry['status']:<7} {entry['wall_ms']/1000:6.1f}s "
-              f"tools={len(rec.tool_calls)} gen={len(gen_calls)} ${entry['cost_usd']:.4f}", flush=True)
+        print(f"[{done}] {item['id']:<55} {entry['status']:<16} {entry['wall_ms']/1000:6.1f}s "
+              f"tools={len(rec.tool_calls)} gen={len(gen_calls)} ${entry['cost_usd']:.4f} "
+              f"run=${rec.run_cost:.2f}", flush=True)
+        if args.max_spend and rec.run_cost >= args.max_spend:
+            print(f"\nSTOPPING: run spend ${rec.run_cost:.2f} reached the cap ${args.max_spend:.2f} "
+                  f"after {done} items. Resume with the same --run-id to continue.")
+            break
+        if args.pilot and done >= args.pilot:
+            break
 
     id_map_path.write_text(json.dumps(id_map, indent=1))
     if mo._neo4j_driver is not None:
         mo._neo4j_driver.close()
     print(f"\n{done} generated this session ({ok} with IDS) -> {run_dir}")
+    print(f"spend this session: ${rec.run_cost:.2f}")
+    if args.pilot and done:
+        per_item = rec.run_cost / done
+        full = args.project_items or len(tasks)
+        print(f"\nPILOT RESULT  model {PINNED_MODEL}")
+        print(f"  {done} items cost ${rec.run_cost:.4f}  ->  ${per_item:.4f} per item")
+        for reps in (1, 3):
+            print(f"  projection for {full} items x {reps} repeat(s): ${per_item * full * reps:.2f}")
+        print("  (projection includes the retries and thinking tokens these items actually used)")
 
 
 if __name__ == "__main__":
