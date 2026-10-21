@@ -96,12 +96,14 @@ def worked_examples() -> pd.DataFrame:
                                   "Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18",
                                   "Pset_SolarDeviceTypeCommon", "Status"),):
         rows.append({
-            "example": "missing value list accepts objects the reference rejects",
+            "example": "truncated value list rejects objects the reference accepts",
             "run": run, "id": iid,
             "reference": facet_xml(RUNS_DIR / run / "reference" / f"{safe_name(iid)}.ids", pset, base, None),
             "generated": facet_xml(RUNS_DIR / run / "generated" / f"{safe_name(iid)}.ids", pset, base, None),
-            "behaviour": "the generated file requires Status to exist but not which values are "
-                         "allowed, so an object with an out-of-list status passes (under-strict)"})
+            "behaviour": "the generated file allows 4 of the reference's 7 Status values (OTHER, "
+                         "NOTKNOWN and UNSET are dropped), so a device with Status UNSET passes the "
+                         "reference and fails the generated file (over-strict). No standard test "
+                         "object uses those three values, so only the probe objects expose it"})
     return pd.DataFrame(rows)
 
 
