@@ -293,6 +293,8 @@ def main(argv=None):
                     help="abort the run once cumulative spend reaches this (USD)")
     ap.add_argument("--no-datatype-fix", action="store_true",
                     help="ablation: hide the graph's ifc_type and restore the String->IFCTEXT mapping")
+    ap.add_argument("--no-request-checks", action="store_true",
+                    help="ablation: do not reject values/names the request does not support (v9)")
     args = ap.parse_args(argv)
 
     import aec_kg.ids.validator as validator
@@ -312,8 +314,11 @@ def main(argv=None):
         ids_models.set_guards(False)              # v4 behaviour: unknown keys silently ignored
     neuro.INCLUDE_IFC_TYPE = not args.no_datatype_fix
     mo.set_datatype_mode(not args.no_datatype_fix)
+    import aec_kg.ids.request_checks as request_checks
+    request_checks.set_request_checks(not args.no_request_checks)
+    mo.set_request_rules(not args.no_request_checks)      # the prompt rules travel with the checks
     fixes = {"truncation_fix": not args.no_truncation_fix, "model_guards": not args.no_model_guards,
-             "datatype_fix": not args.no_datatype_fix,
+             "datatype_fix": not args.no_datatype_fix, "request_checks": not args.no_request_checks,
              "temperature": args.temperature, "max_tool_result_chars": mo.MAX_TOOL_RESULT_CHARS,
              "legacy_truncation": mo.LEGACY_TRUNCATION, "strict_xsd": True}
 

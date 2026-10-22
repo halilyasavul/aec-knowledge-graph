@@ -13,22 +13,28 @@ import logging
 from pydantic import ValidationError
 
 from aec_kg.ids.models import IdsDocument
+from aec_kg.ids.request_checks import RequestContext, check_document
 from aec_kg.ids.serializer import serialize_ids
 from aec_kg.ids.validator import validate_ids_xml
 
 logger = logging.getLogger(__name__)
 
 
-def generate_ids_from_json(ids_json: dict) -> dict:
+def generate_ids_from_json(ids_json: dict, ctx: RequestContext | None = None) -> dict:
     """
     Generate an IDS XML file from an intermediate JSON specification.
 
     Args:
         ids_json: Dict matching the ``IdsDocument`` Pydantic schema.
+        ctx: The request the document answers and the property sets looked up so far
+            (``aec_kg.ids.request_checks.RequestContext``). With it, content the request
+            does not support is rejected like a validation error; without it only the
+            offline checks (property-name hygiene) run.
 
     Returns:
         On success: ``{"success": True, "ids_xml": "...", "spec_count": N}``
         On Pydantic error: ``{"error": "...", "validation_errors": [...]}``
+        On request-check error: ``{"error": "...", "request_errors": [...]}``
         On XSD error: ``{"error": "...", "xsd_errors": [...], "ids_xml": "..."}``
     """
     # Step 1: Pydantic validation
@@ -51,6 +57,15 @@ def generate_ids_from_json(ids_json: dict) -> dict:
                 '{"restriction": {"pattern": "regex"}} or a min/max bound; a property is '
                 '{"propertySet": {...}, "baseName": {...}, "dataType": "IFCLABEL", "value": {...}}.')
         return out
+
+    # Step 1b: content the request does not support
+    problems = check_document(doc, ctx)
+    if problems:
+        logger.warning("IDS request checks failed: %s", problems)
+        return {
+            "error": "The specification states things the request does not. Fix each point and retry.",
+            "request_errors": problems,
+        }
 
     # Step 2: Serialize to XML
     try:

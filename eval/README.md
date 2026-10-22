@@ -33,6 +33,10 @@ Generation needs the knowledge graph. To use a local rebuild instead of Aura, st
 
 Default item pool: the IFC-only items (`--all` to include project-specific property sets).
 Every v5 fix has an off switch: `--no-truncation-fix`, `--no-model-guards`, `--temperature`.
+The v9 request checks (`aec_kg/ids/request_checks.py`: property names, record-vs-require,
+values and bounds traced to the request, complete IFC enumerations, generate_ids retry cap,
+no-file reconciliation) and their prompt rules switch off together with `--no-request-checks`;
+that also reproduces the Run 5/6 system prompt byte for byte, so those runs can still be resumed.
 
 ## Metrics
 

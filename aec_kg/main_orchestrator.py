@@ -18,6 +18,7 @@ Usage:
 
 import os
 import json
+import threading
 import logging
 import re
 import time
@@ -29,6 +30,8 @@ from google.genai import types
 from aec_kg.config import GEMINI_API_KEY, GEMINI_MODEL, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, UCKS_STORAGE
 from aec_kg.neuro_agent import get_class_requirements, get_class_structure, list_classes
 from aec_kg.ids.pipeline import generate_ids_from_json
+from aec_kg.ids.request_checks import (MAX_GENERATE_FAILURES, RequestContext,
+                                       reconcile_attachment_claim)
 from aec_kg.ucks.pipeline import define_entity_from_json, list_ucks_entities, get_ucks_entity_detail
 
 logger = logging.getLogger(__name__)
@@ -41,6 +44,29 @@ RETRY_BASE_DELAY = 10  # seconds
 _WRITE_KEYWORDS = re.compile(
     r"\b(CREATE|DELETE|DETACH|SET|REMOVE|MERGE|DROP|CALL\s*\{)\b", re.IGNORECASE
 )
+
+IDS_RULES_V9 = """\
+  - Property names: copy "code" from query_class exactly (FireRating, never
+    "Fire Rating" or a translation). A property query_class does not list for
+    a Pset_/Qto_ set does not exist there; put a genuinely new property in a
+    custom set instead.
+  - Record vs. require. "Indication whether ...", "Angabe, ob ... (JA/NEIN)",
+    "whether or not ..." ask for the property to be RECORDED: require the
+    property and give NO value. Pin a Boolean only when the request says it
+    must be TRUE or FALSE for every element.
+  - Values come from the request or from query_class "allowed_values", nowhere
+    else. Do not invent fire-rating classes, bounds or example values. When the
+    request names no value, require the property to be present and stop.
+  - Enumerations: when the request points at a property's standard values
+    ("Standard-Werte", "the IFC values", "as defined in <...>Enum"), use the
+    COMPLETE allowed_values list from query_class, never a hand-picked subset;
+    add any further values the request names verbatim.
+  - Coverage: every requirement sentence of the request gets a facet; a sentence
+    that only explains what the element is gets none.
+  - generate_ids rejects content the request does not support ("request_errors").
+    Fix exactly what it names. After its fourth failure it stops; then tell the
+    user generation failed and why. Never retry past that.
+"""
 
 SYSTEM_PROMPT = """\
 You are an AEC (Architecture, Engineering, Construction) Knowledge Engine. You have two modes:
@@ -177,6 +203,7 @@ For custom properties without an IFC match, suggest a PropertySet name like
     ...) — "String" is IFCLABEL, IFCIDENTIFIER or IFCTEXT depending on the
     property, and only "ifc_type" says which.
   - If a property has no "ifc_type", omit dataType rather than guessing.
+__V9_RULES__
   - NEVER paste the IDS XML into your reply. When generate_ids returns
     success, the file is attached to the chat as a downloadable .ids file
     automatically — briefly summarize what the specification requires
@@ -198,7 +225,7 @@ For custom properties without an IFC match, suggest a PropertySet name like
     the app attaches entity definitions automatically when available. If
     you truly have nothing to work from, ask the user which IFC class or
     concept the specification is for.
-"""
+""".replace("__V9_RULES__\n", IDS_RULES_V9)
 
 SYSTEM_PROMPT_PRE_V6 = SYSTEM_PROMPT.replace(
     """  - dataType MUST be UPPERCASE IFC type (e.g. "IFCLABEL", "IFCBOOLEAN").
@@ -215,11 +242,28 @@ SYSTEM_PROMPT_PRE_V6 = SYSTEM_PROMPT.replace(
 """)
 
 
+_PROMPT_MODE = {"graph_types": True, "request_rules": True}
+
+
+def _compose_prompt() -> str:
+    base = _SYSTEM_PROMPT_V6 if _PROMPT_MODE["graph_types"] else SYSTEM_PROMPT_PRE_V6
+    return base if _PROMPT_MODE["request_rules"] else base.replace(IDS_RULES_V9, "")
+
+
 def set_datatype_mode(use_graph_types: bool) -> None:
     """Choose the dataType guidance: the v6 graph-supplied ifc_type, or the old mapping
     table that produced IFCTEXT wherever bSDD said "String"."""
     global SYSTEM_PROMPT
-    SYSTEM_PROMPT = _SYSTEM_PROMPT_V6 if use_graph_types else SYSTEM_PROMPT_PRE_V6
+    _PROMPT_MODE["graph_types"] = use_graph_types
+    SYSTEM_PROMPT = _compose_prompt()
+
+
+def set_request_rules(enabled: bool) -> None:
+    """Include or drop the v9 request-fidelity rules (names, record-vs-require, values,
+    enumerations, coverage, retry cap) so an older run can be resumed with its own prompt."""
+    global SYSTEM_PROMPT
+    _PROMPT_MODE["request_rules"] = enabled
+    SYSTEM_PROMPT = _compose_prompt()
 
 
 _SYSTEM_PROMPT_V6 = SYSTEM_PROMPT
@@ -589,12 +633,45 @@ def _truncate_result(result: dict, max_chars: int | None = None) -> dict:
     return {"summary": json.dumps(result, default=str, ensure_ascii=False)[:max_chars], "_truncated": True}
 
 
+class _Turn(threading.local):
+    """What one run_agent turn has seen: the request, the property sets looked up, and how
+    generate_ids has gone. dispatch_tool reads it; run_agent resets it. Thread-local, so
+    concurrent web requests do not see each other's turns."""
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self, request_text: str | None = None):
+        self.ctx = RequestContext(request_text=request_text)
+        self.generate_failures = 0
+        self.generate_success = False
+
+
+TURN = _Turn()
+
+
+def request_text_from(contents) -> str:
+    """Every user-typed message in the conversation, oldest first. Function responses also
+    carry role 'user' but have no text parts."""
+    texts = []
+    for c in contents or []:
+        if getattr(c, "role", None) != "user":
+            continue
+        for part in getattr(c, "parts", None) or []:
+            t = getattr(part, "text", None)
+            if t:
+                texts.append(t)
+    return "\n\n".join(texts)
+
+
 def dispatch_tool(name: str, args: dict) -> dict:
     """Route tool calls to actual functions."""
     logger.info("Tool call: %s(%s)", name, json.dumps(args, ensure_ascii=False)[:200])
 
     if name == "query_class":
-        return get_class_requirements(args["class_code"])
+        result = get_class_requirements(args["class_code"])
+        TURN.ctx.learn(result)
+        return result
     elif name == "query_class_structure":
         return get_class_structure(args["class_code"])
     elif name == "search_classes":
@@ -610,7 +687,20 @@ def dispatch_tool(name: str, args: dict) -> dict:
                 return {"error": f"Invalid JSON string: {e}"}
         else:
             ids_data = raw
-        return generate_ids_from_json(ids_data)
+        if TURN.generate_failures >= MAX_GENERATE_FAILURES:
+            return {"error": f"generate_ids has failed {TURN.generate_failures} times in this turn and "
+                             "will not be retried. Do not call it again. Tell the user that no IDS "
+                             "file could be produced and quote the last error.",
+                    "stop": True}
+        result = generate_ids_from_json(ids_data, TURN.ctx)
+        if result.get("success"):
+            TURN.generate_success = True
+        else:
+            TURN.generate_failures += 1
+            if TURN.generate_failures >= MAX_GENERATE_FAILURES:
+                result["final_attempt"] = ("This was the last permitted attempt. Do not call "
+                                           "generate_ids again in this turn; report the failure.")
+        return result
     elif name == "define_entity":
         raw = args.get("entity_json_string") or args.get("entity_json", "{}")
         if isinstance(raw, str):
@@ -699,6 +789,7 @@ def run_agent(user_message: str, history: list | None = None) -> tuple:
     contents.append(
         types.Content(role="user", parts=[types.Part(text=user_message)])
     )
+    TURN.reset(request_text_from(contents))
 
     tool_log = []
 
@@ -733,7 +824,7 @@ def run_agent(user_message: str, history: list | None = None) -> tuple:
 
         if not fn_calls:
             # No function calls — final text response
-            answer = response.text or ""
+            answer = reconcile_attachment_claim(response.text or "", TURN.generate_success)
             return answer, contents, tool_log
 
         # Execute each function call and build responses
@@ -803,7 +894,10 @@ def run_agent(user_message: str, history: list | None = None) -> tuple:
         contents.append(types.Content(role="user", parts=fn_response_parts))
 
     logger.warning("Agent reached max iterations (%d).", MAX_ITERATIONS)
-    return "I reached the maximum number of steps. Please try a simpler question.", contents, tool_log
+    answer = "I reached the maximum number of steps. Please try a simpler question."
+    if not TURN.generate_success:
+        answer += " No IDS file was produced."
+    return answer, contents, tool_log
 
 
 # ---------------------------------------------------------------------------

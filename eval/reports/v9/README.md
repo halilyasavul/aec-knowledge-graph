@@ -39,3 +39,25 @@ it does not move 2.5 Flash, whose remaining failures are omissions and truncatio
 
 The labels are the author's reading, like the determinacy labels. The 14 defect labels are
 system faults and stay counted.
+
+## B. Generator changes (not yet run; no model calls made)
+
+`aec_kg/ids/request_checks.py`, called from `generate_ids`, rejects content the request does
+not support, so the model repairs it in the same turn the way it repairs a validation error:
+
+| check | v8 defect it answers |
+| --- | --- |
+| baseName with whitespace; name absent from a looked-up `Pset_`/`Qto_` set (with suggestions) | `Pset_ColumnCommon.Fire Rating`, 7 item-runs |
+| Boolean pinned without a directive in the request ("must be TRUE", "muss WAHR sein", "= TRUE") | `FireExit = TRUE` on "Angabe, ob ..." / "Indication whether ...", the most common invented constraint |
+| exact value / enumeration member / numeric bound neither in the request nor in the property's IFC values | `REI 90`, `ND, NE, REI 30 ...`, `RequiredSlope <= 0.06` |
+| enumeration that is a strict subset of the IFC enumeration while the request names no subset | `Status` without OTHER/NOTKNOWN/UNSET (the 4-of-7 case is *not* caught: the request names those four in parentheses; the prompt rule covers it) |
+| generate_ids refuses a fifth attempt in a turn; a reply that claims an attachment after no success gets a correction appended | 5 "every attempt rejected" item-runs; "attached" with no file on disk |
+
+The system prompt gains matching rules (names, record vs. require, values, complete
+enumerations, coverage, the retry cap). `eval/generate.py --no-request-checks` turns both off
+and reproduces the Run 5/6 prompt exactly (sha `11f3d84b…`), so Run 6 rep2 can still be
+finished with its own prompt.
+
+Expected direction once rerun: determined-only up, strict down (more omissions where the
+request gives no value) — the trade the study is about. 21 offline tests in
+`tests/test_v9_request_checks.py`, including the agent loop against a scripted client.
