@@ -1,0 +1,1202 @@
+run,id,call,accepted,pydantic_ok,n_problems,kinds,problems
+run5-rep1,IDS_ArcDox.ids#1,2,False,False,,,"5 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pro..., 'dataType': 'IFCTEXT'}, input_type=dic"
+run5-rep1,IDS_ArcDox.ids#1,3,True,True,0.0,,
+run5-rep1,IDS_oma_input.ids#2,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCLABEL', input_type=str]
+    For further "
+run5-rep1,IDS_oma_input.ids#2,2,True,True,0.0,,
+run5-rep1,NL_BIM_Basis_ILS_v2.ids#1,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCLABEL', input_type=str]
+    For further i"
+run5-rep1,NL_BIM_Basis_ILS_v2.ids#1,3,True,True,0.0,,
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,4,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,5,False,False,,,"1 validation error for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], inp"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#2,6,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#4,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#4,2,True,True,0.0,,
+run5-rep1,IDS_ArcDox.ids#4,2,False,False,,,"5 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCLABEL', input_type=str]
+    For further "
+run5-rep1,IDS_ArcDox.ids#4,3,True,True,0.0,,
+run5-rep1,IDS4ALL-Template_Example specifications.ids#5,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...rotection regulations.'}, input_type=dic"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#5,2,True,True,0.0,,
+run5-rep1,IDS_ArcDox.ids#5,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCCOMPOUNDPLANEANGLEMEASURE', input_type=s"
+run5-rep1,IDS_ArcDox.ids#5,3,True,True,0.0,,
+run5-rep1,IDS4ALL-Template_Example specifications.ids#14,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...otection regulations.'}}, input_type=dic"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#14,2,True,True,0.0,,
+run5-rep1,IDS4ALL-Template_Example specifications.ids#15,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...otection regulations.'}}, input_type=dic"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#15,2,True,True,0.0,,
+run5-rep1,IDS4ALL-Template_Example specifications.ids#16,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...otection regulations.'}}, input_type=dic"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#16,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...LISH', 'TEMP"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,2,False,False,,,"6 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Mem...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,3,True,True,2.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_MemberCommon.IsExternal is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE. || specifications[0].requirements.properties[1]: Pset_MemberCommon.LoadBearing is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,IDS4ALL-Template_Example specifications.ids#17,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...otection regulations.'}}, input_type=dic"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#17,2,True,True,0.0,,
+run5-rep1,IDS4ALL-Template_Example specifications.ids#18,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep1,IDS4ALL-Template_Example specifications.ids#18,2,True,True,0.0,,
+run5-rep1,IDS_oma_input.ids#10,2,False,False,,,"16 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], i"
+run5-rep1,IDS_oma_input.ids#10,3,False,False,,,"10 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], i"
+run5-rep1,IDS_oma_input.ids#10,4,False,False,,,"6 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], in"
+run5-rep1,IDS_oma_input.ids#10,5,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], in"
+run5-rep1,IDS_oma_input.ids#10,6,False,False,,,"1 validation error for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCWALL'}}], inp"
+run5-rep1,IDS_oma_input.ids#10,7,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'name': 'IFCRAMP'}], input_type=lis"
+run5-rep1,IDS_oma_input.ids#10,8,False,False,,,"1 validation error for IdsDocument
+specifications.0.applicability.entity
+  Input should be a valid dictionary or instance of EntityFacet [type=model_type, input_value=[{'name': 'IFCRAMP'}, {'name': 'I"
+run5-rep1,IDS_oma_input.ids#10,9,True,True,2.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_RampCommon.HandicapAccessible is pinned to 'true', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE. || specifications[0].requirements.properties[2]: Pset_RampCommon.FireExit is pinned to 'true', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,1,False,False,,,"8 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Rai...e': 'IFCLENGTHMEASURE'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.properties.2.value.enumeration
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['NEW', 'EXISTING', 'DEMOLISH', 'TEM"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,3,True,True,2.0,boolean_pinned_without_directive bound_not_in_request,"specifications[0].requirements.properties[0]: Pset_RailingCommon.Height minInclusive='0.0', but the request states no such number. Omit the bound and require the property to be present, or use the number the request gives. || specifications[0].requirements.properties[1]: Pset_RailingCommon.IsExternal is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...mpleValue': "
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,2,False,False,,,"4 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sol...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,3,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pip...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,2,False,False,,,"Expecting ',' delimiter: line 5 column 1 (char 57)"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,3,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'description': 'Sanitä...ISH', 'TEMPOR"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ISH', 'TEMPO"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_San...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,4,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,1,False,False,,,"9 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Qto_Spac... {'minInclusive': '0'}}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,2,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.2.value.restriction.enumerations.0
+  Input should be a valid string [type=string_type, input_value={'value': 'Wohnen und Au"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,3,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Roo...e': {'simpleValue': ''}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Roo...e': {'simpleValue': ''}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.properties.0.value
+  Value error, simpleValue '.+' looks like a regular expression. simpleValue is an exact value; use {'restriction': "
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,3,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...mpleValue': 'REQUIRED'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...dschutzveror"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ataType': 'I"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,3,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...randschutzverordnung.'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,4,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Win... '.*'}}, 'minOccurs': 1}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ataType': 'I"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,3,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...': {'pattern"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla...on': {'pattern': '.*'}}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,3,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'F...he outside) "
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,2,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireExit', 'pro... the outside) is TRUE.'}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,3,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_RampCommon.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram...: {'simpleValue': '.*'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'Fire Rating', '...ng': {'pattern': '.*'}}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,2,True,True,1.0,property_name_whitespace,specifications[0].requirements.properties[0]: baseName 'Fire Rating' contains whitespace. IFC property names are single tokens (e.g. 'FireRating'); copy the 'code' field from query_class exactly.
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram... 'IFCPLANEANGLEMEASURE'}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa... Freie) ist TRUE/WAHR.'}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'true', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...m': ['TRUE', 'FALSE']}}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...impleValue':"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,3,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Col... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,2,True,True,1.0,property_name_whitespace,specifications[0].requirements.properties[0]: baseName 'Fire Rating' contains whitespace. IFC property names are single tokens (e.g. 'FireRating'); copy the 'code' field from query_class exactly.
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Col... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,2,True,True,1.0,property_name_whitespace,specifications[0].requirements.properties[0]: baseName 'Fire Rating' contains whitespace. IFC property names are single tokens (e.g. 'FireRating'); copy the 'code' field from query_class exactly.
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sta...mpleValue': 'required'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sta...mpleValue': 'required'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,2,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal...e': {'simpleValue': ''}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,3,True,True,0.0,,
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,2,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal...randschutzverordnung.'}}, input_type=dic"
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,3,True,True,0.0,,
+run5-rep2,IDS_ArcDox.ids#1,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'attribute': {'name': '...'dataType': "
+run5-rep2,IDS_ArcDox.ids#1,3,False,False,,,"5 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pro..., 'dataType': 'IFCREAL'}, input_type=dic"
+run5-rep2,IDS_ArcDox.ids#1,4,True,True,0.0,,
+run5-rep2,IDS_oma_input.ids#2,1,False,False,,,"4 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.value
+  Value error, simpleValue '.*' looks like a regular expression. simpleValue is an exact value; use {'restriction':"
+run5-rep2,IDS_oma_input.ids#2,2,True,True,0.0,,
+run5-rep2,NL_BIM_Basis_ILS_v2.ids#1,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCLABEL', input_type=str]
+    For further i"
+run5-rep2,NL_BIM_Basis_ILS_v2.ids#1,3,True,True,0.0,,
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,4,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,5,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SlabCommon.LoadBearing is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep2,IDS4ALL-Template_Example specifications.ids#4,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal...otection regulations.'}}, input_type=dic"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#4,2,True,True,0.0,,
+run5-rep2,IDS_ArcDox.ids#4,2,False,False,,,"5 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCLABEL', input_type=str]
+    For further "
+run5-rep2,IDS_ArcDox.ids#4,3,True,True,0.0,,
+run5-rep2,IDS4ALL-Template_Example specifications.ids#5,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...rotection regulations.'}, input_type=dic"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#5,2,True,True,0.0,,
+run5-rep2,IDS_ArcDox.ids#5,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCCOMPOUNDPLANEANGLEMEASURE', input_type=s"
+run5-rep2,IDS_ArcDox.ids#5,3,True,True,0.0,,
+run5-rep2,IDS4ALL-Template_Example specifications.ids#14,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'F...ection regul"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#14,2,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...otection regulations.'}}, input_type=dic"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#14,3,True,True,0.0,,
+run5-rep2,IDS4ALL-Template_Example specifications.ids#15,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'F...ection regul"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#15,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'F...ection regul"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#15,3,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...otection regulations.'}}, input_type=dic"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#15,4,True,True,0.0,,
+run5-rep2,IDS4ALL-Template_Example specifications.ids#16,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...otection regulations.'}}, input_type=dic"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#16,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ISH', 'TEMPO"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,2,False,False,,,"6 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Mem...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,3,True,True,2.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_MemberCommon.IsExternal is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE. || specifications[0].requirements.properties[1]: Pset_MemberCommon.LoadBearing is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep2,IDS4ALL-Template_Example specifications.ids#17,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal...otection regulations.'}}, input_type=dic"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#17,2,True,True,0.0,,
+run5-rep2,IDS4ALL-Template_Example specifications.ids#18,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...rotection regulations.'}, input_type=dic"
+run5-rep2,IDS4ALL-Template_Example specifications.ids#18,2,True,True,0.0,,
+run5-rep2,IDS_oma_input.ids#10,3,False,False,,,"16 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram...dataType': 'IFCBOOLEAN'}, input_type=di"
+run5-rep2,IDS_oma_input.ids#10,4,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'H...LISH', 'TEMP"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'H...LISH', 'TEMP"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,3,False,False,,,"6 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'Height', 'prope...pe': 'IFCLENGTHMEASURE'}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,4,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sol...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,3,False,False,,,"4 validation errors for IdsDocument
+specifications.0.requirements.properties.0.value.restriction.enumerations.0
+  Input should be a valid string [type=string_type, input_value={'value': 'NEW'}, input_"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,4,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...mpleValue': "
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,2,False,False,,,"4 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pip...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...mpleValue': "
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,4,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...mpleValue': "
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,5,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_San...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper... sicherung',"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,2,False,False,,,"5 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Qto_Spac...'minExclusive': '0.0'}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,3,True,True,1.0,bound_not_in_request,"specifications[0].requirements.properties[0]: Qto_SpaceBaseQuantities.NetFloorArea minExclusive='0.0', but the request states no such number. Omit the bound and require the property to be present, or use the number the request gives."
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea...on': {'pattern': '.*'}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea...on': {'pattern': '.*'}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Roo...e': {'simpleValue': ''}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Roo...'dataType': 'IFCLABEL'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...mpleValue': 'REQUIRED'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.property
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, inpu"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.property
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'propertySet': 'Pset_Sla...on': {'pattern': '.*'}}}, inpu"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,4,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...': {'pattern"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,5,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Win..., 'measure': 'required'}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...': {'pattern"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla...on': {'pattern': '.*'}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,3,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ataType': 'I"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,3,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], in"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireExit', 'pro...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,3,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_RampCommon.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,1,False,False,,,"4 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram...Brandschutzverordnung.'}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'Fire Rating', '...ng': {'pattern': '.*'}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,2,True,True,1.0,property_name_whitespace,specifications[0].requirements.properties[0]: baseName 'Fire Rating' contains whitespace. IFC property names are single tokens (e.g. 'FireRating'); copy the 'code' field from query_class exactly.
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram... {'simpleValue': '0.0'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa... Freie) ist TRUE/WAHR.'}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'true', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper... ['TRUE', 'F"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...m': ['TRUE', 'FALSE']}}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,3,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,1,False,False,,,"4 validation errors for IdsDocument
+specifications.0.applicability.entity.PredefinedType
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'simpleValue': 'EXTERNAL'}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.applicability.entity.PredefinedType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='EXTERNAL', input_type=str]
+    For further "
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.applicability.entity.PredefinedType
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'value': {'simpleValue': 'EXTERNAL'}}, inpu"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,4,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'F...simpleValue'"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireExit', 'pro...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,3,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...impleValue':"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,3,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...{'simpleValu"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,2,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Col...: {'simpleValue': '.*'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,3,True,True,1.0,property_name_whitespace,specifications[0].requirements.properties[0]: baseName 'Fire Rating' contains whitespace. IFC property names are single tokens (e.g. 'FireRating'); copy the 'code' field from query_class exactly.
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Col... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,2,True,True,1.0,property_name_whitespace,specifications[0].requirements.properties[0]: baseName 'Fire Rating' contains whitespace. IFC property names are single tokens (e.g. 'FireRating'); copy the 'code' field from query_class exactly.
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sta...mpleValue': 'required'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sta...mpleValue': 'required'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal...randschutzverordnung.'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,2,True,True,0.0,,
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,2,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal...randschutzverordnung.'}}, input_type=dic"
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,3,True,True,0.0,,
+run5-rep3,IDS_ArcDox.ids#1,1,False,False,,,"9 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pro...mpleValue': 'REQUIRED'}}, input_type=dic"
+run5-rep3,IDS_ArcDox.ids#1,2,True,True,0.0,,
+run5-rep3,IDS_oma_input.ids#2,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCLABEL', input_type=str]
+    For further i"
+run5-rep3,IDS_oma_input.ids#2,3,True,True,0.0,,
+run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCBUILDINGSTOR"
+run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCLABEL', input_type=str]
+    For further i"
+run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,4,True,True,0.0,,
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,2,False,False,,,"4 validation errors for IdsDocument
+specifications.0.applicability.entity
+  Input should be a valid dictionary or instance of EntityFacet [type=model_type, input_value=[{'name': 'IFCSLAB'}], input_typ"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.properties.0.baseName.value
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'simpleValue': 'LoadBearing'}, input_t"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,4,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SlabCommon.LoadBearing is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep3,IDS4ALL-Template_Example specifications.ids#4,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#4,2,True,True,0.0,,
+run5-rep3,IDS_ArcDox.ids#4,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'attribute': {'name': '...leValue': 'R"
+run5-rep3,IDS_ArcDox.ids#4,3,False,False,,,"10 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.value
+  Value error, simpleValue 'REQUIRED' states that the property is required, it is not a value of the property. Omi"
+run5-rep3,IDS_ArcDox.ids#4,4,True,True,0.0,,
+run5-rep3,IDS4ALL-Template_Example specifications.ids#5,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...rotection regulations.'}, input_type=dic"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#5,2,True,True,0.0,,
+run5-rep3,IDS_ArcDox.ids#5,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'attribute': {'name': '...UNDPLANEANGL"
+run5-rep3,IDS_ArcDox.ids#5,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.dataType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='IFCCOMPOUNDPLANEANGLEMEASURE', input_type=s"
+run5-rep3,IDS_ArcDox.ids#5,4,True,True,0.0,,
+run5-rep3,IDS4ALL-Template_Example specifications.ids#14,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... {'simpleValue': 'TBD'}}, input_type=dic"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#14,2,True,True,0.0,,
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...dataType': '"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...: {'simpleVa"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper... {'simpleVal"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,4,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ataType': 'I"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,5,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,6,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper... {'simpleVal"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#15,7,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...: {'simpleVa"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...dataType': '"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...: {'simpleVa"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper... {'simpleVal"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,4,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ataType': 'I"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#16,5,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...: {'simpleVa"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...LISH', 'TEMP"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,2,False,False,,,"6 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Mem...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#17,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...rotection regulations.'}, input_type=dic"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#17,2,True,True,0.0,,
+run5-rep3,IDS4ALL-Template_Example specifications.ids#18,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep3,IDS4ALL-Template_Example specifications.ids#18,2,True,True,0.0,,
+run5-rep3,IDS_oma_input.ids#10,2,False,False,,,"16 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], i"
+run5-rep3,IDS_oma_input.ids#10,3,False,False,,,"10 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], i"
+run5-rep3,IDS_oma_input.ids#10,4,False,False,,,"6 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], in"
+run5-rep3,IDS_oma_input.ids#10,5,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCRAMP'}}], in"
+run5-rep3,IDS_oma_input.ids#10,6,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'name': 'IFCRAMP'}], input_type=lis"
+run5-rep3,IDS_oma_input.ids#10,7,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,1,False,False,,,"8 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Rai...e': 'IFCLENGTHMEASURE'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.properties.2.value.enumeration
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['NEW', 'EXISTING', 'DEMOLISH', 'TEM"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,3,True,True,2.0,boolean_pinned_without_directive bound_not_in_request,"specifications[0].requirements.properties[0]: Pset_RailingCommon.Height minInclusive='0.0', but the request states no such number. Omit the bound and require the property to be present, or use the number the request gives. || specifications[0].requirements.properties[1]: Pset_RailingCommon.IsExternal is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...mpleValue': "
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,2,False,False,,,"4 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sol...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,3,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,1,False,False,,,"5 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pip...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.properties.1.value.maxInclusive
+  Extra inputs are not permitted [type=extra_forbidden, input_value=10000, input_type=int]
+    For furt"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.properties.1.value.restriction.maxInclusive
+  Input should be a valid string [type=string_type, input_value=10000, input_type=int]
+    "
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,4,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_San...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,1,False,False,,,"6 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...e': {'simpleValue': ''}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Roo... {'simpleValue': 'ANY'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Roo... {'simpleValue': 'ANY'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla...mpleValue': 'REQUIRED'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.applicability
+  Input should be a valid dictionary or instance of Applicability [type=model_type, input_value=[{'entity': {'name': 'IFCSLAB'}}], in"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ataType': 'I"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,4,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'F...ndschutzvero"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'F...ndschutzvero"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,3,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'name': 'F...'simpleValue"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,4,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireRating', 'p...randschutzverordnung.'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,5,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...': {'pattern"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...: {'pattern'"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla...on': {'pattern': '.*'}}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,4,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...: {'pattern'"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,5,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...': {'pattern"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...: {'pattern'"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla...on': {'pattern': '.*'}}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,4,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...: {'pattern'"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,5,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...: {'pattern'"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,6,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...': {'pattern"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,7,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ataType': 'I"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_RampCommon.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'Fire Rating', '...ng': {'pattern': '.*'}}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,2,True,True,1.0,property_name_whitespace,specifications[0].requirements.properties[0]: baseName 'Fire Rating' contains whitespace. IFC property names are single tokens (e.g. 'FireRating'); copy the 'code' field from query_class exactly.
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram...e': {'simpleValue': ''}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram... {'maxExclusive': 0.5}}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,2,True,True,1.0,bound_not_in_request,"specifications[0].requirements.properties[0]: Pset_RampCommon.RequiredSlope maxExclusive='0.5', but the request states no such number. Omit the bound and require the property to be present, or use the number the request gives."
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...reie) ist TR"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,2,False,False,,,"5 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa... Freie) ist TRUE/WAHR.'}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,3,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'name':...impleValue':"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,2,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'name': 'FireExit', 'pro...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,3,False,False,,,Expecting value: line 1 column 1 (char 0)
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,4,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...{'simpleValue': 'TRUE'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,2,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.applicability.entity.PredefinedType
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'simpleValue': 'SPACE'}, input_type=dict]
+"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.applicability.entity.PredefinedType
+  Extra inputs are not permitted [type=extra_forbidden, input_value='SPACE', input_type=str]
+    For further inf"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,4,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'propertySet': {'name':...simpleValue'"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,5,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.attributes.0.name
+  Field required [type=missing, input_value={'attributeName': 'Predef...'simpleValue': 'SPACE'}}, input_type=dict]
+ "
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,6,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SpaceFireSafetyRequirements.FireExit is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...{'simpleValu"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,2,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Col...: {'simpleValue': '.*'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,3,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'property': {'propertyS...{'simpleValu"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,2,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Col...: {'simpleValue': '.*'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,3,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sta...Brandschutzverordnung.'}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,2,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sta... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.properties.0.value
+  Value error, simpleValue '.*' looks like a regular expression. simpleValue is an exact value; use {'restriction': "
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,3,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements
+  Input should be a valid dictionary or instance of Requirements [type=model_type, input_value=[{'properties': [{'proper...ataType': 'I"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,4,True,True,0.0,,
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal...randschutzverordnung.'}}, input_type=dic"
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,2,True,True,0.0,,
+run6-flash-rep1,IDS_ArcDox.ids#1,7,False,True,0.0,,
+run6-flash-rep1,IDS_ArcDox.ids#1,10,False,False,,,"4 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pro...aType': 'IFCIDENTIFIER'}, input_type=dic"
+run6-flash-rep1,IDS_ArcDox.ids#1,11,True,True,2.0,property_not_in_pset,"specifications[0].requirements.properties[0]: Pset_ProjectCommon has no property 'ProjectID' in the knowledge graph. Did you mean ProjectInvestmentEstimate, ProjectType? Use a name query_class listed for Pset_ProjectCommon, or a custom property set for a custom property. || specifications[0].requirements.properties[1]: Pset_ProjectCommon has no property 'FunctionalUnit' in the knowledge graph. Use a name query_class listed for Pset_ProjectCommon, or a custom property set for a custom property."
+run6-flash-rep1,IDS_oma_input.ids#2,4,True,True,0.0,,
+run6-flash-rep1,NL_BIM_Basis_ILS_v2.ids#1,2,False,False,,,"1 validation error for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit https"
+run6-flash-rep1,NL_BIM_Basis_ILS_v2.ids#1,3,False,True,0.0,,
+run6-flash-rep1,NL_BIM_Basis_ILS_v2.ids#1,4,True,True,0.0,,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#2,9,False,False,,,"2 validation errors for IdsDocument
+info
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.14/v/missing
+specifications
+  "
+run6-flash-rep1,IDS_ArcDox.ids#3,2,False,True,0.0,,
+run6-flash-rep1,IDS_ArcDox.ids#3,3,False,True,0.0,,
+run6-flash-rep1,IDS_ArcDox.ids#3,4,False,True,0.0,,
+run6-flash-rep1,IDS_ArcDox.ids#3,5,True,True,0.0,,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#4,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#4,2,True,True,0.0,,
+run6-flash-rep1,IDS_ArcDox.ids#4,2,True,True,0.0,,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#5,1,True,True,0.0,,
+run6-flash-rep1,IDS_ArcDox.ids#5,2,True,True,0.0,,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#14,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#14,2,True,True,0.0,,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#15,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#15,2,True,True,0.0,,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#16,1,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,1,False,False,,,"3 validation errors for IdsDocument
+info
+  Field required [type=missing, input_value={'test': True}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.14/v/missing
+speci"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,2,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,3,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,4,True,True,0.0,,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#17,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#17,2,True,True,0.0,,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#18,1,True,True,0.0,,
+run6-flash-rep1,IDS_oma_input.ids#10,5,False,False,,,"6 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': {'simpleV...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run6-flash-rep1,IDS_oma_input.ids#10,6,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,5,False,False,,,"2 validation errors for IdsDocument
+info
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.14/v/missing
+specifications
+  "
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,6,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': {'simpleV...MOLISH', 'TEMPORARY']}}}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,7,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,8,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,9,True,True,0.0,,
+run6-flash-rep1,IDS_oma_input.ids#13,4,False,False,,,"1 validation error for IdsDocument
+specifications
+  List should have at least 1 item after validation, not 0 [type=too_short, input_value=[], input_type=list]
+    For further information visit https:/"
+run6-flash-rep1,IDS_oma_input.ids#13,5,False,False,,,"1 validation error for IdsDocument
+specifications.0.applicability.entity.name
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic"
+run6-flash-rep1,IDS_oma_input.ids#13,6,False,True,0.0,,
+run6-flash-rep1,IDS_oma_input.ids#13,7,True,True,0.0,,
+run6-flash-rep1,IDS_oma_input.ids#13,8,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.attributes.0.value
+  Value error, Exactly one of 'simpleValue' or 'restriction' must be set, got simpleValue=unset, restriction=unset ["
+run6-flash-rep1,IDS_oma_input.ids#13,9,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.entity
+  Extra inputs are not permitted [type=extra_forbidden, input_value={}, input_type=dict]
+    For further information visit https"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,3,False,False,,,"2 validation errors for IdsDocument
+info
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.14/v/missing
+specifications
+  "
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,4,False,False,,,"2 validation errors for IdsDocument
+specifications.0.name
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.14/v/missing
+"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,5,False,False,,,"1 validation error for IdsDocument
+specifications.0.applicability.entity.name
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,6,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,7,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sol...bbruch', 'Temporär']}}}, input_type=dict"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,8,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,9,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,7,False,False,,,"1 validation error for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit https"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,8,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,9,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,3,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,4,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,5,False,True,1.0,enumeration_member_not_in_request,"specifications[0].requirements.properties[2]: Pset_ONORM_B1800.Nutzungsgruppe enumeration contains ['Büroarbeit', 'Produktion und Handarbeit, Experimente', 'Lagern, Verkaufen und Verteilen', 'Bildung, Unterricht und Kultur', 'Heilen und Pflegen', 'Verkehrserschließung und -sicherung', 'Technische Funktionsflächen', 'Sonstige Nutzungen'], which the request does not state and which are not IFC values of this property. Keep only values from the request or from query_class allowed_values."
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,6,True,True,1.0,enumeration_member_not_in_request,"specifications[0].requirements.properties[2]: Pset_ONORM_B1800.Nutzungsgruppe enumeration contains ['Büroarbeit', 'Produktion und Handarbeit, Experimente', 'Lagern, Verkaufen und Verteilen', 'Bildung, Unterricht und Kultur', 'Heilen und Pflegen', 'Verkehrserschließung und -sicherung', 'Technische Funktionsflächen', 'Sonstige Nutzungen'], which the request does not state and which are not IFC values of this property. Keep only values from the request or from query_class allowed_values."
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,4,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,5,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': {'simpleV... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Roo... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,1,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,1,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram... 'IFCPLANEANGLEMEASURE'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,4,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,5,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,2,False,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,3,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Col... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit http"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sta... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sta... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,2,True,True,0.0,,
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,2,True,True,0.0,,
+run6-flash-rep2,IDS_ArcDox.ids#1,9,False,False,,,"1 validation error for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit https"
+run6-flash-rep2,IDS_ArcDox.ids#1,10,True,True,0.0,,
+run6-flash-rep2,IDS_ArcDox.ids#1,11,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pro... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,IDS_oma_input.ids#2,4,True,True,0.0,,
+run6-flash-rep2,NL_BIM_Basis_ILS_v2.ids#1,2,False,True,0.0,,
+run6-flash-rep2,NL_BIM_Basis_ILS_v2.ids#1,3,True,True,0.0,,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,5,False,False,,,"3 validation errors for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit http"
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,6,False,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SlabCommon.LoadBearing is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,7,False,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SlabCommon.LoadBearing is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,8,False,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SlabCommon.LoadBearing is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,9,True,True,1.0,boolean_pinned_without_directive,"specifications[0].requirements.properties[0]: Pset_SlabCommon.LoadBearing is pinned to 'TRUE', but the request does not say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for the property to be recorded. Omit 'value' so the property is required to exist with either value; pin it only when the request says it must be TRUE or FALSE."
+run6-flash-rep2,IDS_ArcDox.ids#3,4,False,True,0.0,,
+run6-flash-rep2,IDS_ArcDox.ids#3,8,False,True,0.0,,
+run6-flash-rep2,IDS_ArcDox.ids#3,9,True,True,0.0,,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#4,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#4,2,True,True,0.0,,
+run6-flash-rep2,IDS_ArcDox.ids#4,2,True,True,0.0,,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#5,1,True,True,0.0,,
+run6-flash-rep2,IDS_ArcDox.ids#5,2,True,True,0.0,,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#14,1,True,True,0.0,,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#15,1,True,True,0.0,,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#16,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#16,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,1,False,False,,,"6 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Mem...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,2,True,True,0.0,,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#17,1,True,True,0.0,,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#18,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Wal... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#18,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,4,False,False,,,"1 validation error for IdsDocument
+specifications
+  List should have at least 1 item after validation, not 0 [type=too_short, input_value=[], input_type=list]
+    For further information visit https:/"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,5,False,False,,,"3 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Rai...: 'Status', 'value': {}}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,6,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,7,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,8,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,9,True,True,0.0,,
+run6-flash-rep2,IDS_oma_input.ids#13,4,False,True,0.0,,
+run6-flash-rep2,IDS_oma_input.ids#13,5,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.entity
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'name': {'simpleValue': ...{'simpleValue': 'BELL'}}, input_"
+run6-flash-rep2,IDS_oma_input.ids#13,6,False,True,0.0,,
+run6-flash-rep2,IDS_oma_input.ids#13,9,False,True,0.0,,
+run6-flash-rep2,IDS_oma_input.ids#13,10,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,2,False,False,,,"3 validation errors for IdsDocument
+info
+  Field required [type=missing, input_value={'test': True}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.14/v/missing
+speci"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,3,False,False,,,"1 validation error for IdsDocument
+specifications
+  List should have at least 1 item after validation, not 0 [type=too_short, input_value=[], input_type=list]
+    For further information visit https:/"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,4,False,False,,,"2 validation errors for IdsDocument
+specifications.0.name
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.14/v/missing
+"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,5,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,6,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,7,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.classifications
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[{'system': {'simpleValue': 'ÖNORM A 6241-2'}}], in"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,8,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,9,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,8,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,9,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.classifications
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[{'system': {'simpleValue...': 'Elementklasse II'}}"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,4,False,False,,,"3 validation errors for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit http"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,5,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,8,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,3,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,4,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,5,False,False,,,"1 validation error for IdsDocument
+specifications.0.requirements.classification
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[{'system': {'simpleValue': 'OENORM B 1800'}}], inpu"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,6,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,7,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,8,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,9,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Bea... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,1,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Roo... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,1,False,False,,,"1 validation error for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit https"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Sla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,1,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Win... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,1,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Pla... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,1,False,False,,,"3 validation errors for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit http"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram... 'dataType': 'IFCLABEL'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Ram... 'IFCPLANEANGLEMEASURE'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,2,False,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,3,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,5,False,False,,,"1 validation error for IdsDocument
+specifications.0.ifcVersion
+  Input should be a valid string [type=string_type, input_value=['IFC4X3_ADD2'], input_type=list]
+    For further information visit https"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,6,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,1,False,False,,,"2 validation errors for IdsDocument
+specifications.0.requirements.properties.0.baseName
+  Field required [type=missing, input_value={'propertySet': 'Pset_Spa...dataType': 'IFCBOOLEAN'}, input_type=dic"
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,2,True,True,0.0,,
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,2,True,True,0.0,,

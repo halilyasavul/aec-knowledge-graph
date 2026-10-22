@@ -232,3 +232,11 @@ def test_run_agent_marks_a_turn_that_produced_no_file(monkeypatch):
     assert tool_log[0]["tool"] == "generate_ids" and "ids_error" in tool_log[0]
     assert "No IDS file was produced" in answer
     assert mo.TURN.ctx.request_text == "Walls need a fire rating."
+
+
+def test_boolean_enumeration_of_both_values_is_no_constraint_and_one_value_is_a_pin():
+    both = {"restriction": {"enumerations": ["TRUE", "FALSE"]}}
+    assert errors(doc(prop("FireExit", both, dtype="IFCBOOLEAN")), ctx(VIENNA_81)) == []
+    one = {"restriction": {"enumerations": ["TRUE"]}}
+    errs = errors(doc(prop("FireExit", one, dtype="IFCBOOLEAN")), ctx(VIENNA_81))
+    assert len(errs) == 1 and "pinned to 'TRUE'" in errs[0]

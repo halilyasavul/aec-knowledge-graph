@@ -175,20 +175,28 @@ def check_document(doc, ctx: RequestContext | None) -> list[str]:
             allowed_cf = {a.casefold() for a in allowed}
             dtype = (p.dataType or (prop_info or {}).get("ifc_type") or "").upper()
 
-            # 3. a Boolean pinned to a value
-            if dtype in BOOLEAN_TYPES and p.value.simpleValue is not None and not directive:
+            # 3. a Boolean pinned to a value. An enumeration of both TRUE and FALSE constrains
+            #    nothing and is left alone; a one-member enumeration is a pin like a simpleValue.
+            r = p.value.restriction
+            pinned = p.value.simpleValue
+            if dtype in BOOLEAN_TYPES and r is not None and r.enumerations:
+                members = {e.strip().upper() for e in r.enumerations}
+                if members >= {"TRUE", "FALSE"}:
+                    continue
+                if len(members) == 1:
+                    pinned = next(iter(members))
+            if dtype in BOOLEAN_TYPES and pinned is not None and not directive:
                 GUARDS["boolean_pinned_without_directive"] += 1
                 problems.append(
-                    f"{where}: {label} is pinned to {p.value.simpleValue!r}, but the request does not "
+                    f"{where}: {label} is pinned to {pinned!r}, but the request does not "
                     f"say the value must be that. 'Indication whether ...' / 'Angabe, ob ...' asks for "
                     f"the property to be recorded. Omit 'value' so the property is required to exist "
                     f"with either value; pin it only when the request says it must be TRUE or FALSE.")
                 continue
 
-            if req is None:
+            if req is None or dtype in BOOLEAN_TYPES:
                 continue
 
-            r = p.value.restriction
             if p.value.simpleValue is not None:
                 v = p.value.simpleValue
                 if dtype not in BOOLEAN_TYPES and v.casefold() not in allowed_cf and not stated(v, req):

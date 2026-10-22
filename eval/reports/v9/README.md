@@ -61,3 +61,20 @@ finished with its own prompt.
 Expected direction once rerun: determined-only up, strict down (more omissions where the
 request gives no value) — the trade the study is about. 21 offline tests in
 `tests/test_v9_request_checks.py`, including the agent loop against a scripted client.
+
+### Replay of the checks over the recorded runs (`e4`, `e5`)
+
+Every `generate_ids` call of Run 5 and Run 6 is in `log.jsonl` with the JSON the model sent
+and the `query_class` results before it, so the checks can be replayed with no model calls
+(`python -m eval.replay_checks`). On the documents the runs accepted:
+
+| | accepted documents | checks fire | of those, behaviour-exact | of those, failing |
+| --- | --- | --- | --- | --- |
+| Run 5 (2.5 Flash) | 130 | 33 | 0 | 33 |
+| Run 6 (3.8 Flash) | 83 | 3 | 0 | 2 (+1 unverified) |
+
+Against the probe-set verdict the checks have no false positives: not one behaviour-exact
+item-run would have been sent back. They reach 33 of Run 5's 51 failing item-runs (24 Boolean
+pins, 7 `Fire Rating`, 4 invented bounds) and 2 of Run 6's 15. What they do not reach: the
+no-file item-runs, the 4-of-7 `Status` truncation (the request names the four), and missing
+requirements. Whether the model repairs a rejected document correctly is what the rerun measures.

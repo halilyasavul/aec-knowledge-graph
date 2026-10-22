@@ -1,0 +1,214 @@
+run,id,checks_fire,kinds,verdict,direction
+run5-rep1,IDS_ArcDox.ids#1,False,,unverified,witness_unverified
+run5-rep1,IDS_oma_input.ids#2,False,,exact,equivalent
+run5-rep1,NL_BIM_Basis_ILS_v2.ids#1,False,,failing,over_strict
+run5-rep1,IDS4ALL-Template_Example specifications.ids#4,False,,exact,equivalent
+run5-rep1,IDS_ArcDox.ids#4,False,,unverified,
+run5-rep1,IDS4ALL-Template_Example specifications.ids#5,False,,exact,equivalent
+run5-rep1,IDS_ArcDox.ids#5,False,,exact,equivalent
+run5-rep1,IDS4ALL-Template_Example specifications.ids#14,False,,exact,equivalent
+run5-rep1,IDS4ALL-Template_Example specifications.ids#15,False,,exact,equivalent
+run5-rep1,IDS4ALL-Template_Example specifications.ids#16,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep1,IDS4ALL-Template_Example specifications.ids#17,False,,exact,equivalent
+run5-rep1,IDS4ALL-Template_Example specifications.ids#18,False,,exact,equivalent
+run5-rep1,IDS_oma_input.ids#10,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,True,boolean_pinned_without_directive bound_not_in_request,failing,over_strict+under_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,False,,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,False,,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,False,,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,False,,failing,over_strict+under_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,True,property_name_whitespace,failing,over_strict+under_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,True,property_name_whitespace,failing,over_strict+under_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,True,property_name_whitespace,failing,over_strict+under_strict
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,False,,exact,equivalent
+run5-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,False,,exact,equivalent
+run5-rep2,IDS_ArcDox.ids#1,False,,unverified,witness_unverified
+run5-rep2,IDS_oma_input.ids#2,False,,exact,equivalent
+run5-rep2,NL_BIM_Basis_ILS_v2.ids#1,False,,failing,over_strict
+run5-rep2,IDS4ALL-Template_Example specifications.ids#2,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep2,IDS4ALL-Template_Example specifications.ids#4,False,,exact,equivalent
+run5-rep2,IDS_ArcDox.ids#4,False,,unverified,
+run5-rep2,IDS4ALL-Template_Example specifications.ids#5,False,,exact,equivalent
+run5-rep2,IDS_ArcDox.ids#5,False,,exact,equivalent
+run5-rep2,IDS4ALL-Template_Example specifications.ids#14,False,,exact,equivalent
+run5-rep2,IDS4ALL-Template_Example specifications.ids#15,False,,exact,equivalent
+run5-rep2,IDS4ALL-Template_Example specifications.ids#16,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep2,IDS4ALL-Template_Example specifications.ids#17,False,,exact,equivalent
+run5-rep2,IDS4ALL-Template_Example specifications.ids#18,False,,exact,equivalent
+run5-rep2,IDS_oma_input.ids#10,False,,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,False,,failing,over_strict+under_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,False,,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,False,,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,False,,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,True,bound_not_in_request,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,True,property_name_whitespace,failing,over_strict+under_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,False,,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,True,boolean_pinned_without_directive,failing,over_applicable
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,True,property_name_whitespace,failing,over_strict+under_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,True,property_name_whitespace,failing,over_strict+under_strict
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,False,,exact,equivalent
+run5-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,False,,exact,equivalent
+run5-rep3,IDS_ArcDox.ids#1,False,,unverified,witness_unverified
+run5-rep3,IDS_oma_input.ids#2,False,,exact,equivalent
+run5-rep3,NL_BIM_Basis_ILS_v2.ids#1,False,,failing,over_strict
+run5-rep3,IDS4ALL-Template_Example specifications.ids#2,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep3,IDS4ALL-Template_Example specifications.ids#4,False,,exact,equivalent
+run5-rep3,IDS_ArcDox.ids#4,False,,unverified,
+run5-rep3,IDS4ALL-Template_Example specifications.ids#5,False,,exact,equivalent
+run5-rep3,IDS_ArcDox.ids#5,False,,exact,equivalent
+run5-rep3,IDS4ALL-Template_Example specifications.ids#14,False,,exact,equivalent
+run5-rep3,IDS4ALL-Template_Example specifications.ids#17,False,,exact,equivalent
+run5-rep3,IDS4ALL-Template_Example specifications.ids#18,False,,exact,equivalent
+run5-rep3,IDS_oma_input.ids#10,False,,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,True,boolean_pinned_without_directive bound_not_in_request,failing,over_strict+under_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,False,,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,False,,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,False,,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,False,,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,True,property_name_whitespace,failing,over_strict+under_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,True,bound_not_in_request,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,True,boolean_pinned_without_directive,failing,over_strict
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,True,boolean_pinned_without_directive,failing,over_applicable
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,False,,exact,equivalent
+run5-rep3,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,False,,exact,equivalent
+run6-flash-rep1,IDS_ArcDox.ids#1,True,property_not_in_pset,unverified,witness_unverified
+run6-flash-rep1,IDS_oma_input.ids#2,False,,exact,equivalent
+run6-flash-rep1,NL_BIM_Basis_ILS_v2.ids#1,False,,failing,over_strict
+run6-flash-rep1,IDS_ArcDox.ids#3,False,,unverified,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#4,False,,exact,equivalent
+run6-flash-rep1,IDS_ArcDox.ids#4,False,,unverified,
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#5,False,,exact,equivalent
+run6-flash-rep1,IDS_ArcDox.ids#5,False,,exact,equivalent
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#14,False,,exact,equivalent
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#15,False,,exact,equivalent
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#16,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,False,,failing,under_strict
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#17,False,,exact,equivalent
+run6-flash-rep1,IDS4ALL-Template_Example specifications.ids#18,False,,exact,equivalent
+run6-flash-rep1,IDS_oma_input.ids#10,False,,failing,under_applicable
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,False,,failing,under_strict
+run6-flash-rep1,IDS_oma_input.ids#13,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,False,,failing,over_strict+under_strict
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,False,,failing,under_strict
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,True,enumeration_member_not_in_request,failing,over_strict+under_strict
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#95,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#96,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#128,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#129,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#132,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#133,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#155,False,,exact,equivalent
+run6-flash-rep1,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#156,False,,exact,equivalent
+run6-flash-rep2,IDS_ArcDox.ids#1,False,,unverified,witness_unverified
+run6-flash-rep2,IDS_oma_input.ids#2,False,,exact,equivalent
+run6-flash-rep2,NL_BIM_Basis_ILS_v2.ids#1,False,,failing,over_strict
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#2,True,boolean_pinned_without_directive,failing,under_applicable
+run6-flash-rep2,IDS_ArcDox.ids#3,False,,unverified,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#4,False,,exact,equivalent
+run6-flash-rep2,IDS_ArcDox.ids#4,False,,unverified,
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#5,False,,exact,equivalent
+run6-flash-rep2,IDS_ArcDox.ids#5,False,,exact,equivalent
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#14,False,,exact,equivalent
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#15,False,,exact,equivalent
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#16,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#7,False,,failing,under_strict
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#17,False,,exact,equivalent
+run6-flash-rep2,IDS4ALL-Template_Example specifications.ids#18,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#9,False,,failing,under_strict
+run6-flash-rep2,IDS_oma_input.ids#13,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#18,False,,failing,over_strict+under_strict
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#19,False,,failing,under_strict
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#22,False,,failing,under_strict
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#25,False,,failing,over_strict+under_strict
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#46,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#47,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#57,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#58,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#61,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#62,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#71,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#77,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#78,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#81,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#82,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#83,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#84,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#91,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#92,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#93,False,,exact,equivalent
+run6-flash-rep2,Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications.ids#94,False,,exact,equivalent
