@@ -15,3 +15,11 @@ group,scoring,object set,item_runs,items,S1,S1_ci_low,S1_ci_high,S1_exact_count,
 "Run 6 (3.8 Flash, 47 items x 2)","determined-only, faithful extras excused",probe,80,44,0.775,0.6455,0.8987,62,0.9199,0.8563,0.9735,0.7841,6
 "Run 6 (3.8 Flash, 47 items x 2)","request-determined (+PDF Status values), faithful extras excused",standard,80,44,0.8375,0.7179,0.9474,67,0.9227,0.8584,0.9773,0.814,6
 "Run 6 (3.8 Flash, 47 items x 2)","request-determined (+PDF Status values), faithful extras excused",probe,80,44,0.825,0.7058,0.9277,66,0.9227,0.8566,0.9747,0.814,6
+"Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)",strict,standard,132,44,0.2727,0.1364,0.4091,36,0.8869,0.8265,0.9357,0.2414,0
+"Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)",strict,probe,132,44,0.1818,0.0682,0.296,24,0.8869,0.8277,0.9348,0.2414,0
+"Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)",determined-only,standard,132,44,0.9318,0.8409,1.0,123,0.9944,0.9846,1.0,0.8499,0
+"Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)",determined-only,probe,132,44,0.8409,0.7273,0.9318,111,0.9944,0.9846,1.0,0.8499,0
+"Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)","determined-only, faithful extras excused",standard,132,44,0.9318,0.8409,1.0,123,0.9944,0.9846,1.0,0.8499,0
+"Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)","determined-only, faithful extras excused",probe,132,44,0.8409,0.7273,0.9318,111,0.9944,0.9835,1.0,0.8499,0
+"Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)","request-determined (+PDF Status values), faithful extras excused",standard,132,44,0.9318,0.8409,1.0,123,0.9947,0.9852,1.0,0.9046,0
+"Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)","request-determined (+PDF Status values), faithful extras excused",probe,132,44,0.9318,0.8409,1.0,123,0.9947,0.9852,1.0,0.9046,0

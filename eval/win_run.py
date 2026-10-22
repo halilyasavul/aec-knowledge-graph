@@ -174,6 +174,8 @@ def main(argv=None):
     for extra in ([], ["--probe"], ["--relaxed"], ["--relaxed", "--probe"],
                   ["--relaxed", "--excuse-extras"], ["--relaxed", "--excuse-extras", "--probe"],
                   ["--relaxed", "--annotations", "eval/annotations/determinacy_plus_request_values.jsonl", "--tag", "_rv",
+                   "--excuse-extras"],
+                  ["--relaxed", "--annotations", "eval/annotations/determinacy_plus_request_values.jsonl", "--tag", "_rv",
                    "--excuse-extras", "--probe"]):
         sh(base + extra, timeout=1800)
     log("=== win_run done")

@@ -27,10 +27,23 @@ V = "Requirements-openBIM-building-permit-City-of-Vienna-extended_Specifications
 
 
 def _doc(args):
-    raw = args.get("ids_json_string") or args.get("ids_json")
+    raw = args.get("ids_json_string") or args.get("ids_json") or args.get("ids")    # Gemini runs | MCP server
     if isinstance(raw, str):
         raw = json.loads(raw)
     return raw
+
+
+def _learn(ctx: RequestContext, tc: dict) -> None:
+    """What the generator knew before each call. Gemini runs: query_class returned full property
+    sets. MCP runs (v9 two-step): query_class returns code lists only and the server learns from
+    query_pset, so do the same here."""
+    res = tc.get("result")
+    if not isinstance(res, dict):
+        return
+    if tc["tool"] == "query_class" and all(isinstance(b, dict) for b in (res.get("property_sets") or {}).values()):
+        ctx.learn(res)
+    elif tc["tool"] == "query_pset" and res.get("properties"):
+        ctx.learn({"property_sets": {res["pset_code"]: {"properties": res["properties"]}}})
 
 
 def replay(run: str) -> list[dict]:
@@ -45,8 +58,7 @@ def replay(run: str) -> list[dict]:
             if isinstance(tc.get("result"), dict) and tc["result"].get("success"):
                 accepted = i
         for i, tc in enumerate(calls):
-            if tc["tool"] == "query_class" and isinstance(tc.get("result"), dict):
-                ctx.learn(tc["result"])
+            _learn(ctx, tc)
             if tc["tool"] != "generate_ids":
                 continue
             try:

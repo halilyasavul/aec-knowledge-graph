@@ -19,7 +19,8 @@ from eval.common import EVAL_DIR, RUNS_DIR
 
 OUT = EVAL_DIR / "reports" / "v8"
 GROUPS = {"Run 5 (2.5 Flash, 47 items x 3)": [f"run5-rep{r}" for r in (1, 2, 3)],
-          "Run 6 (3.8 Flash, 47 items x 2)": ["run6-flash-rep1", "run6-flash-rep2"]}
+          "Run 6 (3.8 Flash, 47 items x 2)": ["run6-flash-rep1", "run6-flash-rep2"],
+          "Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)": [f"run7-claude-rep{r}" for r in (1, 2, 3)]}
 B = 2000
 RNG = np.random.default_rng(20261007)
 

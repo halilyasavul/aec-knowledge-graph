@@ -59,10 +59,30 @@ def find_claude() -> str:
     sys.exit("Claude Code not found on PATH (tried claude, claude.cmd, claude.exe)")
 
 
+def child_env() -> dict:
+    """Our environment minus what a parent Claude Code session (CLI, desktop app, SDK) exports:
+    CLAUDECODE, CLAUDE_CODE_* (entrypoint, session id, messaging socket, extra tools),
+    CLAUDE_EFFORT, and ANTHROPIC_* (an API key would bill the run to it, not the subscription).
+    CLAUDE_CONFIG_DIR stays: it says where the login lives."""
+    return {k: v for k, v in os.environ.items()
+            if k == "CLAUDE_CONFIG_DIR" or not (k.upper().startswith(("CLAUDE", "ANTHROPIC_")))}
+
+
 def cli_flags(claude: str) -> set[str]:
-    out = subprocess.run([claude, "--help"], capture_output=True, text=True, timeout=60)
+    out = subprocess.run([claude, "--help"], capture_output=True, text=True, timeout=60, env=child_env())
     text = out.stdout + out.stderr
-    return {f for f in WANTED_FLAGS + OPTIONAL_FLAGS if f in text}
+    found = {f for f in WANTED_FLAGS + OPTIONAL_FLAGS if f in text}
+    # Some builds accept --max-turns and --system-prompt-file without listing them in --help
+    # (2.1.296 does). Options are parsed before the action runs, so a missing prompt file fails
+    # fast and with no model call when both flags are known, and says "unknown option" if not.
+    hidden = [f for f in ("--max-turns", "--system-prompt-file") if f not in found]
+    if hidden:
+        missing_file = Path(tempfile.gettempdir()) / "ids-eval-no-such-prompt.md"
+        out = subprocess.run([claude, "-p", "--max-turns", "1", "--system-prompt-file", str(missing_file), "x"],
+                             capture_output=True, text=True, timeout=60, env=child_env())
+        if "unknown option" not in (out.stdout + out.stderr):
+            found.update(hidden)
+    return found
 
 
 def build_command(claude: str, flags: set[str], model: str, mcp_cfg: Path, max_turns: int,
@@ -107,7 +127,7 @@ def neo4j_env() -> dict:
 def run_claude(cmd: list[str], message: str, cwd: Path, timeout_s: int) -> tuple[list[dict], str, int]:
     """Run one item; return (events, stderr, returncode). Events are the parsed stream-json lines."""
     proc = subprocess.run(cmd + [message], cwd=str(cwd), capture_output=True, text=True,
-                          encoding="utf-8", errors="replace", timeout=timeout_s)
+                          encoding="utf-8", errors="replace", timeout=timeout_s, env=child_env())
     events = []
     for line in proc.stdout.splitlines():
         line = line.strip()
@@ -136,18 +156,27 @@ def digest(events: list[dict]) -> dict:
     """llm_calls, tool_calls, usage and the final result, in eval/generate.py's shapes."""
     init = next((e for e in events if e.get("type") == "system" and e.get("subtype") == "init"), {})
     llm_calls, tool_calls, pending = [], [], {}
+    call_index = {}                     # message id -> position in llm_calls
     answer_parts = []
     for e in events:
         if e.get("type") == "assistant":
             msg = e.get("message", {})
             u = msg.get("usage") or {}
-            llm_calls.append({"prompt_tokens": (u.get("input_tokens") or 0) + (u.get("cache_read_input_tokens") or 0)
-                              + (u.get("cache_creation_input_tokens") or 0),
-                              "uncached_prompt_tokens": u.get("input_tokens") or 0,
-                              "cached_tokens": u.get("cache_read_input_tokens") or 0,
-                              "cache_creation_tokens": u.get("cache_creation_input_tokens") or 0,
-                              "output_tokens": u.get("output_tokens") or 0, "thinking_tokens": 0,
-                              "model_version": msg.get("model"), "finish_reason": msg.get("stop_reason")})
+            call = {"prompt_tokens": (u.get("input_tokens") or 0) + (u.get("cache_read_input_tokens") or 0)
+                    + (u.get("cache_creation_input_tokens") or 0),
+                    "uncached_prompt_tokens": u.get("input_tokens") or 0,
+                    "cached_tokens": u.get("cache_read_input_tokens") or 0,
+                    "cache_creation_tokens": u.get("cache_creation_input_tokens") or 0,
+                    "output_tokens": u.get("output_tokens") or 0, "thinking_tokens": 0,
+                    "model_version": msg.get("model"), "finish_reason": msg.get("stop_reason")}
+            # Claude Code emits one assistant event per content block, each carrying the whole
+            # message's usage: count a message once (Run 7 was logged before this, 2-3x over).
+            mid = msg.get("id")
+            if mid is not None and mid in call_index:
+                llm_calls[call_index[mid]] = call
+            else:
+                call_index[mid] = len(llm_calls)
+                llm_calls.append(call)
             for block in msg.get("content") or []:
                 if block.get("type") == "tool_use":
                     name = block.get("name", "")
@@ -222,6 +251,7 @@ def main(argv=None):
         print(f"result: {str(d['answer'])[:400]!r}")
         print(f"cost: {d['result'].get('total_cost_usd')}  turns: {d['result'].get('num_turns')}  rc={rc}  "
               f"denials: {d['result'].get('permission_denials')}")
+        print(f"llm calls: {len(d['llm_calls'])}  usage: {d['result'].get('usage')}")
         if err.strip():
             print("stderr:", err[-800:])
         if listed:
@@ -301,16 +331,19 @@ def main(argv=None):
         d = digest(events)
         gen_calls = [c for c in d["tool_calls"] if c["tool"] == "generate_ids"]
         success = [c for c in gen_calls if isinstance(c["result"], dict) and c["result"].get("success")]
-        tin = sum(c["prompt_tokens"] for c in d["llm_calls"])
-        tout = sum(c["output_tokens"] for c in d["llm_calls"])
         res = d["result"]
+        tin = sum(c["prompt_tokens"] for c in d["llm_calls"])
+        # the per-event usage holds the output count at stream start; the result event has the total
+        tout = (res.get("usage") or {}).get("output_tokens") or sum(c["output_tokens"] for c in d["llm_calls"])
         entry.update({"model_api_version": d["init"].get("model"), "init": d["init"],
                       "llm_calls": d["llm_calls"], "tool_calls": d["tool_calls"],
                       "retries": {"generate_ids_attempts": len(gen_calls),
                                   "generate_ids_failures": len(gen_calls) - len(success)},
-                      "input_tokens": tin, "output_tokens": tout, "thinking_tokens": 0,
+                      "input_tokens": tin, "output_tokens": tout,
+                      "thinking_tokens": ((res.get("usage") or {}).get("output_tokens_details") or {}).get("thinking_tokens") or 0,
                       "cached_tokens": sum(c["cached_tokens"] for c in d["llm_calls"]),
                       "cost_usd": res.get("total_cost_usd"), "num_turns": res.get("num_turns"),
+                      "result_usage": res.get("usage"), "model_usage": res.get("modelUsage"),
                       "result_subtype": res.get("subtype"), "is_error": res.get("is_error"),
                       "permission_denials": res.get("permission_denials"),
                       "answer": d["answer"], "returncode": rc,
