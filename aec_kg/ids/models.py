@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import collections
 import re
+from typing import ClassVar
 
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -24,8 +25,9 @@ def set_guards(enabled: bool) -> None:
     """Enable/disable the v5 guards, including 'unknown key is an error'."""
     global GUARDS_ENABLED
     GUARDS_ENABLED = enabled
-    for cls in (IdsRestriction, IdsValue, EntityFacet, PropertyFacet, AttributeFacet,
-                Applicability, Requirements, Specification, IdsInfo, IdsDocument):
+    for cls in (IdsRestriction, IdsValue, IdsName, EntityFacet, PropertyFacet, AttributeFacet, PartOfFacet,
+                ClassificationFacet, MaterialFacet, Applicability, Requirements, Specification, IdsInfo,
+                IdsDocument):
         cls.model_config = ConfigDict(**{**cls.model_config, "extra": "forbid" if enabled else "ignore"})
         cls.model_rebuild(force=True)
 
@@ -112,6 +114,7 @@ class IdsValue(_Strict):
         default=None,
         description="An XSD restriction (enumeration, pattern, range)",
     )
+    _name_field: ClassVar[bool] = False             # IdsName: the prose/placeholder guards don't apply
 
     @model_validator(mode="before")
     @classmethod
@@ -149,19 +152,26 @@ class IdsValue(_Strict):
                 raise ValueError(
                     f"simpleValue {v!r} looks like a regular expression. simpleValue is an exact "
                     "value; use {'restriction': {'pattern': '...'}} for a pattern.")
-            if looks_like_placeholder(v):
+            if not self._name_field and looks_like_placeholder(v):
                 GUARDS["value_is_placeholder"] += 1
                 raise ValueError(
                     f"simpleValue {v!r} states that the property is required, it is not a value of "
                     "the property. Omit 'value' to require the property to be present, or give the "
                     "allowed values via 'restriction'.")
-            if looks_like_description(v):
+            if not self._name_field and looks_like_description(v):
                 GUARDS["value_looks_like_description"] += 1
                 raise ValueError(
                     f"simpleValue {v[:60]!r}... reads as a description, not a value. Put guidance in "
                     "'instructions'; use 'restriction' for allowed values, or omit value to only "
                     "require the property to be present.")
         return self
+
+
+class IdsName(IdsValue):
+    """A property-set or property name. A user-defined property may carry the request's own
+    words ("Slip resistance coefficient"), and standard names include words the value guards
+    read as placeholders (Pset_SensorPHistory.Value), so only the regex guard applies here."""
+    _name_field: ClassVar[bool] = True
 
 
 # ---------------------------------------------------------------------------
@@ -196,8 +206,8 @@ class EntityFacet(_Strict):
 
 class PropertyFacet(_Strict):
     """IDS property facet — requires/filters a property."""
-    propertySet: IdsValue = Field(description="Property set name (e.g. 'Pset_WallCommon')")
-    baseName: IdsValue = Field(description="Property name within the set")
+    propertySet: IdsName = Field(description="Property set name (e.g. 'Pset_WallCommon')")
+    baseName: IdsName = Field(description="Property name within the set")
     value: IdsValue | None = Field(default=None, description="Expected value constraint")
     dataType: str | None = Field(
         default=None,
@@ -228,24 +238,86 @@ class AttributeFacet(_Strict):
     instructions: str | None = Field(default=None)
 
 
+PART_OF_RELATIONS = ("IFCRELAGGREGATES", "IFCRELASSIGNSTOGROUP", "IFCRELCONTAINEDINSPATIALSTRUCTURE",
+                     "IFCRELNESTS", "IFCRELVOIDSELEMENT IFCRELFILLSELEMENT")
+
+
+class PartOfFacet(_Strict):
+    """IDS partOf facet — the element is part of another one (aggregate, group, spatial
+    container, nest, void/fill), e.g. a space contained in or aggregated by a storey."""
+    entity: EntityFacet = Field(description="The whole, e.g. {'name': {'simpleValue': 'IFCBUILDINGSTOREY'}}")
+    relation: str | None = Field(default=None, description=" | ".join(PART_OF_RELATIONS) + "; omit for any")
+    cardinality: str = Field(default="required", description="'required' or 'prohibited' (no 'optional')")
+    instructions: str | None = Field(default=None)
+
+    @field_validator("relation")
+    @classmethod
+    def _relation(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
+        v = " ".join(v.upper().split())
+        if v not in PART_OF_RELATIONS:
+            raise ValueError(f"relation {v!r} is not an IDS partOf relation; use one of {list(PART_OF_RELATIONS)} "
+                             "or omit it to accept any")
+        return v
+
+    @field_validator("cardinality")
+    @classmethod
+    def _cardinality(cls, v: str) -> str:
+        if v not in ("required", "prohibited"):
+            raise ValueError("partOf cardinality is 'required' or 'prohibited'; IDS has no optional partOf")
+        return v
+
+
+class ClassificationFacet(_Strict):
+    """IDS classification facet — a classification reference from a system (e.g. Uniclass)."""
+    system: IdsValue = Field(description="Classification system name, e.g. 'Uniclass 2015'")
+    value: IdsValue | None = Field(default=None, description="Classification code; omit for any code")
+    cardinality: str = Field(default="required", description="'required', 'prohibited', or 'optional'")
+    instructions: str | None = Field(default=None)
+
+
+class MaterialFacet(_Strict):
+    """IDS material facet — the element has a material (name or category)."""
+    value: IdsValue | None = Field(default=None, description="Material name or category; omit for any")
+    cardinality: str = Field(default="required", description="'required', 'prohibited', or 'optional'")
+    instructions: str | None = Field(default=None)
+
+
 # ---------------------------------------------------------------------------
 # Applicability & Requirements
 # ---------------------------------------------------------------------------
 
 class Applicability(_Strict):
-    """Defines which IFC objects a specification applies to."""
+    """Defines which IFC objects a specification applies to: the entity and, when the request
+    selects elements by a value (rooms named "Room A", slabs with Slope < 0.05), the attribute or
+    property facets that select them. Facets here carry no cardinality (the XSD has none)."""
     entity: EntityFacet | None = Field(default=None)
+    attributes: list[AttributeFacet] | None = Field(default=None)
+    properties: list[PropertyFacet] | None = Field(default=None)
+    partOf: list[PartOfFacet] | None = Field(default=None, validation_alias=AliasChoices("partOf", "partOfs"))
+    classifications: list[ClassificationFacet] | None = Field(
+        default=None, validation_alias=AliasChoices("classifications", "classification"))
+    materials: list[MaterialFacet] | None = Field(default=None, validation_alias=AliasChoices("materials", "material"))
     minOccurs: int | None = Field(default=None)
     maxOccurs: str | None = Field(
         default=None,
         description="'unbounded' or an integer string",
     )
 
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
 
 class Requirements(_Strict):
     """Defines what must/must-not be present on matching objects."""
     properties: list[PropertyFacet] | None = Field(default=None)
     attributes: list[AttributeFacet] | None = Field(default=None)
+    partOf: list[PartOfFacet] | None = Field(default=None, validation_alias=AliasChoices("partOf", "partOfs"))
+    classifications: list[ClassificationFacet] | None = Field(
+        default=None, validation_alias=AliasChoices("classifications", "classification"))
+    materials: list[MaterialFacet] | None = Field(default=None, validation_alias=AliasChoices("materials", "material"))
+
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
 
     @model_validator(mode="before")
     @classmethod

@@ -1,0 +1,7 @@
+model,stage,items,ok,no_file,S1_standard,S1_standard_ci_low,S1_standard_ci_high,S1_standard_exact,S1_standard_verified,S1_probe,S1_probe_ci_low,S1_probe_ci_high,S1_probe_exact,S1_probe_verified,unverified,facet_f1_ours,FacetF1_theirs,FacetF1_theirs_noversion,xsd_valid_rate
+Sonnet 5.5,stage 1,41,41,0,0.3158,0.1842,0.4737,12,38,0.3158,0.1842,0.4737,12,38,3,0.5528,0.5901,0.6503,1.0
+Sonnet 5.5,stage 2,20,20,0,0.0526,0.0,0.1579,1,19,0.0526,0.0,0.1579,1,19,1,0.486,0.544,0.5636,1.0
+Opus,stage 1,41,41,0,0.1842,0.0789,0.3158,7,38,0.1842,0.0789,0.3158,7,38,3,0.3037,0.4542,0.4778,1.0
+Opus,stage 2,20,20,0,0.0526,0.0,0.1579,1,19,0.0526,0.0,0.1579,1,19,1,0.3851,0.4689,0.4843,1.0
+"Sonnet 5.5, Run 10 (+applicability facets)",stage 1,41,41,0,0.3158,0.1579,0.4737,12,38,0.3158,0.1579,0.4737,12,38,3,0.5553,0.5907,0.6509,1.0
+"Sonnet 5.5, Run 10 (+applicability facets)",stage 2,20,20,0,0.3684,0.1579,0.5789,7,19,0.3684,0.1579,0.5789,7,19,1,0.5643,0.6136,0.642,1.0

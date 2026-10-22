@@ -23,3 +23,35 @@ group,scoring,object set,item_runs,items,S1,S1_ci_low,S1_ci_high,S1_exact_count,
 "Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)","determined-only, faithful extras excused",probe,132,44,0.8409,0.7273,0.9318,111,0.9944,0.9835,1.0,0.8499,0
 "Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)","request-determined (+PDF Status values), faithful extras excused",standard,132,44,0.9318,0.8409,1.0,123,0.9947,0.9852,1.0,0.9046,0
 "Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)","request-determined (+PDF Status values), faithful extras excused",probe,132,44,0.9318,0.8409,1.0,123,0.9947,0.9852,1.0,0.9046,0
+"Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)",strict,standard,132,44,0.2727,0.1591,0.4091,36,0.8869,0.8236,0.9374,0.2414,0
+"Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)",strict,probe,132,44,0.1818,0.0682,0.2955,24,0.8869,0.825,0.9373,0.2414,0
+"Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)",determined-only,standard,132,44,0.9545,0.8864,1.0,126,0.9985,0.9955,1.0,0.8584,0
+"Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)",determined-only,probe,132,44,0.8636,0.75,0.9545,114,0.9985,0.9955,1.0,0.8584,0
+"Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)","determined-only, faithful extras excused",standard,132,44,0.9545,0.8864,1.0,126,0.9985,0.9955,1.0,0.8584,0
+"Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)","determined-only, faithful extras excused",probe,132,44,0.8636,0.75,0.9545,114,0.9985,0.9955,1.0,0.8584,0
+"Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)","request-determined (+PDF Status values), faithful extras excused",standard,132,44,0.9545,0.8864,1.0,126,0.9988,0.9964,1.0,0.9131,0
+"Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)","request-determined (+PDF Status values), faithful extras excused",probe,132,44,0.9545,0.8864,1.0,126,0.9988,0.9964,1.0,0.9131,0
+"Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)",strict,standard,44,44,0.2955,0.1591,0.4318,13,0.8944,0.8447,0.9353,0.2459,0
+"Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)",strict,probe,44,44,0.1818,0.0682,0.2955,8,0.8944,0.8424,0.9357,0.2459,0
+"Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)",determined-only,standard,44,44,0.9545,0.8864,1.0,42,0.9773,0.9432,1.0,0.863,0
+"Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)",determined-only,probe,44,44,0.8409,0.7273,0.9318,37,0.9773,0.9432,1.0,0.863,0
+"Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)","determined-only, faithful extras excused",standard,44,44,0.9545,0.8864,1.0,42,0.9773,0.9432,1.0,0.863,0
+"Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)","determined-only, faithful extras excused",probe,44,44,0.8409,0.7273,0.9318,37,0.9773,0.9432,1.0,0.863,0
+"Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)","request-determined (+PDF Status values), faithful extras excused",standard,44,44,0.9545,0.8864,1.0,42,0.9773,0.9432,1.0,0.9177,0
+"Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)","request-determined (+PDF Status values), faithful extras excused",probe,44,44,0.9545,0.8864,1.0,42,0.9773,0.9432,1.0,0.9177,0
+"Run 8 (Opus 5.5, dev fixes, 47 items x 1)",strict,standard,44,44,0.2955,0.1591,0.4318,13,0.8944,0.8452,0.9365,0.2406,0
+"Run 8 (Opus 5.5, dev fixes, 47 items x 1)",strict,probe,44,44,0.1818,0.0909,0.2955,8,0.8944,0.8407,0.9356,0.2406,0
+"Run 8 (Opus 5.5, dev fixes, 47 items x 1)",determined-only,standard,44,44,0.9545,0.8864,1.0,42,0.9773,0.9432,1.0,0.8576,0
+"Run 8 (Opus 5.5, dev fixes, 47 items x 1)",determined-only,probe,44,44,0.8409,0.7273,0.9318,37,0.9773,0.9432,1.0,0.8576,0
+"Run 8 (Opus 5.5, dev fixes, 47 items x 1)","determined-only, faithful extras excused",standard,44,44,0.9545,0.8864,1.0,42,0.9773,0.9432,1.0,0.8576,0
+"Run 8 (Opus 5.5, dev fixes, 47 items x 1)","determined-only, faithful extras excused",probe,44,44,0.8409,0.7273,0.9318,37,0.9773,0.9432,1.0,0.8576,0
+"Run 8 (Opus 5.5, dev fixes, 47 items x 1)","request-determined (+PDF Status values), faithful extras excused",standard,44,44,0.9545,0.8864,1.0,42,0.9773,0.9432,1.0,0.9124,0
+"Run 8 (Opus 5.5, dev fixes, 47 items x 1)","request-determined (+PDF Status values), faithful extras excused",probe,44,44,0.9545,0.8864,1.0,42,0.9773,0.9432,1.0,0.9124,0
+"Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)",strict,standard,44,44,0.2955,0.1591,0.4318,13,0.8771,0.8091,0.9296,0.2482,0
+"Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)",strict,probe,44,44,0.1818,0.0682,0.2955,8,0.8771,0.815,0.9288,0.2482,0
+"Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)",determined-only,standard,44,44,0.9773,0.9318,1.0,43,0.9886,0.9659,1.0,0.8652,0
+"Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)",determined-only,probe,44,44,0.8636,0.75,0.9545,38,0.9886,0.9659,1.0,0.8652,0
+"Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)","determined-only, faithful extras excused",standard,44,44,0.9773,0.9318,1.0,43,0.9886,0.9659,1.0,0.8652,0
+"Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)","determined-only, faithful extras excused",probe,44,44,0.8636,0.75,0.9545,38,0.9886,0.9659,1.0,0.8652,0
+"Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)","request-determined (+PDF Status values), faithful extras excused",standard,44,44,0.9773,0.9318,1.0,43,0.9886,0.9659,1.0,0.92,0
+"Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)","request-determined (+PDF Status values), faithful extras excused",probe,44,44,0.9773,0.9318,1.0,43,0.9886,0.9659,1.0,0.92,0

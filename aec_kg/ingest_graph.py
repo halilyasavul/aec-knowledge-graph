@@ -15,6 +15,8 @@ Phase 2 — EXPRESS enrichment (IFC4X3_ADD2.exp.txt):
 
 Usage:
     python -m aec_kg.ingest_graph
+    python -m aec_kg.ingest_graph --only-ifc-type   # type the untyped set/property pairs from the
+                                                    # property set templates, nothing else
 """
 
 import json
@@ -128,6 +130,76 @@ def resolve_ifc_type(prop: dict, qto_only: bool) -> tuple:
     if (prop.get("DataType") or "") == "String":
         return "IFCLABEL", "string_default"
     return None, "omitted"
+
+
+# What is left — 416 properties, 635 set/property pairs (Pset_RailingCommon.Height is plain
+# "Real") — buildingSMART's IfcPropertySetTemplate library, shipped with ifcopenshell, types per
+# set. Per set because one code can differ: Height is IfcPositiveLengthMeasure in
+# Pset_RailingCommon and a length quantity in Qto_*. So the type goes on the HAS_PROPERTY
+# relationship, only where the property node has none; readers take coalesce(rel, node).
+_QTO_TEMPLATE_KIND = {"Q_LENGTH": "IFCLENGTHMEASURE", "Q_AREA": "IFCAREAMEASURE", "Q_VOLUME": "IFCVOLUMEMEASURE",
+                      "Q_COUNT": "IFCCOUNTMEASURE", "Q_WEIGHT": "IFCMASSMEASURE", "Q_TIME": "IFCTIMEMEASURE",
+                      "Q_NUMBER": "IFCNUMERICMEASURE"}
+
+
+def template_ifc_types(schema: str = "IFC4X3") -> dict:
+    """{(pset code, property code): IFC type} from the property set templates. Only defined
+    types (measures, simple values) qualify as an IDS dataType; a template whose primary type
+    is an entity (IfcTimeSeries, IfcExternalReference, IfcMaterialDefinition) gives nothing."""
+    import ifcopenshell
+    import ifcopenshell.util.pset
+
+    out = {}
+    for f in ifcopenshell.util.pset.get_template(schema).templates:
+        decl = ifcopenshell.ifcopenshell_wrapper.schema_by_name(f.schema).declaration_by_name
+        for t in f.by_type("IfcPropertySetTemplate"):
+            for p in t.HasPropertyTemplates or ():
+                kind = getattr(p, "TemplateType", None)
+                if kind in _QTO_TEMPLATE_KIND:
+                    out[(t.Name, p.Name)] = _QTO_TEMPLATE_KIND[kind]
+                    continue
+                m = getattr(p, "PrimaryMeasureType", None)
+                if not m:
+                    continue
+                try:
+                    if decl(m).as_type_declaration() is None:
+                        continue
+                except RuntimeError:                     # not in the schema
+                    continue
+                out[(t.Name, p.Name)] = m.upper()
+    return out
+
+
+_GAP_COUNTS = """
+MATCH (ps:PropertySet)-[rel:HAS_PROPERTY]->(p:Property)
+WITH p, collect(coalesce(rel.ifc_type, p.ifc_type) IS NULL) AS untyped
+RETURN count(p) AS properties,
+       sum(CASE WHEN any(u IN untyped WHERE u) THEN 1 ELSE 0 END) AS properties_with_gap,
+       sum(size(untyped)) AS pairs,
+       sum(size([u IN untyped WHERE u])) AS pairs_with_gap
+"""
+
+
+def fill_ifc_type_gaps(driver: neo4j.Driver) -> dict:
+    """Type the set/property pairs the node leaves untyped, from the templates. Idempotent;
+    returns the gap counts before and after."""
+    types = template_ifc_types()
+    with driver.session() as session:
+        before = dict(session.run(_GAP_COUNTS).single())
+        gaps = list(session.run("MATCH (ps:PropertySet)-[rel:HAS_PROPERTY]->(p:Property) "
+                                "WHERE p.ifc_type IS NULL RETURN ps.code AS ps, p.code AS prop"))
+    rows = [{"ps": r["ps"], "prop": r["prop"], "t": types[(r["ps"], r["prop"])]}
+            for r in gaps if (r["ps"], r["prop"]) in types]
+    query = """
+    UNWIND $rows AS r
+    MATCH (:PropertySet {code: r.ps})-[rel:HAS_PROPERTY]->(:Property {code: r.prop})
+    SET rel.ifc_type = r.t, rel.ifc_type_source = 'pset_template'
+    """
+    _run_in_batches(driver, query, "rows", rows)
+    with driver.session() as session:
+        after = dict(session.run(_GAP_COUNTS).single())
+    logger.info("ifc_type gap before %s, after %s (%d pairs typed from templates)", before, after, len(rows))
+    return {"before": before, "after": after, "typed_from_templates": len(rows)}
 
 
 def qto_only_codes(data: dict) -> set:
@@ -707,7 +779,13 @@ def verify_counts(driver: neo4j.Driver) -> None:
 # Main
 # ---------------------------------------------------------------------------
 
-def main() -> None:
+def main(argv=None) -> None:
+    import argparse
+    ap = argparse.ArgumentParser(description="Ingest the IFC 4.3 schema into Neo4j.")
+    ap.add_argument("--only-ifc-type", action="store_true",
+                    help="only type the untyped set/property pairs from the property set templates")
+    args = ap.parse_args(argv)
+
     logger.info("Connecting to Neo4j at %s ...", NEO4J_URI)
     driver = neo4j.GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
@@ -718,6 +796,11 @@ def main() -> None:
         logger.error("Failed to connect to Neo4j: %s", e)
         logger.error("Make sure Neo4j is running. You can start it with:")
         logger.error("  docker run --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/password neo4j:5")
+        return
+
+    if args.only_ifc_type:
+        print(json.dumps(fill_ifc_type_gaps(driver), indent=1))
+        driver.close()
         return
 
     start = time.time()
@@ -737,6 +820,7 @@ def main() -> None:
     create_class_nodes(driver, classes)
 
     create_pset_to_property_rels(driver, property_sets)
+    fill_ifc_type_gaps(driver)
     create_class_to_pset_rels(driver, classes)
     create_inheritance_rels(driver, classes)
 
