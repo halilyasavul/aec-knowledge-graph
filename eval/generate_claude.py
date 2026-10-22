@@ -84,8 +84,12 @@ def build_command(claude: str, flags: set[str], model: str, mcp_cfg: Path, max_t
 
 
 def mcp_config(request_file: Path, out_dir: Path, out_name: str, env_extra: dict) -> dict:
-    env = {"PYTHONPATH": str(REPO), "PYTHONIOENCODING": "utf-8",
-           "IDS_REQUEST_FILE": str(request_file), "IDS_OUTPUT_DIR": str(out_dir), "IDS_OUTPUT_NAME": out_name}
+    # Pass the process environment the server needs even if the client does not inherit ours:
+    # user site-packages (APPDATA), temp dirs, PATH and the Windows system root.
+    env = {k: os.environ[k] for k in ("PATH", "APPDATA", "LOCALAPPDATA", "USERPROFILE", "HOMEDRIVE", "HOMEPATH",
+                                      "HOME", "SYSTEMROOT", "TEMP", "TMP", "PYTHONUSERBASE") if os.environ.get(k)}
+    env.update({"PYTHONPATH": str(REPO), "PYTHONIOENCODING": "utf-8",
+                "IDS_REQUEST_FILE": str(request_file), "IDS_OUTPUT_DIR": str(out_dir), "IDS_OUTPUT_NAME": out_name})
     env.update({k: v for k, v in env_extra.items() if v})
     return {"mcpServers": {SERVER_NAME: {"type": "stdio", "command": sys.executable,
                                          "args": ["-m", "aec_kg.mcp_server"], "env": env}}}
@@ -160,7 +164,7 @@ def digest(events: list[dict]) -> dict:
                         continue
                     res = _parse_result_content(block.get("content"))
                     s = json.dumps(res, ensure_ascii=False) if not isinstance(res, str) else res
-                    tool_calls.append({"tool": call["tool"], "args": call["args"], "result": res,
+                    tool_calls.append({"tool": call["tool"], "tool_full": call["tool_full"], "args": call["args"], "result": res,
                                        "result_chars": len(s), "delivered_chars": len(s),
                                        "is_error": bool(block.get("is_error"))})
     result = next((e for e in events if e.get("type") == "result"), {})
@@ -204,19 +208,30 @@ def main(argv=None):
         req.write_text("probe", encoding="utf-8")
         cfg = run_dir / "_probe.mcp.json"
         cfg.write_text(json.dumps(mcp_config(req, gen_dir, "_probe.ids", env_extra), indent=1))
-        cmd = build_command(claude, flags, args.model, cfg, 2)
-        events, err, rc = run_claude(cmd, "Call query_class for IfcWall and reply with the number of property sets.",
-                                     scratch, 180)
+        cmd = build_command(claude, flags, args.model, cfg, 4)
+        probe_prompt = ("Do three things and report each in one line. 1) Call query_class for IfcWall and give the "
+                        "number of property sets. 2) Try to read the file C:\\Windows\\win.ini (or /etc/hosts) with "
+                        "any file-reading tool you have and say whether that was possible. 3) Try to run the shell "
+                        "command `echo leak` with any shell tool you have and say whether that was possible.")
+        events, err, rc = run_claude(cmd, probe_prompt, scratch, 240)
         d = digest(events)
         print(json.dumps(d["init"], indent=1))
-        builtins = [t for t in (d["init"]["tools"] or []) if not t.startswith(f"mcp__{SERVER_NAME}__")]
-        print(f"tool calls: {[c['tool'] for c in d['tool_calls']]}")
-        print(f"result: {str(d['answer'])[:300]!r}")
-        print(f"cost: {d['result'].get('total_cost_usd')}  turns: {d['result'].get('num_turns')}  rc={rc}")
+        listed = [t for t in (d["init"]["tools"] or []) if not t.startswith(f"mcp__{SERVER_NAME}__")]
+        leaked = [c for c in d["tool_calls"] if not c["tool_full"].startswith(f"mcp__{SERVER_NAME}__") and not c["is_error"]]
+        print(f"tool calls: {[(c['tool_full'], 'error' if c['is_error'] else 'ok') for c in d['tool_calls']]}")
+        print(f"result: {str(d['answer'])[:400]!r}")
+        print(f"cost: {d['result'].get('total_cost_usd')}  turns: {d['result'].get('num_turns')}  rc={rc}  "
+              f"denials: {d['result'].get('permission_denials')}")
         if err.strip():
             print("stderr:", err[-800:])
-        if builtins:
-            sys.exit(f"REFUSING: built-in tools are present: {builtins}. Fix the flags before an eval run.")
+        if listed:
+            print(f"note: built-in tools still listed (should be blocked by permissions): {listed}")
+        if leaked:
+            sys.exit(f"REFUSING: a built-in tool call succeeded: {[c['tool_full'] for c in leaked]}. "
+                     f"Fix the flags before an eval run.")
+        if not any(c["tool"] == "query_class" for c in d["tool_calls"]):
+            sys.exit("REFUSING: the ifc server's query_class was never called; check the MCP server started "
+                     "(stderr above) and that Neo4j is reachable.")
         if d["init"].get("apiKeySource") not in (None, "none", "oauth", "claude.ai"):
             print(f"NOTE: apiKeySource={d['init'].get('apiKeySource')!r} — check this is the subscription, not an API key")
         print("probe ok")
