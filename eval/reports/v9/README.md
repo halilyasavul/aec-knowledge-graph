@@ -112,4 +112,5 @@ is compared like for like.
 relationship); `partOf` / `classifications` / `materials` requirement facets; the whitespace check
 limited to standard sets and the prose/placeholder guards limited to values (`IdsName`); and, for
 Run 10 only, attribute/property (and partOf/classification/material) facets in applicability.
-Ishigaki tables: `h1`–`h6` (`eval.ishigaki_bench.analysis`, `.failures`, `.check_firings`).
+Ishigaki tables: `h1`–`h7` (`eval.ishigaki_bench.analysis`, `.failures`, `.check_firings`,
+`.audit` — the last needs buildingSMART's `ids-tool`, NuGet package `ids-tool.commandline`).

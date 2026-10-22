@@ -19,7 +19,9 @@ best zero-shot is 65.6%, as the handover cites it. Most failures are the system 
 built to do — mapping request words onto standard IFC properties — where the benchmark's gold keeps
 the request's own words in a user-defined set. The request checks, tuned on the dev set, fire on
 held-out requests and sometimes push the model away from the gold. Opus is no better than Sonnet
-on the dev set and worse on the held-out set.
+on the dev set and worse on the held-out set. buildingSMART's official audit passes every generated
+file's structure and fails every one on content (0 of 183; all 61 gold files pass). That is mostly
+two serializer defaults, not the model: without them, about nine in ten of Sonnet's files would pass.
 
 ## 1. Stage A: the three dev-set causes
 
@@ -124,7 +126,9 @@ string. `applies_to` is the gold's entity. Generation used
 | facet F1, ours (requirements only) | 0.553 | 0.304 | 0.555 |
 | FacetF1 their way, with version block | 0.590 | 0.454 | 0.591 |
 | FacetF1 their way, version block excluded | 0.650 | 0.478 | 0.651 |
-| XSD-valid files ("Content" stand-in) | 41/41 | 41/41 | 41/41 |
+| official audit, full (the paper's "Content") | **0/41** | **0/41** | **0/41** |
+| official audit, structure only (`-c`) | 41/41 | 41/41 | 41/41 |
+| full audit if the serializer wrote applicability occurs and numeric restriction bases | 37/41 | 31/41 | 38/41 |
 
 "Their way" follows `eval/analysis_ishigaki.py`: blocks keyed by side, facet type and content,
 the version as one more block, classification/material/partOf excluded, macro over items, scored
@@ -134,9 +138,31 @@ The paper's best zero-shot is 65.6% FacetF1 (GPT-5.5) and 33.1% "Content" pass, 
 cites them. Those were computed on the whole benchmark and with the version given, and our FacetF1
 is our reading of theirs. So "about at the paper's best" is as far as that comparison goes.
 
-The official IDSAuditTool was not installed: installing it means downloading and running a .NET
-package from NuGet, and that was left to the person to approve. XSD validity is the handover's
-stated fallback.
+**The official audit** (`eval/ishigaki_bench/audit.py`, `h7_ishigaki_audit*.csv`) uses
+buildingSMART's IDS-Audit-tool, `ids-tool` 1.0.124, installed with your approval as the NuGet
+package `ids-tool.commandline`. Every file was audited twice: the full audit (structure plus the
+"agreed limitation of IDS contents") and the structure audit alone (`-c`).
+
+- **All 61 gold files pass the full audit**, which confirms the tool and the conversion agree.
+- **Every generated file passes the structure audit and fails the full audit**, for both models
+  and both runs.
+
+The failures are mostly two defaults in our serializer, not the model:
+
+| code | message | cause | files (Sonnet stage 1) |
+| --- | --- | --- | --- |
+| 301 | invalid cardinality on `applicability`: [1..1] breaks the implementation agreements | the serializer writes no `minOccurs`/`maxOccurs` unless the model asks; the IDS default is exactly one element. The gold writes 0..unbounded. | 41 of 41 |
+| 303, 308 | numeric bounds on an `xs:string` restriction base / `xs:string` base for a measure type | `IdsRestriction.base` defaults to `xs:string` and the instructions never mention it | 15 and 14 |
+| 203 | a `value` without a `dataType` | the model; Opus drops dataTypes (9 Opus files) | 1 |
+| 103 | invalid attribute name ("Temporary height") | the model (rows 0080/0082, see below) | 2 |
+| 305 | `TRUE` for `xs:boolean`, `1/20` for `xs:double` | the model | 0 |
+| 202 | a `prohibited` property with a `dataType` | the model | 1 |
+
+Counting the files whose only full-audit errors are 301, 303 and 308 gives what the two serializer
+defaults cost. With them fixed, Sonnet would pass 37 of 41 stage-1 files (Opus 31, Run 10 38): far
+above the paper's 33.1%, where we now stand at 0. The S1 numbers are unaffected: ifctester tolerates
+both defaults, and the behavioural score reads per-element verdicts, not the specification's
+cardinality.
 
 By input format (Sonnet, Run 9):
 
@@ -247,6 +273,8 @@ witness models the rebuilt references behave like the gold on 19 of 20; row-0008
 | S1 strict, standard = probe | 1/19 = 0.053 [0.00, 0.16] | 1/19 = 0.053 [0.00, 0.16] | **7/19 = 0.368 [0.16, 0.58]** |
 | FacetF1 their way (with / without version) | 0.544 / 0.564 | 0.469 / 0.484 | 0.614 / 0.642 |
 | NL / CSV S1 | 0.10 / 0.00 | 0.10 / 0.00 | 0.30 / 0.44 |
+| official audit, full / structure only | 0/20 / 20/20 | 0/20 / 20/20 | 0/20 / 20/20 |
+| full audit without the two serializer defaults | 18/20 | 16/20 | 19/20 |
 
 In Run 9, 14 of Sonnet's 18 failures differ in applicability. The cause: the generator's
 `Applicability` held only an entity. "Rooms named Room A … D" or "slabs with slope under 0.05"
@@ -319,10 +347,14 @@ stage-1 numbers are.
    changes.
 6. **Attribution:** commits carry `Co-Authored-By: Claude Opus 5.5`, the model that ran this
    session, not the Fable line the handover suggests.
+7. **The audit tool's package id:** the handover's `dotnet tool install -g ids-tool` finds no
+   package. The tool is published as `ids-tool.commandline` (author Claudio Benghi, tags IDS and
+   buildingSmart) and provides the `ids-tool` command. Its `errorcode` command describes exit
+   codes, not message numbers, so the table above quotes the messages themselves.
 
-Files: `eval/ishigaki_bench/{convert,analysis,failures,check_firings}.py`,
+Files: `eval/ishigaki_bench/{convert,analysis,failures,check_firings,audit}.py`,
 `eval/ishigaki_bench/spec_tasks_en.jsonl`, `item_lists/`, `eval/claude_system_prompt_ishigaki.md`,
 `eval/annotations/cardinality.jsonl`, `tests/test_v9_devset_causes.py` (30 tests),
-`eval/reports/v9/h1`–`h6`, the regenerated `e2`, `e4`, `e5`, `p1` and `p2`, and `README.md` §C.
+`eval/reports/v9/h1`–`h7`, the regenerated `e2`, `e4`, `e5`, `p1` and `p2`, and `README.md` §C.
 Runs (not committed): `eval/runs/run7-claude-rep*-rescored-v9b`, `run8-{claude,opus}-rep1`,
 `run9-ishigaki{,-opus}-rep1{,-s2}`, `run10-claude-rep1`, `run10-ishigaki-rep1{,-s2}`.
