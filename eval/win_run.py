@@ -88,7 +88,7 @@ def neo4j_container() -> str:
 def wait_for_bolt(passwords: list[str]) -> tuple[str, str]:
     import neo4j
     last = None
-    for i in range(60):
+    for i in range(24):
         for pw in passwords:
             try:
                 d = neo4j.GraphDatabase.driver(LOCAL_URI, auth=("neo4j", pw), connection_timeout=5)
@@ -100,7 +100,7 @@ def wait_for_bolt(passwords: list[str]) -> tuple[str, str]:
             except Exception as e:  # noqa: BLE001
                 last = f"{type(e).__name__}: {str(e)[:120]}"
         time.sleep(5)
-    raise SystemExit(f"Neo4j did not accept a connection in 5 minutes; last error: {last}")
+    raise SystemExit(f"Neo4j did not accept a connection (uri {LOCAL_URI}, {len(passwords)} passwords tried); last error: {last}")
 
 
 def main(argv=None):
@@ -110,7 +110,15 @@ def main(argv=None):
     ap.add_argument("--ids-file", default="eval/item_lists/v8_47.json")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--skip-score", action="store_true")
+    ap.add_argument("--neo4j-uri", default=None, help="bolt URI of the local graph (default bolt://localhost:7687 or $NEO4J_URI if local)")
+    ap.add_argument("--neo4j-password", default=None, help="tried first, before the compose/.env/default passwords")
     args = ap.parse_args(argv)
+    global LOCAL_URI
+    env_uri = os.environ.get("NEO4J_URI", "")
+    if args.neo4j_uri:
+        LOCAL_URI = args.neo4j_uri
+    elif env_uri.startswith("bolt://") or env_uri.startswith("neo4j://"):
+        LOCAL_URI = env_uri
     os.chdir(REPO)
     LOG.parent.mkdir(parents=True, exist_ok=True)
     log(f"=== win_run start: model={args.model} run={args.run_id} python={sys.executable}")
@@ -126,10 +134,11 @@ def main(argv=None):
     neo4j_container()
     from dotenv import dotenv_values
     envv = dotenv_values(REPO / ".env")
-    passwords = ["password123"]
-    if envv.get("NEO4J_PASSWORD") and envv["NEO4J_PASSWORD"] not in passwords:
-        passwords.append(envv["NEO4J_PASSWORD"])
-    passwords.append("password")
+    passwords = []
+    for cand in (args.neo4j_password, os.environ.get("NEO4J_PASSWORD"), "password123", envv.get("NEO4J_PASSWORD"), "password"):
+        if cand and cand not in passwords:
+            passwords.append(cand)
+    log(f"neo4j target {LOCAL_URI}; {len(passwords)} password(s) to try")
     pw, n_classes = wait_for_bolt(passwords)
     os.environ.update({"NEO4J_URI": LOCAL_URI, "NEO4J_USER": "neo4j", "NEO4J_PASSWORD": pw})
     if n_classes == 0:
