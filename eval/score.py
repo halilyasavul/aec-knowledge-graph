@@ -129,9 +129,12 @@ def parse_candidate(path: Path) -> dict:
 
 def relax(item: dict, ann: list) -> dict:
     """Drop what the request cannot determine: unmentioned requirements go, and value
-    constraints nobody could recover are removed while the requirement itself stays."""
+    constraints nobody could recover are removed while the requirement itself stays.
+    `scope=value_extend` goes the other way: the request explicitly permits values the
+    reference enumeration lacks, so they are added (`add`: list of values)."""
     drop = {a["facet_index"] for a in ann if a["scope"] == "facet"}
     devalue = {a["facet_index"] for a in ann if a["scope"] == "value"}
+    extend = {a["facet_index"]: a["add"] for a in ann if a["scope"] == "value_extend"}
     target = []
     for i, f in enumerate(item["target"]):
         if i in drop:
@@ -139,6 +142,11 @@ def relax(item: dict, ann: list) -> dict:
         g = dict(f)
         if i in devalue:
             g.pop("value", None)
+        elif i in extend and (g.get("value") or "").startswith("RESTRICTION("):
+            members = restriction_members(g["value"])
+            have = {v for k, v in members if k == "enumeration"}
+            members += [("enumeration", v) for v in extend[i] if v not in have]
+            g["value"] = "RESTRICTION(" + ",".join(f"{k}={v}" for k, v in members) + ")"
         target.append(g)
     return {**item, "target": target}
 
@@ -150,6 +158,34 @@ def load_annotations(path: Path) -> dict:
             r = json.loads(line)
             out.setdefault(r["id"], []).append(r)
     return out
+
+
+def load_extras(path: Path) -> dict:
+    """Labels for generated requirements the reference lacks (eval/annotations/extras.jsonl).
+    Returns {item id: set of loose keys labelled faithful}."""
+    out: dict = {}
+    if path.exists():
+        for line in open(path, encoding="utf-8"):
+            r = json.loads(line)
+            if r["label"] == "faithful":
+                out.setdefault(r["id"], set()).add(tuple(r["key"]))
+    return out
+
+
+def excuse(cand_path: Path, faithful: set, out_path: Path) -> tuple[dict, Path, int]:
+    """Mirror image of relax(): drop generated requirements that the request supports but the
+    reference never encoded. Writes the trimmed candidate next to the reference variants and
+    returns (parsed trimmed candidate, its path, number of facets removed)."""
+    tree = etree.parse(str(cand_path))
+    removed = 0
+    for req in tree.findall(".//" + I("requirements")):
+        for c in children(req):
+            if loose_key(extract.facet_target(c)) in faithful:
+                req.remove(c)
+                removed += 1
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    tree.write(str(out_path), xml_declaration=True, encoding="UTF-8", standalone=True)
+    return parse_candidate(out_path), out_path, removed
 
 
 def dt_now() -> str:
@@ -462,6 +498,9 @@ def main(argv=None):
     ap.add_argument("--probe", action="store_true",
                     help="add test objects from the symmetric difference of differing value lists "
                          "(writes scores*_probe.csv; the standard scoring is left untouched)")
+    ap.add_argument("--excuse-extras", metavar="PATH", nargs="?", const="eval/annotations/extras.jsonl",
+                    help="remove generated requirements labelled faithful-to-request in PATH from the "
+                         "candidate before scoring (writes scores*_excused.csv)")
     ap.add_argument("--tag", default="", help="suffix for the output files, so annotation variants "
                                              "do not overwrite each other (e.g. --tag _passA)")
     args = ap.parse_args(argv if argv is not None else sys.argv[1:])
@@ -481,6 +520,14 @@ def main(argv=None):
         suffix = "_relaxed" + args.tag
         print(f"determined-only reference: {n_before - n_after} requirements dropped, "
               f"{sum(1 for v in ann.values() for a in v if a['scope'] == 'value')} value constraints removed")
+    faithful = {}
+    if args.excuse_extras:
+        faithful = load_extras(Path(args.excuse_extras))
+        if not faithful:
+            sys.exit(f"no faithful-extra labels at {args.excuse_extras}")
+        suffix += "_excused"
+        print(f"faithful extras excused: {sum(len(v) for v in faithful.values())} (item, requirement) labels "
+              f"on {len(faithful)} items")
     log = {}
     if (run_dir / "log.jsonl").exists():
         for line in open(run_dir / "log.jsonl", encoding="utf-8"):
@@ -521,6 +568,10 @@ def main(argv=None):
 
         # ---------------- A. intensional
         cand = parse_candidate(cand_path) if cand_path.exists() else None
+        row["n_excused"] = 0
+        if cand is not None and iid in faithful:
+            cand, cand_path, row["n_excused"] = excuse(
+                cand_path, faithful[iid], out_dir / ("candidate" + suffix) / f"{name}.ids")
         ref_c = [canon(f) for f in item["target"]]
         cand_c = [canon(f) for f in cand["requirements"]] if cand else []
         tp, fp, fn = multiset_match(ref_c, cand_c)
