@@ -19,9 +19,11 @@ best zero-shot is 65.6%, as the handover cites it. Most failures are the system 
 built to do — mapping request words onto standard IFC properties — where the benchmark's gold keeps
 the request's own words in a user-defined set. The request checks, tuned on the dev set, fire on
 held-out requests and sometimes push the model away from the gold. Opus is no better than Sonnet
-on the dev set and worse on the held-out set. buildingSMART's official audit passes every generated
-file's structure and fails every one on content (0 of 183; all 61 gold files pass). That is mostly
-two serializer defaults, not the model: without them, about nine in ten of Sonnet's files would pass.
+on the dev set and worse on the held-out set. buildingSMART's official audit passed every generated
+file's structure and failed every one on content (0 of 183; all 61 gold files pass). That was two
+serializer defaults, now fixed. Re-serializing the logged documents with the fixed serializer, no
+model calls, 36/41 of Sonnet's stage-1 files pass (Opus 31/41, Run 10 38/41), against the paper's
+33.1%. S1 is unchanged; what still fails the audit is the model's own.
 
 ## 1. Stage A: the three dev-set causes
 
@@ -126,9 +128,9 @@ string. `applies_to` is the gold's entity. Generation used
 | facet F1, ours (requirements only) | 0.553 | 0.304 | 0.555 |
 | FacetF1 their way, with version block | 0.590 | 0.454 | 0.591 |
 | FacetF1 their way, version block excluded | 0.650 | 0.478 | 0.651 |
-| official audit, full (the paper's "Content") | **0/41** | **0/41** | **0/41** |
-| official audit, structure only (`-c`) | 41/41 | 41/41 | 41/41 |
-| full audit if the serializer wrote applicability occurs and numeric restriction bases | 37/41 | 31/41 | 38/41 |
+| official audit, full (the paper's "Content"), as generated | 0/41 | 0/41 | 0/41 |
+| official audit, full, re-serialized with the fixed serializer | **36/41** | **31/41** | **38/41** |
+| official audit, structure only (`-c`), both renderings | 41/41 | 41/41 | 41/41 |
 
 "Their way" follows `eval/analysis_ishigaki.py`: blocks keyed by side, facet type and content,
 the version as one more block, classification/material/partOf excluded, macro over items, scored
@@ -147,7 +149,7 @@ package `ids-tool.commandline`. Every file was audited twice: the full audit (st
 - **Every generated file passes the structure audit and fails the full audit**, for both models
   and both runs.
 
-The failures are mostly two defaults in our serializer, not the model:
+As generated, the failures were mostly two defaults in our serializer, not the model:
 
 | code | message | cause | files (Sonnet stage 1) |
 | --- | --- | --- | --- |
@@ -158,11 +160,39 @@ The failures are mostly two defaults in our serializer, not the model:
 | 305 | `TRUE` for `xs:boolean`, `1/20` for `xs:double` | the model | 0 |
 | 202 | a `prohibited` property with a `dataType` | the model | 1 |
 
-Counting the files whose only full-audit errors are 301, 303 and 308 gives what the two serializer
-defaults cost. With them fixed, Sonnet would pass 37 of 41 stage-1 files (Opus 31, Run 10 38): far
-above the paper's 33.1%, where we now stand at 0. The S1 numbers are unaffected: ifctester tolerates
-both defaults, and the behavioural score reads per-element verdicts, not the specification's
-cardinality.
+**Both defaults are fixed** in `aec_kg/ids/serializer.py`:
+
+- **Applicability occurs.** Unstated `minOccurs`/`maxOccurs` now default to optional
+  [0..unbounded], and a stated `minOccurs` alone keeps `maxOccurs` unbounded.
+- **Restriction base.** A property value's restriction takes its XSD base from the dataType
+  (`xsd_base`). That is the EXPRESS underlying type: REAL/NUMBER → `xs:double`, INTEGER →
+  `xs:integer`, BOOLEAN → `xs:boolean`, else `xs:string`. Five exceptions get their own XSD types:
+  `IFCDATE`, `IFCDATETIME`, `IFCDURATION`, `IFCTIME`, `IFCURIREFERENCE`. Numeric bounds without a
+  dataType get `xs:double`, and a base the document states wins.
+
+The table was not guessed. Error 303 names the base it expects, so a probe file with one
+specification per IFC 4.3 defined type gave the audit's own table, and `xsd_base` matches it on all
+132 types. Two tests check this against the live tool and skip when `ids-tool` is absent.
+
+**What the fix changes, measured without new model calls.** `eval/ishigaki_bench/reserialize.py`
+takes the JSON of each accepted `generate_ids` call from the six Ishigaki runs' logs and serializes
+it again into `eval/runs/<run>-reserialized/`. All 183 files are identical to the originals apart
+from those two attributes. Audited again (`audit.py --suffix=-reserialized`,
+`h7_ishigaki_audit_reserialized*.csv`), the full-audit pass rates are 36/41 and 18/20 for Sonnet,
+31/41 and 16/20 for Opus, and 38/41 and 19/20 for Run 10. That is against the paper's 33.1%, though
+the paper's figure covers the whole benchmark. Scored again, S1, facet F1, direction and XSD
+validity are identical on every item of every run (1,464 values compared). ifctester tolerated both
+defaults, and the behavioural score reads per-element verdicts.
+
+What still fails the audit is the model's:
+
+- a value with no dataType: 2 Sonnet files, 13 Opus. Opus follows "omit dataType if ifc_type is
+  missing";
+- attribute names invented from the request (rows 0080/0082);
+- a numeric bound on an IFCLABEL (row-0096, `AcousticRating ≥ 30`);
+- `1/20` as an `xs:double`;
+- `TRUE` for an `xs:boolean`, which IDS writes `true`;
+- a `prohibited` property with a dataType.
 
 By input format (Sonnet, Run 9):
 
@@ -273,8 +303,8 @@ witness models the rebuilt references behave like the gold on 19 of 20; row-0008
 | S1 strict, standard = probe | 1/19 = 0.053 [0.00, 0.16] | 1/19 = 0.053 [0.00, 0.16] | **7/19 = 0.368 [0.16, 0.58]** |
 | FacetF1 their way (with / without version) | 0.544 / 0.564 | 0.469 / 0.484 | 0.614 / 0.642 |
 | NL / CSV S1 | 0.10 / 0.00 | 0.10 / 0.00 | 0.30 / 0.44 |
-| official audit, full / structure only | 0/20 / 20/20 | 0/20 / 20/20 | 0/20 / 20/20 |
-| full audit without the two serializer defaults | 18/20 | 16/20 | 19/20 |
+| official audit, full, as generated / re-serialized | 0/20 / **18/20** | 0/20 / **16/20** | 0/20 / **19/20** |
+| official audit, structure only | 20/20 | 20/20 | 20/20 |
 
 In Run 9, 14 of Sonnet's 18 failures differ in applicability. The cause: the generator's
 `Applicability` held only an entity. "Rooms named Room A … D" or "slabs with slope under 0.05"
@@ -351,10 +381,16 @@ stage-1 numbers are.
    package. The tool is published as `ids-tool.commandline` (author Claudio Benghi, tags IDS and
    buildingSmart) and provides the `ids-tool` command. Its `errorcode` command describes exit
    codes, not message numbers, so the table above quotes the messages themselves.
+8. **Two serializer defaults failed every file's content audit.** Applicability had no occurs, so
+   the IDS default [1..1] applied, and numeric restrictions had an `xs:string` base. Both are fixed,
+   and the effect was measured by re-serializing the logged documents rather than regenerating them.
+   Every run before this fix — the dev runs included — was written with the old defaults. Their S1
+   is unaffected.
 
-Files: `eval/ishigaki_bench/{convert,analysis,failures,check_firings,audit}.py`,
+Files: `eval/ishigaki_bench/{convert,analysis,failures,check_firings,audit,reserialize}.py`,
 `eval/ishigaki_bench/spec_tasks_en.jsonl`, `item_lists/`, `eval/claude_system_prompt_ishigaki.md`,
-`eval/annotations/cardinality.jsonl`, `tests/test_v9_devset_causes.py` (30 tests),
+`eval/annotations/cardinality.jsonl`, `tests/test_v9_devset_causes.py` (43 tests),
 `eval/reports/v9/h1`–`h7`, the regenerated `e2`, `e4`, `e5`, `p1` and `p2`, and `README.md` §C.
 Runs (not committed): `eval/runs/run7-claude-rep*-rescored-v9b`, `run8-{claude,opus}-rep1`,
-`run9-ishigaki{,-opus}-rep1{,-s2}`, `run10-claude-rep1`, `run10-ishigaki-rep1{,-s2}`.
+`run9-ishigaki{,-opus}-rep1{,-s2}`, `run10-claude-rep1`, `run10-ishigaki-rep1{,-s2}`, and the six
+`*-reserialized` copies.

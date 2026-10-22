@@ -8,9 +8,15 @@ the "agreed limitation of IDS contents" -- the paper's "Content" column) and the
 audit alone (`-c`). The gold files are audited too, as a check on the tool: the benchmark says
 they were validated with it. Writes eval/reports/v9/h7_ishigaki_audit.csv (one row per file)
 and h7_ishigaki_audit_summary.csv (pass rates per model and stage), and prints the error codes.
+
+    python -m eval.ishigaki_bench.audit --suffix=-reserialized
+
+audits the eval.ishigaki_bench.reserialize copies instead (<run>-reserialized; gold skipped) and
+writes h7_ishigaki_audit_reserialized*.csv.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
@@ -48,7 +54,11 @@ def audit(exe: str, path: Path, content: bool) -> dict:
             "codes": sorted({c for c, _ in errors}), "first_error": errors[0][1][:200] if errors else ""}
 
 
-def main():
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="official IDS audit of the Ishigaki files")
+    ap.add_argument("--suffix", default="", help="audit eval/runs/<run><suffix>/generated instead (gold skipped)")
+    args = ap.parse_args(argv)
+    tag = "_" + args.suffix.strip("-_").replace("-", "_") if args.suffix else ""
     exe = ids_tool()
     tasks = {json.loads(l)["id"]: json.loads(l) for l in open(TASKS, encoding="utf-8")}
     stage_of = {}
@@ -58,7 +68,7 @@ def main():
     jobs = []
     gold_dir = Path(tempfile.mkdtemp(prefix="ishigaki-gold-"))
     for iid, it in tasks.items():
-        if iid in stage_of:
+        if iid in stage_of and not args.suffix:
             p = gold_dir / f"{safe_name(iid)}.ids"
             p.write_text(it["gold_ids"], encoding="utf-8")
             jobs.append(("gold", stage_of[iid], "(gold)", iid, p))
@@ -66,7 +76,7 @@ def main():
         for stage, runs in stages.items():
             for run in runs:
                 for iid in [i for i, s in stage_of.items() if s == stage]:
-                    p = RUNS_DIR / run / "generated" / f"{safe_name(iid)}.ids"
+                    p = RUNS_DIR / (run + args.suffix) / "generated" / f"{safe_name(iid)}.ids"
                     if p.exists():
                         jobs.append((model, stage, run, iid, p))
 
@@ -85,19 +95,19 @@ def main():
     shutil.rmtree(gold_dir, ignore_errors=True)
     d = pd.DataFrame(rows)
     OUT.mkdir(parents=True, exist_ok=True)
-    d.to_csv(OUT / "h7_ishigaki_audit.csv", index=False)
+    d.to_csv(OUT / f"h7_ishigaki_audit{tag}.csv", index=False)
     summary = (d.groupby(["model", "stage"], sort=False)
                  .agg(files=("id", "count"), full_audit_pass=("full_pass", "sum"),
                       structure_audit_pass=("structure_pass", "sum"))
                  .reset_index())
     summary["full_audit_rate"] = (summary.full_audit_pass / summary.files).round(4)
     summary["structure_audit_rate"] = (summary.structure_audit_pass / summary.files).round(4)
-    summary.to_csv(OUT / "h7_ishigaki_audit_summary.csv", index=False)
+    summary.to_csv(OUT / f"h7_ishigaki_audit{tag}_summary.csv", index=False)
     print(summary.to_string(index=False))
     for (model, stage), g in d.groupby(["model", "stage"], sort=False):
         codes = Counter(c for cs in g.full_codes for c in cs.split())
         print(f"{model} {stage}: files failing per error code {dict(codes.most_common())}")
-    print(f"-> {OUT / 'h7_ishigaki_audit.csv'}")
+    print(f"-> {OUT / f'h7_ishigaki_audit{tag}.csv'}")
 
 
 if __name__ == "__main__":
