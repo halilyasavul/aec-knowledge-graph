@@ -92,3 +92,19 @@ validator raises instead of passing.
 **report.py** prints outcome equivalence, the two conditional probabilities, F1 vs
 equivalence (Spearman is withheld below 10 distinct F1 values), the error table, and cost and
 latency. All items count; whether the request text names the property is shown only as a breakdown.
+
+## Generating with Claude Code instead of the Gemini API (v9)
+
+The graph is also an MCP server (`python -m aec_kg.mcp_server`; two-step retrieval:
+`query_class` index -> `query_pset` detail; `generate_ids` applies the request checks and writes
+the file). `eval/generate_claude.py` drives Claude Code headlessly on the subscription login:
+one `claude -p` per item with only that server's tools, the system prompt replaced by
+`eval/claude_system_prompt.md`, cwd an empty scratch directory, and the stream-json parsed into
+the usual `log.jsonl` / `generated/` layout.
+
+    python -m eval.generate_claude --run-id run7-probe --probe          # tools, servers, auth source
+    python -m eval.generate_claude --run-id run7-claude-rep1 --ids-file eval/item_lists/v8_47.json --model claude-sonnet-5-5
+    python -m eval.score eval/runs/run7-claude-rep1 eval/nl_to_ids_testset/spec_tasks.jsonl eval/models --relaxed --excuse-extras --probe
+
+To use the server interactively: `claude mcp add ifc -- python -m aec_kg.mcp_server` (or the
+equivalent entry in Claude Desktop's config), with the Neo4j variables in `.env`.

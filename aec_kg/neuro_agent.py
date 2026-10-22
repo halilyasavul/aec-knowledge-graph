@@ -309,6 +309,96 @@ def list_classes(search_term: str | None = None) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
+# Two-step retrieval (v9): the index of a class, then one property set in full
+# ---------------------------------------------------------------------------
+
+def get_class_index(class_code: str) -> dict:
+    """
+    The property sets of an IFC class with their property codes only — no definitions, no
+    allowed values. About 6k characters for the largest classes instead of ~100k for the full
+    dump, so it can sit in the conversation for every later call. Fetch one set in full with
+    get_pset_detail() once it is chosen.
+
+    Returns {"class_code", "class_name", "class_definition", "parent_class",
+             "property_sets": {"Pset_WallCommon": ["AcousticRating", "FireRating", ...]}}.
+    """
+    driver = _get_driver()
+    query = """
+    MATCH (c:Class {code: $class_code})
+    OPTIONAL MATCH (c)-[:HAS_PROPERTY_SET]->(pset:PropertySet)-[:HAS_PROPERTY]->(prop:Property)
+    OPTIONAL MATCH (c)-[:INHERITS_FROM]->(parent:Class)
+    RETURN c.code AS class_code, c.name AS class_name, c.definition AS class_definition,
+           parent.code AS parent_class_code, pset.code AS pset_code, prop.code AS prop_code
+    ORDER BY pset.code, prop.code
+    """
+    with driver.session() as session:
+        records = list(session.run(query, class_code=class_code))
+    if not records:
+        logger.warning("Class '%s' not found in knowledge graph.", class_code)
+        return {"class_code": class_code, "class_name": None, "class_definition": None,
+                "parent_class": None, "property_sets": {}}
+    first = records[0]
+    out = {"class_code": first["class_code"], "class_name": first["class_name"],
+           "class_definition": first["class_definition"], "parent_class": first["parent_class_code"],
+           "property_sets": {}}
+    for rec in records:
+        if rec["pset_code"] is None:
+            continue
+        codes = out["property_sets"].setdefault(rec["pset_code"], [])
+        if rec["prop_code"] is not None and rec["prop_code"] not in codes:
+            codes.append(rec["prop_code"])
+    return out
+
+
+def get_pset_detail(pset_code: str) -> dict:
+    """
+    One property set in full: every property with its IFC data type (``ifc_type``, the IDS
+    dataType), bSDD data_type, definition and allowed values, plus the classes it applies to.
+
+    Returns {"pset_code", "pset_name", "pset_definition", "applies_to": [class codes],
+             "properties": [{"code", "name", "definition", "data_type", "ifc_type",
+                             "property_value_kind", "allowed_values": [...]}]}
+    or {"pset_code": ..., "properties": []} when the set is unknown.
+    """
+    driver = _get_driver()
+    query = """
+    MATCH (pset:PropertySet {code: $pset_code})
+    OPTIONAL MATCH (pset)-[:HAS_PROPERTY]->(prop:Property)
+    OPTIONAL MATCH (c:Class)-[:HAS_PROPERTY_SET]->(pset)
+    RETURN pset.code AS pset_code, pset.name AS pset_name, pset.definition AS pset_definition,
+           collect(DISTINCT c.code) AS applies_to,
+           prop.code AS prop_code, prop.name AS prop_name, prop.definition AS prop_definition,
+           prop.data_type AS prop_data_type, prop.ifc_type AS prop_ifc_type,
+           prop.property_value_kind AS prop_value_kind, prop.allowed_values AS prop_allowed_values
+    ORDER BY prop.code
+    """
+    with driver.session() as session:
+        records = list(session.run(query, pset_code=pset_code))
+    if not records:
+        logger.warning("Property set '%s' not found in knowledge graph.", pset_code)
+        return {"pset_code": pset_code, "pset_name": None, "pset_definition": None,
+                "applies_to": [], "properties": []}
+    first = records[0]
+    out = {"pset_code": first["pset_code"], "pset_name": first["pset_name"],
+           "pset_definition": first["pset_definition"],
+           "applies_to": sorted(x for x in first["applies_to"] if x), "properties": []}
+    seen = set()
+    for rec in records:
+        code = rec["prop_code"]
+        if code is None or code in seen:
+            continue
+        seen.add(code)
+        allowed_raw = rec["prop_allowed_values"]
+        entry = {"code": code, "name": rec["prop_name"], "definition": rec["prop_definition"],
+                 "data_type": rec["prop_data_type"], "property_value_kind": rec["prop_value_kind"],
+                 "allowed_values": json.loads(allowed_raw) if allowed_raw else []}
+        if INCLUDE_IFC_TYPE and rec["prop_ifc_type"]:
+            entry["ifc_type"] = rec["prop_ifc_type"]
+        out["properties"].append(entry)
+    return out
+
+
+# ---------------------------------------------------------------------------
 # CLI test
 # ---------------------------------------------------------------------------
 
