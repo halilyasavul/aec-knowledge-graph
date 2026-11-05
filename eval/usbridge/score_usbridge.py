@@ -151,40 +151,74 @@ def score_a(items: list[dict], specs_un: dict, gen: Path) -> list[dict]:
 
 # --------------------------------------------------------------------------- failure classes on (b)
 def failure_classes(task_b: dict, cand: dict | None, full_keys: set) -> Counter:
+    """Per reference specification (determined facets), against the candidate specification with
+    the same (entity, predefinedType):
+      entity_mapping          reference specs with no such candidate spec (their facets are
+                              counted apart as facets_under_unmapped_entity)
+      cardinality / value_or_datatype   same facet identity, that field differs
+      pset_choice             the property is there under another set
+      property_name           the set is there, the property name is not in it
+      missing_facet           none of the above
+      extra_facet             candidate facets (in any spec) whose identity is in no reference spec
+                              of the item, determined or not
+    """
     c = Counter()
     if cand is None:
         c["no_file"] += 1
         return c
-    cand_apps = {app_key(s["applicability_facets"]) for s in cand.get("specs") or []}
+    by_app: dict = {}
+    for s in cand.get("specs") or []:
+        by_app.setdefault(app_key(s["applicability_facets"]), []).extend(s["target"])
     for s in task_b["specs"]:
-        if app_key(s["applicability_facets"]) not in cand_apps:
+        creq = by_app.get(app_key(s["applicability_facets"]))
+        if creq is None:
             c["entity_mapping"] += 1
-    creq = cand["requirements"]
-    ccanon = Counter(score.canon(f) for f in creq)
-    cloose = {score.loose_key(f): f for f in creq}
-    for f in task_b["target"]:
-        if ccanon[score.canon(f)] > 0:
-            ccanon[score.canon(f)] -= 1
+            c["facets_under_unmapped_entity"] += len(s["target"])
             continue
-        lk = score.loose_key(f)
-        if lk in cloose:
-            g = cloose[lk]
-            c["cardinality" if (g.get("cardinality") or "required") != (f.get("cardinality") or "required")
-              else "value_or_datatype"] += 1
-        elif f["facet"] == "property" and any(x["facet"] == "property" and x.get("baseName") == f.get("baseName")
-                                              for x in creq):
-            c["pset_choice"] += 1
-        elif f["facet"] == "property" and any(x["facet"] == "property" and x.get("propertySet") == f.get("propertySet")
-                                              for x in creq):
-            c["property_name"] += 1
-        else:
-            c["missing_facet"] += 1
-    c["extra_facet"] += sum(1 for f in creq if score.loose_key(f) not in full_keys)
+        ccanon = Counter(score.canon(f) for f in creq)
+        cloose = {score.loose_key(f): f for f in creq}
+        for f in s["target"]:
+            if ccanon[score.canon(f)] > 0:
+                ccanon[score.canon(f)] -= 1
+                c["correct"] += 1
+                continue
+            g = cloose.get(score.loose_key(f))
+            if g is not None:
+                c["cardinality" if (g.get("cardinality") or "required") != (f.get("cardinality") or "required")
+                  else "value_or_datatype"] += 1
+            elif f["facet"] == "property" and any(x["facet"] == "property" and x.get("baseName") == f.get("baseName")
+                                                  for x in creq):
+                c["pset_choice"] += 1
+            elif f["facet"] == "property" and any(x["facet"] == "property" and x.get("propertySet") == f.get("propertySet")
+                                                  for x in creq):
+                c["property_name"] += 1
+            else:
+                c["missing_facet"] += 1
+    c["extra_facet"] += sum(1 for f in cand["requirements"] if score.loose_key(f) not in full_keys)
     return c
 
 
+def reclassify(run_dir: Path, items: list[dict]) -> dict:
+    """Recompute the failure classes of a scored run (summary.json updated in place)."""
+    out = run_dir / "usbridge_scores"
+    specs_ex = {s["spec_id"]: s for s in load(ROOT / "reference" / "specs_expanded.jsonl")}
+    tb = {t["id"]: t for t in load(out / "b" / "tasks_b.jsonl")}
+    classes = {}
+    for iid, t in tb.items():
+        p = run_dir / "generated" / f"{safe_name(iid)}.ids"
+        cand = score.parse_candidate(p) if p.exists() else None
+        item = next(i for i in items if i["id"] == iid)
+        full = {score.loose_key(f) for sid in item["reference_spec_ids"] for f in specs_ex[sid]["requirements"]}
+        classes[iid] = failure_classes(t, cand, full)
+    s = json.loads((out / "summary.json").read_text(encoding="utf-8"))
+    s["failure_classes"] = dict(sum(classes.values(), Counter()))
+    s["per_item_classes"] = {k: dict(v) for k, v in classes.items()}
+    (out / "summary.json").write_text(json.dumps(s, indent=1), encoding="utf-8")
+    return s["failure_classes"]
+
+
 # --------------------------------------------------------------------------- driver
-def score_run(run_dir: Path, items: list[dict], out: Path | None = None) -> dict:
+def score_run(run_dir: Path, items: list[dict], out: Path | None = None, strict: bool = False) -> dict:
     out = out or run_dir / "usbridge_scores"
     out.mkdir(parents=True, exist_ok=True)
     specs_un = {s["spec_id"]: s for s in load(ROOT / "reference" / "specs.jsonl")}
@@ -230,6 +264,20 @@ def score_run(run_dir: Path, items: list[dict], out: Path | None = None) -> dict
               "facet_fn": sum(int(r.get("facet_fn") or 0) for r in rows_b)},
         "failure_classes": dict(sum(classes.values(), Counter())),
     }
+    if strict:                                   # appendix: the full expanded reference, nothing relaxed
+        from eval.usbridge.harness_check import task as task_full
+        (out / "strict").mkdir(exist_ok=True)
+        sp = out / "strict" / "tasks_strict.jsonl"
+        with open(sp, "w", encoding="utf-8") as fh:
+            for it in items:
+                fh.write(json.dumps(task_full(it, specs_ex)) + "\n")
+        score.main([str(run_dir), str(sp), str(MODELS), "--out", str(out / "strict")])
+        rs = list(csv.DictReader(open(out / "strict" / "scores.csv", encoding="utf-8")))
+        tp, fp, fn = (sum(int(r.get(k) or 0) for r in rs) for k in ("facet_tp", "facet_fp", "facet_fn"))
+        summ["strict"] = {"s1": sum(1 for r in rs if num(r, "wit_outcome_equiv") == 1.0),
+                          "s1_scored": sum(1 for r in rs if num(r, "wit_outcome_equiv") is not None),
+                          "facet_tp": tp, "facet_fp": fp, "facet_fn": fn,
+                          "facet_f1_micro": 2 * tp / (2 * tp + fp + fn) if tp else 0.0}
     a = summ["a"]
     a["facet_f1_micro"] = 2 * a["facet_tp"] / (2 * a["facet_tp"] + a["facet_fp"] + a["facet_fn"]) if a["facet_tp"] else 0.0
     b = summ["b"]
@@ -288,11 +336,15 @@ def main(argv=None):
             for x in v["not_perfect"]:
                 print(k, json.dumps(x)[:300])
         return
+    if argv and argv[0] == "--classes":
+        for r in argv[1:]:
+            print(r, json.dumps(reclassify(Path(r), items)))
+        return
     run_dir = Path(argv[0])
     gen = run_dir / "generated"
     items = [it for it in items if (gen / f"{safe_name(it['id'])}.ids").exists()
              or (gen / f"{safe_name(it['id'])}.fail.json").exists()]          # the items this run attempted
-    s = score_run(run_dir, items)
+    s = score_run(run_dir, items, strict="--strict" in argv)
     print(json.dumps(s, indent=1))
 
 

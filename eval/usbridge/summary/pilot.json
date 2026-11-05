@@ -1,0 +1,148 @@
+{
+ "conditions": {
+  "usbridge-pilot-ifc": "ifc",
+  "usbridge-pilot-ifc-usbridge": "ifc,usbridge"
+ },
+ "tables": {
+  "usbridge-pilot-ifc": {
+   "items": 61,
+   "ok": 61,
+   "no_file": 0,
+   "error": 0,
+   "b_s1_entity": [
+    0.0,
+    0.0,
+    0.0,
+    55
+   ],
+   "b_s1_document": 0.0,
+   "b_facet_f1_micro": 0.0036188178528347406,
+   "b_facet_f1_entity_mean": [
+    0.016635586635586636,
+    0.0027972027972027968,
+    0.03360625485625485,
+    55
+   ],
+   "a_facet_f1_micro": 0.020993343573988736,
+   "a_facet_f1_entity_mean": [
+    0.03344674445812608,
+    0.020486731455593217,
+    0.046879248273642364,
+    60
+   ],
+   "a_facet_f1_document": 0.020031628887717447,
+   "a_spec_match_entity": [
+    0.23194444444444443,
+    0.14305555555555555,
+    0.32499999999999996,
+    60
+   ],
+   "strict": {
+    "s1": 0,
+    "s1_scored": 57,
+    "facet_tp": 5,
+    "facet_fp": 1885,
+    "facet_fn": 8758,
+    "facet_f1_micro": 0.0009387027128508401
+   },
+   "failure_classes": {
+    "entity_mapping": 260,
+    "facets_under_unmapped_entity": 1285,
+    "extra_facet": 1827,
+    "missing_facet": 179,
+    "pset_choice": 15
+   },
+   "cost_total": 9.994213,
+   "cost_per_entity_item_mean": 0.13658442333333334,
+   "cost_document": 1.7991476000000002,
+   "cost_first10_max": 0.17494829999999997,
+   "input_tokens_median": 70454.5,
+   "output_tokens_median": 5200.5,
+   "thinking_tokens_median": 1949.0,
+   "tool_calls_median": 13.5,
+   "wall_s_median": 39.1955,
+   "items_output_with_usbrpset": 2,
+   "items_with_usbrpset_lookup": 59,
+   "usbrpset_lookups_total": 266,
+   "items_with_custom_psets": 57,
+   "custom_pset_property_facets": 1336
+  },
+  "usbridge-pilot-ifc-usbridge": {
+   "items": 61,
+   "ok": 61,
+   "no_file": 0,
+   "error": 0,
+   "b_s1_entity": [
+    0.01818181818181818,
+    0.0,
+    0.05454545454545454,
+    55
+   ],
+   "b_s1_document": 0.0,
+   "b_facet_f1_micro": 0.14361702127659576,
+   "b_facet_f1_entity_mean": [
+    0.23729737663221384,
+    0.1694236427896902,
+    0.3128598363835931,
+    55
+   ],
+   "a_facet_f1_micro": 0.0449854458851548,
+   "a_facet_f1_entity_mean": [
+    0.054405035448659704,
+    0.030577633612859926,
+    0.08133661646571518,
+    60
+   ],
+   "a_facet_f1_document": 0.043795620437956206,
+   "a_spec_match_entity": [
+    0.21180555555555552,
+    0.12914930555555557,
+    0.30277777777777776,
+    60
+   ],
+   "strict": {
+    "s1": 0,
+    "s1_scored": 57,
+    "facet_tp": 140,
+    "facet_fp": 1066,
+    "facet_fn": 8623,
+    "facet_f1_micro": 0.0280870699167419
+   },
+   "failure_classes": {
+    "missing_facet": 132,
+    "entity_mapping": 253,
+    "facets_under_unmapped_entity": 1251,
+    "extra_facet": 883,
+    "correct": 81,
+    "property_name": 11,
+    "pset_choice": 4
+   },
+   "cost_total": 12.3718812,
+   "cost_per_entity_item_mean": 0.18780090166666666,
+   "cost_document": 1.1038271000000002,
+   "cost_first10_max": 0.2600384,
+   "input_tokens_median": 109567.5,
+   "output_tokens_median": 5874.5,
+   "thinking_tokens_median": 2904.5,
+   "tool_calls_median": 13.0,
+   "wall_s_median": 44.615,
+   "items_output_with_usbrpset": 27,
+   "items_with_usbrpset_lookup": 59,
+   "usbrpset_lookups_total": 242,
+   "items_with_custom_psets": 36,
+   "custom_pset_property_facets": 898
+  }
+ },
+ "paired_b_s1": {
+  "n": 56,
+  "better": 1,
+  "worse": 0,
+  "same": 55
+ },
+ "paired_a_f1": {
+  "n": 61,
+  "better": 13,
+  "worse": 5,
+  "same": 43
+ }
+}
