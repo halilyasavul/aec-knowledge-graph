@@ -21,6 +21,13 @@ Environment:
   IDS_REQUEST_TEXT / IDS_REQUEST_FILE   the request, for the fidelity checks
   NEO4J_URI / NEO4J_USER / NEO4J_PASSWORD   as for the rest of aec_kg (.env is read)
 
+Dictionaries (the usBridge ablation, v10b):
+  --dictionaries ifc            default; every tool behaves exactly as before
+  --dictionaries ifc,usbridge   search_classes, query_class, query_pset and query_class_structure
+                                also return bSDD usBridge classes and property sets, each record
+                                tagged "dictionary": "usBridge" (aec_kg/usbridge.py)
+  IFC_DICTIONARIES              the same, for clients that cannot pass arguments
+
 Nothing is printed to stdout: stdio is the protocol channel. Logging goes to stderr.
 """
 from __future__ import annotations
@@ -120,6 +127,31 @@ class _State:
 
 
 STATE = _State()
+KNOWN_DICTIONARIES = {"ifc", "usbridge"}
+
+
+def parse_dictionaries(argv: list[str] | None = None, env: dict | None = None) -> frozenset:
+    """--dictionaries a,b (or IFC_DICTIONARIES); 'ifc' is always on."""
+    argv = sys.argv[1:] if argv is None else argv
+    env = os.environ if env is None else env
+    value = env.get("IFC_DICTIONARIES") or "ifc"
+    for i, a in enumerate(argv):
+        if a == "--dictionaries" and i + 1 < len(argv):
+            value = argv[i + 1]
+        elif a.startswith("--dictionaries="):
+            value = a.split("=", 1)[1]
+    names = {x.strip().lower() for x in value.split(",") if x.strip()} | {"ifc"}
+    unknown = names - KNOWN_DICTIONARIES
+    if unknown:
+        raise SystemExit(f"unknown dictionaries: {sorted(unknown)} (known: {sorted(KNOWN_DICTIONARIES)})")
+    return frozenset(names)
+
+
+DICTIONARIES = parse_dictionaries([], {})          # module default: ifc only; main() reads the flag
+
+
+def _usbridge() -> bool:
+    return "usbridge" in DICTIONARIES
 
 
 def _slug(s: str) -> str:
@@ -136,6 +168,9 @@ def search_classes(term: str) -> list[dict]:
     for c in list_classes(term)[:40]:
         d = (c.get("definition") or "").strip().replace("\n", " ")
         out.append({"code": c["code"], "name": c["name"], "definition": d[:160] + ("…" if len(d) > 160 else "")})
+    if _usbridge():
+        from aec_kg import usbridge
+        out = [{**c, "dictionary": "ifc"} for c in out] + usbridge.search(term, 40)
     return out
 
 
@@ -144,7 +179,15 @@ def query_class(class_code: str) -> dict:
     """A class's property sets with their property codes only (no definitions, no values):
     the index to choose from. Then fetch the set you need with query_pset. Example:
     query_class("IfcWall") -> {"property_sets": {"Pset_WallCommon": ["FireRating", ...], ...}}."""
-    return get_class_index(class_code)
+    if not _usbridge():
+        return get_class_index(class_code)
+    from aec_kg import usbridge
+    ub = usbridge.class_index(class_code)
+    if ub is not None:                       # a usBridge class code (usBridge_PierCap, ...)
+        return ub
+    out = {**get_class_index(class_code), "dictionary": "ifc"}
+    out["usbridge_classes"] = usbridge.classes_for_ifc(out.get("class_code") or class_code)
+    return out
 
 
 @server.tool()
@@ -153,6 +196,12 @@ def query_pset(pset_code: str) -> dict:
     as dataType), "data_type", "definition" and "allowed_values" (the IFC enumeration, if any).
     Example: query_pset("Pset_WallCommon")."""
     detail = get_pset_detail(pset_code)
+    if _usbridge():
+        from aec_kg import usbridge
+        if detail.get("properties"):
+            detail = {**detail, "dictionary": "ifc"}
+        else:
+            detail = usbridge.pset_detail(pset_code) or detail
     if detail.get("properties"):
         STATE.ctx.learn({"property_sets": {detail["pset_code"]: {"properties": detail["properties"]}}})
     return detail
@@ -163,7 +212,25 @@ def query_class_structure(class_code: str) -> dict:
     """EXPRESS structure of a class: attributes (Name, Description, PredefinedType, ...) with
     types and enumerations, the inheritance chain and WHERE rules. Use for attribute facets and
     for the PredefinedType values of a class."""
-    return get_class_structure(class_code)
+    if not _usbridge():
+        return get_class_structure(class_code)
+    from aec_kg import usbridge
+    ub = usbridge.class_index(class_code)
+    if ub is None:
+        return {**get_class_structure(class_code), "dictionary": "ifc",
+                "usbridge_classes": usbridge.classes_for_ifc(class_code)}
+    ent = ub.get("ifc_entity")                 # a usBridge class: the structure of its IFC entity
+    base = get_class_structure(_ifc_code(ent)) if ent else {}
+    return {**base, "dictionary": "usBridge", "usbridge_class": class_code, "ifc_entity": ent,
+            "predefinedType": ub.get("predefinedType"), "objectType": ub.get("objectType")}
+
+
+def _ifc_code(upper: str) -> str:
+    """IFCBRIDGEPART -> IfcBridgePart (the graph's class code), via the class list."""
+    for c in list_classes(upper):
+        if c["code"].upper() == upper.upper():
+            return c["code"]
+    return upper
 
 
 @server.tool()
@@ -223,6 +290,9 @@ def generate_ids(ids: dict | str, request_text: str | None = None) -> dict:
 
 
 def main() -> None:
+    global DICTIONARIES
+    DICTIONARIES = parse_dictionaries()
+    logger.info("dictionaries: %s", ",".join(sorted(DICTIONARIES)))
     server.run(transport="stdio")
 
 

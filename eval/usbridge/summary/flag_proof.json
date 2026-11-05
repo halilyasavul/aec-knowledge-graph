@@ -1,0 +1,121 @@
+{
+ "ifc": {
+  "server_args": [],
+  "term": "Pier",
+  "n": 7,
+  "by_dictionary": {
+   "(none)": 7
+  },
+  "rows": [
+   {
+    "code": "IfcBeamPIERCAP",
+    "name": "Pier Cap"
+   },
+   {
+    "code": "IfcBridgePartPIER",
+    "name": "Pier"
+   },
+   {
+    "code": "IfcBridgePartPIER_SEGMENT",
+    "name": "Pier Segment"
+   },
+   {
+    "code": "IfcColumnPIERSTEM",
+    "name": "Pier Stem"
+   },
+   {
+    "code": "IfcColumnPIERSTEM_SEGMENT",
+    "name": "Pier Stem Segment"
+   },
+   {
+    "code": "IfcElectricAppliancePHOTOCOPIER",
+    "name": "Photocopier"
+   },
+   {
+    "code": "IfcElementAssemblyPIER",
+    "name": "Pier"
+   }
+  ]
+ },
+ "ifc,usbridge": {
+  "server_args": [
+   "--dictionaries",
+   "ifc,usbridge"
+  ],
+  "term": "Pier",
+  "n": 12,
+  "by_dictionary": {
+   "ifc": 7,
+   "usBridge": 5
+  },
+  "rows": [
+   {
+    "code": "IfcBeamPIERCAP",
+    "name": "Pier Cap",
+    "dictionary": "ifc"
+   },
+   {
+    "code": "IfcBridgePartPIER",
+    "name": "Pier",
+    "dictionary": "ifc"
+   },
+   {
+    "code": "IfcBridgePartPIER_SEGMENT",
+    "name": "Pier Segment",
+    "dictionary": "ifc"
+   },
+   {
+    "code": "IfcColumnPIERSTEM",
+    "name": "Pier Stem",
+    "dictionary": "ifc"
+   },
+   {
+    "code": "IfcColumnPIERSTEM_SEGMENT",
+    "name": "Pier Stem Segment",
+    "dictionary": "ifc"
+   },
+   {
+    "code": "IfcElectricAppliancePHOTOCOPIER",
+    "name": "Photocopier",
+    "dictionary": "ifc"
+   },
+   {
+    "code": "IfcElementAssemblyPIER",
+    "name": "Pier",
+    "dictionary": "ifc"
+   },
+   {
+    "code": "usBridge_Pier",
+    "name": "Pier",
+    "dictionary": "usBridge",
+    "ifc_entity": "IFCBRIDGEPART"
+   },
+   {
+    "code": "usBridge_PierCap",
+    "name": "Pier Cap",
+    "dictionary": "usBridge",
+    "ifc_entity": "IFCBEAM"
+   },
+   {
+    "code": "usBridge_PierColumn",
+    "name": "Pier Column",
+    "dictionary": "usBridge",
+    "ifc_entity": "IFCCOLUMN"
+   },
+   {
+    "code": "usBridge_PierStem",
+    "name": "Pier Stem",
+    "dictionary": "usBridge",
+    "ifc_entity": "IFCCOLUMN"
+   },
+   {
+    "code": "usBridge_PierWall",
+    "name": "Pier Wall",
+    "dictionary": "usBridge",
+    "ifc_entity": "IFCWALL",
+    "predefinedType": "USERDEFINED",
+    "objectType": "PIER_WALL"
+   }
+  ]
+ }
+}

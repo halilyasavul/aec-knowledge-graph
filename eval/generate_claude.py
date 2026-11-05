@@ -103,7 +103,8 @@ def build_command(claude: str, flags: set[str], model: str, mcp_cfg: Path, max_t
     return cmd
 
 
-def mcp_config(request_file: Path, out_dir: Path, out_name: str, env_extra: dict) -> dict:
+def mcp_config(request_file: Path, out_dir: Path, out_name: str, env_extra: dict,
+               dictionaries: str = "ifc") -> dict:
     # Pass the process environment the server needs even if the client does not inherit ours:
     # user site-packages (APPDATA), temp dirs, PATH and the Windows system root.
     env = {k: os.environ[k] for k in ("PATH", "APPDATA", "LOCALAPPDATA", "USERPROFILE", "HOMEDRIVE", "HOMEPATH",
@@ -111,8 +112,29 @@ def mcp_config(request_file: Path, out_dir: Path, out_name: str, env_extra: dict
     env.update({"PYTHONPATH": str(REPO), "PYTHONIOENCODING": "utf-8",
                 "IDS_REQUEST_FILE": str(request_file), "IDS_OUTPUT_DIR": str(out_dir), "IDS_OUTPUT_NAME": out_name})
     env.update({k: v for k, v in env_extra.items() if v})
+    args = ["-m", "aec_kg.mcp_server"] + ([] if dictionaries == "ifc" else ["--dictionaries", dictionaries])
     return {"mcpServers": {SERVER_NAME: {"type": "stdio", "command": sys.executable,
-                                         "args": ["-m", "aec_kg.mcp_server"], "env": env}}}
+                                         "args": args, "env": env}}}
+
+
+# Items that carry their request as text (eval/usbridge/items.jsonl) instead of a structured prompt.
+# The user turn is this fixed header plus the text, verbatim.
+REQUEST_HEADER = "Generate an IDS specification.\nTarget schema: IFC4X3_ADD2\nRequest:\n"
+
+
+def request_message(item: dict) -> str:
+    return REQUEST_HEADER + item["request_text"]
+
+
+def assert_no_leak_text(item: dict, message: str) -> None:
+    """For request_text items: the message is the header plus the text and nothing of the answer key."""
+    assert message == request_message(item), "message is not header + request_text"
+    assert item["id"] not in message, "id leaked into message"
+    for sid in item.get("reference_spec_ids") or []:
+        assert sid not in message, f"reference spec id {sid} leaked into message"
+    import re as _re
+    hits = _re.findall(r"\b(?:Pset_|Qto_|usBrPset)\w*|\bIFC[A-Z]{3,}\w*|\bIfc[A-Z]\w+", item["request_text"])
+    assert not hits, f"IFC names in the request text: {hits[:5]}"
 
 
 def neo4j_env() -> dict:
@@ -218,6 +240,8 @@ def main(argv=None):
     ap.add_argument("--probe", action="store_true", help="one trivial prompt; print tools/servers/auth and stop")
     ap.add_argument("--system-prompt-file", default=str(SYSTEM_PROMPT_FILE),
                     help="system prompt for the generator (default: the dev-set prompt); its sha goes in run.json")
+    ap.add_argument("--dictionaries", default="ifc",
+                    help="passed to the server: 'ifc' (default, as before) or 'ifc,usbridge'")
     args = ap.parse_args(argv)
 
     claude = find_claude()
@@ -238,7 +262,7 @@ def main(argv=None):
         req = req_dir / "_probe.txt"
         req.write_text("probe", encoding="utf-8")
         cfg = run_dir / "_probe.mcp.json"
-        cfg.write_text(json.dumps(mcp_config(req, gen_dir, "_probe.ids", env_extra), indent=1))
+        cfg.write_text(json.dumps(mcp_config(req, gen_dir, "_probe.ids", env_extra, args.dictionaries), indent=1))
         cmd = build_command(claude, flags, args.model, cfg, 4)
         probe_prompt = ("Do three things and report each in one line. 1) Call query_class for IfcWall and give the "
                         "number of property sets. 2) Try to read the file C:\\Windows\\win.ini (or /etc/hosts) with "
@@ -273,23 +297,28 @@ def main(argv=None):
     sys_sha = hashlib.sha256(system_prompt.read_bytes()).hexdigest()
     import aec_kg.mcp_server as srv
     instr_sha = hashlib.sha256(srv.INSTRUCTIONS.encode()).hexdigest()
+    tasks = load_tasks(args.tasks)
+    text_items = bool(tasks) and all("request_text" in t and "prompt" not in t for t in tasks)
     meta = {"generator": "claude-code", "model": args.model, "system_prompt_file": str(system_prompt),
             "system_prompt_sha256": sys_sha,
             "server_instructions_sha256": instr_sha, "max_turns": args.max_turns,
             "builtin_tools_disallowed": BUILTIN_TOOLS, "cli_flags_present": sorted(flags),
-            "message_template": build_message({"applies_to": {"entity": "X"}, "requirements": ["R"]}),
+            "message_template": (request_message({"request_text": "<request_text>"}) if text_items else
+                                 build_message({"applies_to": {"entity": "X"}, "requirements": ["R"]})),
             "tasks": str(Path(args.tasks).resolve())}
+    if args.dictionaries != "ifc":           # absent for 'ifc', so earlier runs' run.json still match
+        meta["dictionaries"] = args.dictionaries
     meta_path = run_dir / "run.json"
     if meta_path.exists():
         prev = json.loads(meta_path.read_text())
-        for k in ("model", "system_prompt_sha256", "server_instructions_sha256", "message_template"):
+        for k in ("model", "system_prompt_sha256", "server_instructions_sha256", "message_template", "dictionaries"):
             if prev.get(k) != meta.get(k):
                 sys.exit(f"refusing to resume {args.run_id}: {k} changed")
     else:
         meta["created"] = dt.datetime.now().isoformat(timespec="seconds")
         meta_path.write_text(json.dumps(meta, indent=2))
 
-    tasks = ordered(load_tasks(args.tasks))
+    tasks = tasks if text_items else ordered(tasks)
     if args.ids_file:
         wanted = json.loads(Path(args.ids_file).read_text())
         by_id = {t["id"]: t for t in tasks}
@@ -297,7 +326,7 @@ def main(argv=None):
         if missing_ids:
             sys.exit(f"ids not found in tasks: {missing_ids}")
         tasks = [by_id[i] for i in wanted]
-    elif not args.all:
+    elif not args.all and not text_items:
         psets = graph_psets(run_dir)
         if psets is None:
             sys.exit("graph needed to select IFC-only items (or pass --all / --ids-file)")
@@ -315,12 +344,16 @@ def main(argv=None):
         out_ids, out_fail = gen_dir / f"{name}.ids", gen_dir / f"{name}.fail.json"
         if out_ids.exists() or out_fail.exists():
             continue
-        message = build_message(item["prompt"])
-        assert_no_leak(item, message)
+        if text_items:
+            message = request_message(item)
+            assert_no_leak_text(item, message)
+        else:
+            message = build_message(item["prompt"])
+            assert_no_leak(item, message)
         req = req_dir / f"{name}.txt"
         req.write_text(message, encoding="utf-8")
         cfg = run_dir / "requests" / f"{name}.mcp.json"
-        cfg.write_text(json.dumps(mcp_config(req, gen_dir, f"{name}.ids", env_extra), indent=1))
+        cfg.write_text(json.dumps(mcp_config(req, gen_dir, f"{name}.ids", env_extra, args.dictionaries), indent=1))
         cmd = build_command(claude, flags, args.model, cfg, args.max_turns, system_prompt=system_prompt)
         entry = {"id": item["id"], "file": name, "model": args.model, "model_api_version": None,
                  "temperature": None, "prompt_sent": message, "prompt_chars": len(message),

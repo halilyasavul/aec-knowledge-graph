@@ -1,0 +1,22 @@
+{
+ "note": "Recorded answer for the v10b dry run (eval/usbridge/stub_claude.py). Hand-written for item usb-idm1-033 (Pier Cap); not a model output. Same answer in both conditions.",
+ "item": "usb-idm1-033",
+ "search": "Pier",
+ "class": "IfcBeam",
+ "psets": ["usBrPset_PierCap", "Qto_BeamBaseQuantities"],
+ "ids": {
+  "info": {"title": "Pier Cap"},
+  "specifications": [{
+   "name": "Pier Cap", "ifcVersion": "IFC4X3_ADD2",
+   "applicability": {"entity": {"name": {"simpleValue": "IFCBEAM"}, "predefinedType": {"simpleValue": "PIERCAP"}}},
+   "requirements": {
+    "attributes": [{"name": {"simpleValue": "Name"}}, {"name": {"simpleValue": "Description"}}],
+    "properties": [
+     {"propertySet": {"simpleValue": "Qto_BeamBaseQuantities"}, "baseName": {"simpleValue": "Length"}},
+     {"propertySet": {"simpleValue": "usBrPset_PierCap"}, "baseName": {"simpleValue": "EndSectionType"}, "dataType": "IFCLABEL"}
+    ],
+    "materials": [{}]
+   }
+  }]
+ }
+}
