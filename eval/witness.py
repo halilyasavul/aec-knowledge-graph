@@ -825,7 +825,8 @@ def _ref_specs(item: dict) -> list[dict] | None:
         for m in out:
             for c in covers:
                 if c is not m and _names(c["app"]["entity"]) >= _names(m["app"]["entity"]):
-                    m["target"] = m["target"] + [f for f in c["target"] if f not in m["target"]]
+                    have = {_loose(x) for x in m["target"]}   # one facet per identity: no duplicate
+                    m["target"] = m["target"] + [f for f in c["target"] if _loose(f) not in have]
     return out
 
 

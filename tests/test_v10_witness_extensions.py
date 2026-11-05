@@ -64,6 +64,17 @@ def test_a_whole_class_spec_adds_its_requirements(ext):
     assert names == (["Description", "Name"] if ext else ["Description"])
 
 
+def test_a_covering_spec_does_not_duplicate_a_facet(ext):
+    req = {"facet": "property", "propertySet": "P", "baseName": "X", "cardinality": "required"}
+    opt = {**req, "cardinality": "optional"}
+    item = {"id": "t", "applicability": {"entity": "IFCWALL"}, "target": [],
+            "specs": [{"applicability_facets": [{"facet": "entity", "name": "IFCWALL"}], "target": [opt]},
+                      {"applicability_facets": [{"facet": "entity", "name": "IFCWALL", "predefinedType": "BACKWALL"}],
+                       "target": [req]}]}
+    typed = next(s for s in witness._ref_specs(item) if s["app"].get("predefinedType"))
+    assert typed["target"] == [req]
+
+
 def test_off_by_default():
     import importlib
     assert importlib.reload(witness).EXTENSIONS is False
