@@ -40,6 +40,20 @@ PATTERN_SAMPLES = ["Witness 01", "00 groundfloor", "A1", "Witness", "X", "01", "
                    "00 Witness", "-01 Witness", "Level 01", "Niveau 01"]
 PATTERN_NONMATCH = ["", " ", "!!", "zz zz zz ??", "0", "Witness 01", "a" * 300]
 
+# v10b, for the usBridge reference: facets the builder could not build. Off by default, so every
+# existing scoring builds exactly the models it built before; eval/usbridge/score_usbridge.py
+# turns it on. With EXTENSIONS:
+#   attribute   a single required enumeration value (CompositionType = ELEMENT) is the value set
+#   property    on a type object (IfcReinforcingBarType) the set goes in HasPropertySets
+#   entity      a user-defined predefined type of a type object goes in ElementType
+#   partOf      a whole given as a pattern (".*") is built as a concrete class the relation allows
+#   decoy:ptype avoids the predefined types every other reference specification applies to
+EXTENSIONS = False
+PARTOF_WHOLES = {"IFCRELAGGREGATES": ["IFCELEMENTASSEMBLY", "IFCBRIDGEPART", "IFCBUILDINGSTOREY"],
+                 "IFCRELCONTAINEDINSPATIALSTRUCTURE": ["IFCBRIDGEPART", "IFCBUILDINGSTOREY", "IFCSITE"],
+                 "IFCRELASSIGNSTOGROUP": ["IFCGROUP"], "IFCRELNESTS": ["IFCELEMENTASSEMBLY"],
+                 None: ["IFCELEMENTASSEMBLY", "IFCBRIDGEPART"]}
+
 
 # ------------------------------------------------------------------ restriction parsing
 _SPLIT = re.compile(r",(?=(?:enumeration|pattern|minInclusive|maxInclusive|minExclusive|maxExclusive|"
@@ -280,6 +294,9 @@ class Builder:
         decl = S.declaration_by_name(el.is_a())
         names = [a.name() for a in decl.all_attributes()]
         if "PredefinedType" not in names:
+            if EXTENSIONS and "ObjectType" in names:  # IfcBuiltElement: IDS reads the type from ObjectType
+                el.ObjectType = ptype
+                return
             self.unsupported.append(f"{el.is_a()} has no PredefinedType")
             return
         kind, items = resolve(decl.attribute_by_index(decl.attribute_index("PredefinedType")).type_of_attribute())
@@ -287,7 +304,9 @@ class Builder:
             el.PredefinedType = ptype
         else:                                        # user-defined type: IDS matches ObjectType
             el.PredefinedType = "USERDEFINED"
-            if "ObjectType" in names:
+            if EXTENSIONS and "ElementType" in names and el.is_a("IfcTypeObject"):
+                el.ElementType = ptype               # a type object's user-defined type is its ElementType
+            elif "ObjectType" in names:
                 el.ObjectType = ptype
 
     def attribute(self, el, name: str, value) -> bool:
@@ -317,6 +336,9 @@ class Builder:
             return
         ps = f.create_entity("IfcPropertySet", GlobalId=self.guid("pset"), Name=pset, HasProperties=[p])
         self.psets[key] = ps
+        if EXTENSIONS and el.is_a("IfcTypeObject"):  # a type carries its sets itself, not by relation
+            el.HasPropertySets = list(el.HasPropertySets or []) + [ps]
+            return
         f.create_entity("IfcRelDefinesByProperties", GlobalId=self.guid("rel"), RelatedObjects=[el],
                         RelatingPropertyDefinition=ps)
 
@@ -395,6 +417,8 @@ def _apply_facet(b: Builder, el, f: dict, mode: str = "ok", r_override: dict | N
         if k == "enum":
             allowed = [x for x in (r or {}).get("enumeration", extra) if x in extra] or \
                       ([r["simple"]] if r and "simple" in r and r["simple"] in extra else extra)
+            if EXTENSIONS and r and "simple" in r and r["simple"] in extra:
+                allowed = [r["simple"]]              # without the switch the line above picks extra[0]
             pick = [x for x in allowed if x not in ("USERDEFINED", "NOTDEFINED")] or allowed
             if mode == "ok":
                 return b.attribute(el, name, pick[0])
@@ -442,6 +466,11 @@ def _apply_facet(b: Builder, el, f: dict, mode: str = "ok", r_override: dict | N
         return False
     if kind_ == "partOf":                            # a "missing" variant is simply not part of anything
         whole = first(f.get("entity"))
+        pw = parse(f.get("entity")) or {}
+        if EXTENSIONS and "pattern" in pw:           # "part of anything": a concrete whole the relation allows
+            rel = " ".join((f.get("relation") or "").upper().split()) or None
+            whole = next((c for c in PARTOF_WHOLES.get(rel, PARTOF_WHOLES[None])
+                          if xsd_match(pw["pattern"], c) and _exists(c)), None)
         if mode != "ok" or not whole:
             return False
         return b.part_of(el, whole, f.get("relation"), first(f.get("entityPredefinedType")))
@@ -608,6 +637,13 @@ def _emit(b, app: dict, target: list, side: str, mutate: set | None = None,
     if ptype:
         kind, items = _attr_kind(cls, "PredefinedType")
         others = [x for x in (items or []) if x not in ptypes and x not in ("USERDEFINED", "NOTDEFINED")]
+        if EXTENSIONS:                               # not a type another reference spec applies to
+            others = [x for x in others if x not in getattr(b, "taken_ptypes", set())]
+            taken = getattr(b, "taken_ptypes", set())
+            if not others and "USERDEFINED" in taken:
+                return                               # every type, user-defined ones too, is in some spec's scope
+            if cls.upper() in getattr(b, "whole_classes", set()):
+                return                               # another spec applies to every object of the class
         full(cls, "decoy:ptype", others[0] if others else "OtherUserDefinedType", decoy=True)
 
 
@@ -704,6 +740,10 @@ def build(item: dict, out_path: Path, candidate: dict | None = None, probe: bool
     """
     b = Builder(item["id"])
     specs = _ref_specs(item)
+    if EXTENSIONS and specs is not None:            # predefined types some reference spec applies to
+        b.taken_ptypes = {p for sp in specs for p in _ptypes(sp["app"])}
+        b.whole_classes = {c for sp in specs if not sp["app"].get("predefinedType") and not sp["app_facets"]
+                           for c in _names(sp["app"]["entity"])}
     if specs is None:
         _emit(b, item["applicability"], item["target"], "ref")
     else:
@@ -776,7 +816,22 @@ def _ref_specs(item: dict) -> list[dict] | None:
                            "app_facets": [f for f in s["applicability_facets"] if f["facet"] != "entity"],
                            "target": []}
         merged[key]["target"] += s["target"]
-    return list(merged.values())
+    out = list(merged.values())
+    if EXTENSIONS:
+        # an object in scope of a narrower specification is also in scope of every specification
+        # that applies to its whole class (same entity, no predefined type, no further facets):
+        # it has to meet those requirements too
+        covers = [m for m in out if not m["app"].get("predefinedType") and not m["app_facets"]]
+        for m in out:
+            for c in covers:
+                if c is not m and _names(c["app"]["entity"]) >= _names(m["app"]["entity"]):
+                    m["target"] = m["target"] + [f for f in c["target"] if f not in m["target"]]
+    return out
+
+
+def _names(v: str | None) -> set:
+    r = parse(v) or {}
+    return {x.upper() for x in (r.get("enumeration") or ([r["simple"]] if "simple" in r else []))}
 
 
 def _try(b: Builder, fn):
