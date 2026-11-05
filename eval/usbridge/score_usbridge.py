@@ -118,12 +118,57 @@ def set_units(app: tuple, reqs: list[dict]) -> set:
     return units
 
 
-def ref_units_a(item: dict, specs_un: dict) -> set:
+def ref_units_a(item: dict, specs_un: dict, app_det: dict | None = None) -> set:
+    specs = [{"spec_id": sid, "applicability_facets": specs_un[sid]["applicability"]["facets"],
+              "target": specs_un[sid]["requirements"]} for sid in item["reference_spec_ids"]]
+    if app_det is not None:                       # untyped where the request does not state the type
+        specs = relax_app({"id": item["id"], "specs": specs}, app_det)["specs"]
     out = set()
-    for sid in item["reference_spec_ids"]:
-        sp = specs_un[sid]
-        out |= set_units(app_key(sp["applicability"]["facets"]), sp["requirements"])
+    for sp in specs:
+        out |= set_units(app_key(sp["applicability_facets"]), sp["target"])
     return out
+
+
+# --------------------------------------------------------------------------- applicability determinacy
+def load_app_det() -> dict:
+    """(item id, spec id) -> whether the IDM states the spec's predefined type
+    (annotations/applicability.jsonl, eval/usbridge/applicability.py)."""
+    return {(r["id"], r["spec_id"]): r["determined"] for r in load(ROOT / "annotations" / "applicability.jsonl")}
+
+
+def relax_app(task: dict, app_det: dict) -> dict:
+    """Drop the predefined type from the applicability of specs whose type the request does not
+    state; specs that end up with the same applicability are merged (facets united)."""
+    merged: dict = {}
+    for s in task["specs"]:
+        facets = s["applicability_facets"]
+        if app_det.get((task["id"], s["spec_id"])) is False:
+            facets = [{k: v for k, v in f.items() if not (f["facet"] == "entity" and k == "predefinedType")}
+                      for f in facets]
+        key = json.dumps(sorted(json.dumps(f, sort_keys=True) for f in facets))
+        if key not in merged:
+            merged[key] = {**s, "applicability_facets": facets, "target": [], "merged_from": []}
+        m = merged[key]
+        m["merged_from"].append(s["spec_id"])
+        for f in s["target"]:                     # one facet per identity across the merged kinds
+            lk = score.loose_key(f)
+            g = next((x for x in m["target"] if score.loose_key(x) == lk), None)
+            if g is None:
+                m["target"].append(dict(f))
+                continue
+            cards = {g.get("cardinality") or "required", f.get("cardinality") or "required"}
+            g["cardinality"] = ("required" if "required" in cards else
+                                "prohibited" if cards == {"prohibited"} else "optional")
+            for fld in ("value", "dataType"):     # kept only where every kind agrees
+                if g.get(fld) != f.get(fld):
+                    g.pop(fld, None)
+            if f.get("cardinality_free"):
+                g["cardinality_free"] = True
+    specs = list(merged.values())
+    first = next((f for f in specs[0]["applicability_facets"] if f["facet"] == "entity"), {})
+    return {**task, "specs": specs, "target": [f for s in specs for f in s["target"]],
+            "applicability": {"entity": first.get("name"),
+                              **({"predefinedType": first["predefinedType"]} if first.get("predefinedType") else {})}}
 
 
 def cand_units_a(cand: dict) -> set:
@@ -133,12 +178,12 @@ def cand_units_a(cand: dict) -> set:
     return out
 
 
-def score_a(items: list[dict], specs_un: dict, gen: Path) -> list[dict]:
+def score_a(items: list[dict], specs_un: dict, gen: Path, app_det: dict | None = None) -> list[dict]:
     rows = []
     for it in items:
         p = gen / f"{safe_name(it['id'])}.ids"
         cand = score.parse_candidate(p) if p.exists() else None
-        R, C = ref_units_a(it, specs_un), (cand_units_a(cand) if cand else set())
+        R, C = ref_units_a(it, specs_un, app_det), (cand_units_a(cand) if cand else set())
         tp, fp, fn = len(R & C), len(C - R), len(R - C)
         ref_apps = {u[0] for u in R}
         cand_apps = {u[0] for u in C}
@@ -218,19 +263,25 @@ def reclassify(run_dir: Path, items: list[dict]) -> dict:
 
 
 # --------------------------------------------------------------------------- driver
-def score_run(run_dir: Path, items: list[dict], out: Path | None = None, strict: bool = False) -> dict:
-    out = out or run_dir / "usbridge_scores"
+def score_run(run_dir: Path, items: list[dict], out: Path | None = None, strict: bool = False,
+              app: bool = False) -> dict:
+    """app=True: the applicability-determinacy variant (annotations/applicability.jsonl); writes
+    usbridge_scores_app/ beside the plan's usbridge_scores/."""
+    out = out or run_dir / ("usbridge_scores_app" if app else "usbridge_scores")
+    app_det = load_app_det() if app else None
     out.mkdir(parents=True, exist_ok=True)
     specs_un = {s["spec_id"]: s for s in load(ROOT / "reference" / "specs.jsonl")}
     specs_ex = {s["spec_id"]: s for s in load(ROOT / "reference" / "specs_expanded.jsonl")}
     det = {(r["id"], r["spec_id"], r["req_index"]): r for r in load(ROOT / "annotations" / "determinacy.jsonl")}
     gen = run_dir / "generated"
-    rows_a = score_a(items, specs_un, gen)
+    rows_a = score_a(items, specs_un, gen, app_det)
     with open(out / "setlevel.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows_a[0]))
         w.writeheader()
         w.writerows(rows_a)
     tb, empty = tasks_b(items, specs_ex, det)
+    if app_det is not None:
+        tb = [relax_app(t, app_det) for t in tb]
     adopted, classes = [], {}
     for t in tb:
         p = gen / f"{safe_name(t['id'])}.ids"
@@ -326,9 +377,48 @@ def gate(items: list[dict]) -> dict:
     return res
 
 
+def gate_app(items: list[dict]) -> dict:
+    """Reference vs reference for the applicability-determinacy variant, both granularities."""
+    from eval.usbridge.harness_check import task as task_un
+    specs_un = {s["spec_id"]: s for s in load(ROOT / "reference" / "specs.jsonl")}
+    specs_ex = {s["spec_id"]: s for s in load(ROOT / "reference" / "specs_expanded.jsonl")}
+    det = {(r["id"], r["spec_id"], r["req_index"]): r for r in load(ROOT / "annotations" / "determinacy.jsonl")}
+    app_det = load_app_det()
+    res = {}
+    run_a = RUNS / "usbridge-gate-a-app"
+    (run_a / "generated").mkdir(parents=True, exist_ok=True)
+    for it in items:
+        t = task_un(it, specs_un)
+        t = relax_app({**t, "specs": [{**s, "spec_id": sid} for s, sid in zip(t["specs"], t["reference_spec_ids"])]},
+                      app_det)
+        (run_a / "generated" / f"{safe_name(it['id'])}.ids").write_bytes(score.build_reference(t))
+    rows = score_a(items, specs_un, run_a / "generated", app_det)
+    res["a"] = {"items": len(rows), "f1_1": sum(1 for r in rows if r["a_f1"] == 1.0),
+                "not_perfect": [r for r in rows if r["a_f1"] != 1.0][:10]}
+    run_b = RUNS / "usbridge-gate-b-app"
+    (run_b / "generated").mkdir(parents=True, exist_ok=True)
+    tb, empty = tasks_b(items, specs_ex, det)
+    for t in tb:
+        (run_b / "generated" / f"{safe_name(t['id'])}.ids").write_bytes(score.build_reference(adopt(relax_app(t, app_det), None)))
+    summ = score_run(run_b, items, app=True)
+    rows_b = list(csv.DictReader(open(run_b / "usbridge_scores_app" / "b" / "scores.csv", encoding="utf-8")))
+    res["b"] = {**summ["b"], "not_perfect": [{k: r.get(k) for k in ("id", "facet_f1", "wit_outcome_equiv", "wit_direction",
+                                                                     "wit_problems")}
+                                             for r in rows_b if r.get("wit_outcome_equiv") not in ("1", "1.0")][:12]}
+    (ROOT / "summary" / "gate_app.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
+    return res
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     items = load(ROOT / "items.jsonl")
+    if argv and argv[0] == "--gate-app":
+        r = gate_app(items)
+        print(json.dumps({k: {kk: vv for kk, vv in v.items() if kk != "not_perfect"} for k, v in r.items()}, indent=1))
+        for k, v in r.items():
+            for x in v["not_perfect"]:
+                print(k, json.dumps(x)[:300])
+        return
     if argv and argv[0] == "--gate":
         r = gate(items)
         print(json.dumps({k: {kk: vv for kk, vv in v.items() if kk != "not_perfect"} for k, v in r.items()}, indent=1))
@@ -344,7 +434,7 @@ def main(argv=None):
     gen = run_dir / "generated"
     items = [it for it in items if (gen / f"{safe_name(it['id'])}.ids").exists()
              or (gen / f"{safe_name(it['id'])}.fail.json").exists()]          # the items this run attempted
-    s = score_run(run_dir, items, strict="--strict" in argv)
+    s = score_run(run_dir, items, strict="--strict" in argv, app="--app" in argv)
     print(json.dumps(s, indent=1))
 
 

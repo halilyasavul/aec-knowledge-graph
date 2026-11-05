@@ -1,0 +1,13 @@
+{
+ "entity_items": {
+  "typed_specs": 124,
+  "determined": 85,
+  "undetermined": 39,
+  "items_with_undetermined": 17,
+  "readings": 59
+ },
+ "document_item": {
+  "typed_specs": 140,
+  "determined": 70
+ }
+}

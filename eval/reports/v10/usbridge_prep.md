@@ -129,5 +129,5 @@ Closed in v10b behind `witness.EXTENSIONS` (off by default); gate in `summary/ga
 | prerequisite | MCP server reads `UsBridge*` labels (today IFC only → ceiling 35%, with them 54%); runner `--tasks` for `items.jsonl` (`request_text` only) |
 | scoring | determined-only first, strict second; S1 on witness |
 | measured basis | Sonnet $0.040/item (dev, 0.7k out), $0.099/item (Ishigaki, 1.9k out); Opus ×1.9 |
-| estimate | entity: $0.10–0.25/item → **$18–45** for 180 item-runs; document: $3–10/rep; Opus 1 rep ≈ $11–28 |
+| estimate (API prices; runs use the subscription) | entity: $0.10–0.25/item → **$18–45** for 180 item-runs; document: $3–10/rep; Opus 1 rep ≈ $11–28 |
 | rights | IDM-1 (AASHTO, "no reproduction"), IDS/workbook (HDR), bSDD ("rights reserved"): derived data not committed (v10b repo split; `python -m eval.usbridge.build` rebuilds it) |

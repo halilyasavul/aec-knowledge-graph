@@ -2,7 +2,7 @@
 classes, cost and tokens. Reads eval/runs/<run>/log.jsonl and <run>/usbridge_scores/ (written by
 eval.usbridge.score_usbridge). Writes eval/usbridge/summary/pilot.json (totals only).
 
-    python -X utf8 -m eval.usbridge.pilot_report usbridge-pilot-ifc usbridge-pilot-ifc-usbridge
+    python -X utf8 -m eval.usbridge.pilot_report usbridge-pilot-ifc usbridge-pilot-ifc-usbridge [--app]
 """
 from __future__ import annotations
 
@@ -41,9 +41,9 @@ def num(x):
     return float(x) if x not in (None, "") else None
 
 
-def run_tables(run: str) -> dict:
+def run_tables(run: str, sub: str = "usbridge_scores") -> dict:
     log = load_log(run)
-    sc = RUNS / run / "usbridge_scores"
+    sc = RUNS / run / sub
     summ = json.loads((sc / "summary.json").read_text(encoding="utf-8"))
     rows_b = {r["id"]: r for r in csv.DictReader(open(sc / "b" / "scores.csv", encoding="utf-8"))}
     rows_a = {r["id"]: r for r in csv.DictReader(open(sc / "setlevel.csv", encoding="utf-8"))}
@@ -108,14 +108,17 @@ def paired(x: dict, y: dict) -> dict:
 
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
+    app = "--app" in argv                       # the applicability-determinacy variant
+    argv = [a for a in argv if a != "--app"]
     base, usb = argv[:2]
-    t = {base: run_tables(base), usb: run_tables(usb)}
+    sub = "usbridge_scores_app" if app else "usbridge_scores"
+    t = {base: run_tables(base, sub), usb: run_tables(usb, sub)}
     out = {"conditions": {base: "ifc", usb: "ifc,usbridge"},
            "tables": {k: {kk: vv for kk, vv in v.items() if not kk.endswith("_by_item")} for k, v in t.items()},
            "paired_b_s1": paired(t[base]["s1_by_item"], t[usb]["s1_by_item"]),
            "paired_a_f1": paired(t[base]["a_f1_by_item"], t[usb]["a_f1_by_item"])}
     (ROOT / "summary").mkdir(exist_ok=True)
-    (ROOT / "summary" / "pilot.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
+    (ROOT / "summary" / ("pilot_app.json" if app else "pilot.json")).write_text(json.dumps(out, indent=1), encoding="utf-8")
     print(json.dumps(out, indent=1))
 
 

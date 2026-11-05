@@ -1,0 +1,18 @@
+{
+ "a": {
+  "items": 61,
+  "f1_1": 61,
+  "not_perfect": []
+ },
+ "b": {
+  "s1": 56,
+  "s1_scored": 56,
+  "witness_unverified": 0,
+  "facet_f1_mean": 1.0,
+  "facet_tp": 1187,
+  "facet_fp": 0,
+  "facet_fn": 0,
+  "facet_f1_micro": 1.0,
+  "not_perfect": []
+ }
+}
