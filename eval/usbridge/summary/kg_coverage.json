@@ -1,0 +1,137 @@
+{
+ "requirement_facets": 4226,
+ "not_graph_targets": {
+  "classification": 149,
+  "material": 106
+ },
+ "by_check": {
+  "entity": {
+   "n": 139,
+   "ifc": 139,
+   "ifc+usbridge": 139
+  },
+  "predefinedType": {
+   "n": 107,
+   "ifc": 47,
+   "ifc+usbridge": 104
+  },
+  "attribute": {
+   "n": 284,
+   "ifc": 284,
+   "ifc+usbridge": 284
+  },
+  "pset": {
+   "n": 3548,
+   "ifc": 1099,
+   "ifc+usbridge": 3547
+  },
+  "property": {
+   "n": 3403,
+   "ifc": 1094,
+   "ifc+usbridge": 3402
+  },
+  "dataType": {
+   "n": 3402,
+   "ifc": 1035,
+   "ifc+usbridge": 3295
+  },
+  "enumeration": {
+   "n": 280,
+   "ifc": 103,
+   "ifc+usbridge": 105
+  },
+  "enumeration_ci": {
+   "n": 280,
+   "ifc": 103,
+   "ifc+usbridge": 280
+  },
+  "all": {
+   "n": 3971,
+   "ifc": 1402,
+   "ifc+usbridge": 3684
+  }
+ },
+ "by_check_property_facets_usbr_vs_std": {
+  "usBrPset": {
+   "pset": {
+    "n": 2449,
+    "ifc": 0,
+    "ifc+usbridge": 2448
+   },
+   "property": {
+    "n": 2308,
+    "ifc": 0,
+    "ifc+usbridge": 2308
+   },
+   "dataType": {
+    "n": 2308,
+    "ifc": 0,
+    "ifc+usbridge": 2260
+   },
+   "enumeration": {
+    "n": 177,
+    "ifc": 0,
+    "ifc+usbridge": 2
+   },
+   "enumeration_ci": {
+    "n": 177,
+    "ifc": 0,
+    "ifc+usbridge": 177
+   },
+   "all": {
+    "n": 2449,
+    "ifc": 0,
+    "ifc+usbridge": 2225
+   }
+  },
+  "standard Pset_/Qto_": {
+   "pset": {
+    "n": 1099,
+    "ifc": 1099,
+    "ifc+usbridge": 1099
+   },
+   "property": {
+    "n": 1095,
+    "ifc": 1094,
+    "ifc+usbridge": 1094
+   },
+   "dataType": {
+    "n": 1094,
+    "ifc": 1035,
+    "ifc+usbridge": 1035
+   },
+   "enumeration": {
+    "n": 103,
+    "ifc": 103,
+    "ifc+usbridge": 103
+   },
+   "enumeration_ci": {
+    "n": 103,
+    "ifc": 103,
+    "ifc+usbridge": 103
+   },
+   "all": {
+    "n": 1099,
+    "ifc": 1039,
+    "ifc+usbridge": 1039
+   }
+  }
+ },
+ "applicability": {
+  "entity": {
+   "n": 208,
+   "ifc": 208,
+   "ifc+usbridge": 208
+  },
+  "predefinedType": {
+   "n": 140,
+   "ifc": 65,
+   "ifc+usbridge": 135
+  },
+  "all": {
+   "n": 208,
+   "ifc": 133,
+   "ifc+usbridge": 203
+  }
+ }
+}

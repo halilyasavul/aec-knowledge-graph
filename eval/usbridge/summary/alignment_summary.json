@@ -1,0 +1,1115 @@
+{
+ "idm_entities": 69,
+ "idm_by_best_match": {
+  "exact": 15,
+  "normalised": 16,
+  "manual": 29,
+  "unmatched": 9
+ },
+ "idm_aligned": 60,
+ "idm_aligned_with_ids_spec": 60,
+ "idm_aligned_without_ids_spec": [],
+ "alignment_rows": 167,
+ "rows_by_match": {
+  "exact": 16,
+  "normalised": 19,
+  "manual": 123,
+  "unmatched": 9
+ },
+ "idm_unmatched": [
+  {
+   "entity": "Cross Section",
+   "reason": "roadway cross-section (lanes, shoulders, slopes) has no usBridge entity or IDS spec"
+  },
+  {
+   "entity": "Architectural Feature",
+   "reason": "no usBridge class for an architectural feature; aesthetics became usBrPset_Wall.AestheticType"
+  },
+  {
+   "entity": "Seal Coat/ Tremie Seal/Seal Slab",
+   "reason": "no usBridge class for a seal coat"
+  },
+  {
+   "entity": "Bent Plate",
+   "reason": "no bent-plate class; bending became usBrPset_PlateCommon on every plate"
+  },
+  {
+   "entity": "Field Splice",
+   "reason": "no field-splice class; its components (bolts, fill and splice plates) are their own IDM entities"
+  },
+  {
+   "entity": "Weld",
+   "reason": "no usBridge class for a weld"
+  },
+  {
+   "entity": "Accessories",
+   "reason": "no usBridge class for chairs, standees, support bars"
+  },
+  {
+   "entity": "Environmental",
+   "reason": "noise and nesting/spawning restrictions have no usBridge property"
+  },
+  {
+   "entity": "Miscellaneous",
+   "reason": "temporary shoring has no usBridge class"
+  }
+ ],
+ "workbook_entities": 191,
+ "workbook_reached": 120,
+ "workbook_unreached": [
+  {
+   "tab": "IfcPersonAndOrganization",
+   "industry_name": "Company Affiliation",
+   "ifc": "IfcPersonAndOrganization"
+  },
+  {
+   "tab": "IfcDocumentReference",
+   "industry_name": "2D Details",
+   "ifc": "IfcDocumentReference"
+  },
+  {
+   "tab": "IfcDocumentReference",
+   "industry_name": "Tabular Data",
+   "ifc": "IfcDocumentReference"
+  },
+  {
+   "tab": "IfcMaterial",
+   "industry_name": "Material",
+   "ifc": "IfcMaterial"
+  },
+  {
+   "tab": "IfcMaterialLayer",
+   "industry_name": "Shoring Layer",
+   "ifc": "IfcMaterialLayer"
+  },
+  {
+   "tab": "IfcMaterialLayer",
+   "industry_name": "Structural Layer",
+   "ifc": "IfcMaterialLayer"
+  },
+  {
+   "tab": "IfcMaterialLayer",
+   "industry_name": "Facing",
+   "ifc": "IfcMaterialLayer"
+  },
+  {
+   "tab": "IfcSite",
+   "industry_name": "Site",
+   "ifc": "IfcSite"
+  },
+  {
+   "tab": "IfcBridgePart",
+   "industry_name": "Superstructure",
+   "ifc": "IfcBridgePart.SUPERSTRUCTURE"
+  },
+  {
+   "tab": "IfcBridgePart",
+   "industry_name": "Deck Segment",
+   "ifc": "IfcBridgePart.DECK_SEGMENT"
+  },
+  {
+   "tab": "IfcBridgePart",
+   "industry_name": "Substructure",
+   "ifc": "IfcBridgePart.SUBSTRUCTURE"
+  },
+  {
+   "tab": "IfcBridgePart",
+   "industry_name": "Foundation",
+   "ifc": "IfcBridgePart.FOUNDATION"
+  },
+  {
+   "tab": "IfcBridgePart",
+   "industry_name": "Approach",
+   "ifc": "IfcBridgePart.USERDEFINED:APPROACH_STRUCTURE"
+  },
+  {
+   "tab": "IfcBridgePart",
+   "industry_name": "Earth Retaining System",
+   "ifc": "IfcBridgePart.USERDEFINED:RETAINING_STRUCTURE"
+  },
+  {
+   "tab": "IfcBridgePart",
+   "industry_name": "Culvert Inlet/Outlet",
+   "ifc": "IfcBridgePart.USERDEFINED:CULVERT_LET"
+  },
+  {
+   "tab": "IfcFacilityPartCommon",
+   "industry_name": "Culvert Superstructure",
+   "ifc": "IfcFacilityPartCommon.SUPERSTRUCTURE"
+  },
+  {
+   "tab": "IfcFacilityPartCommon",
+   "industry_name": "Approach",
+   "ifc": "IfcFacilityPartCommon.USERDEFINED:\nAPPROACH_STRUCTURE"
+  },
+  {
+   "tab": "IfcFacilityPartCommon",
+   "industry_name": "Foundation",
+   "ifc": "IfcFacilityPartCommon.USERDEFINED:\nFOUNDATION"
+  },
+  {
+   "tab": "IfcFacilityPartCommon",
+   "industry_name": "Earth Retaining System",
+   "ifc": "IfcFacilityPartCommon.USERDEFINED:\nRETAINING_STRUCTURE"
+  },
+  {
+   "tab": "IfcFacilityPartCommon",
+   "industry_name": "Culvert Barrel",
+   "ifc": "IfcFacilityPartCommon.USERDEFINED:\nCULVERT_BARREL"
+  },
+  {
+   "tab": "IfcFacilityPartCommon",
+   "industry_name": "Culvert Inlet/Outlet",
+   "ifc": "IfcFacilityPartCommon.USERDEFINED:\nCULVERT_LET"
+  },
+  {
+   "tab": "IfcFacilityPartCommon",
+   "industry_name": "Utilities",
+   "ifc": "IfcFacilityPartCommon.USERDEFINED:\nUTILITIES"
+  },
+  {
+   "tab": "IfcElementAssembly",
+   "industry_name": "Signage Base",
+   "ifc": "IfcElementAssembly.USERDEFINED:BASE_SIGNAGE"
+  },
+  {
+   "tab": "IfcElementAssembly",
+   "industry_name": "Lighting Base",
+   "ifc": "IfcElementAssembly.USERDEFINED:BASE_LIGHTING"
+  },
+  {
+   "tab": "IfcElementAssembly",
+   "industry_name": "Precast Tilt-up Wall",
+   "ifc": "IfcElementAssembly.USERDEFINED:\nRETAININGWALL_TILTUP"
+  },
+  {
+   "tab": "IfcElementAssembly",
+   "industry_name": "Secant Pile Wall",
+   "ifc": "IfcElementAssembly.USERDEFINED:\nRETAININGWALL_SECANTPILE"
+  },
+  {
+   "tab": "IfcElementAssembly",
+   "industry_name": "Sheet Pile Wall",
+   "ifc": "IfcElementAssembly.USERDEFINED:\nRETAININGWALL_SHEETPILE"
+  },
+  {
+   "tab": "IfcSlab",
+   "industry_name": "Sleeper Headwall",
+   "ifc": "IfcSlab.USERDEFINED:HEADWALL"
+  },
+  {
+   "tab": "IfcSlab",
+   "industry_name": "Culvert Apron",
+   "ifc": "IfcSlab.USERDEFINED:APRON"
+  },
+  {
+   "tab": "IfcBeam_Concrete",
+   "industry_name": "Cap Beam",
+   "ifc": "IfcBeam.HATSTONE"
+  },
+  {
+   "tab": "IfcMember",
+   "industry_name": "Threaded Rod",
+   "ifc": "IfcMember.TIEBAR"
+  },
+  {
+   "tab": "IfcMember",
+   "industry_name": "Ground Anchor Bar",
+   "ifc": "IfcMember.TIEBAR"
+  },
+  {
+   "tab": "IfcMember",
+   "industry_name": "Ground Anchor Tendon",
+   "ifc": "IfcMember.STRUCTURALCABLE"
+  },
+  {
+   "tab": "IfcMember",
+   "industry_name": "Helical Anchor",
+   "ifc": "IfcMember.TIEBAR"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Mask Wall",
+   "ifc": "IfcWall.USERDEFINED:MASK_WALL"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Counterfort",
+   "ifc": "IfcWall.USERDEFINED:COUNTERFORT"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Buttress",
+   "ifc": "IfcWall.USERDEFINED:BUTTRESS"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Toe Wall",
+   "ifc": "IfcWall.USERDEFINED:TOEWALL"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Mechanically Stabilized Earth (MSE) Wall (Simple)",
+   "ifc": "IfcWall.RETAININGWALL"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Secant Pile Wall (Simple)",
+   "ifc": "IfcWall.RETAININGWALL"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Soldier Pile Wall (Simple)",
+   "ifc": "IfcWall.RETAININGWALL"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Sheet Pile Wall (Simple)",
+   "ifc": "IfcWall.RETAININGWALL"
+  },
+  {
+   "tab": "IfcWall",
+   "industry_name": "Geosynthetic Reinforced Soil Wall",
+   "ifc": "IfcWall.RETAININGWALL"
+  },
+  {
+   "tab": "IfcColumn",
+   "industry_name": "Pier Stem",
+   "ifc": "IfcColumn.PIERSTEM"
+  },
+  {
+   "tab": "IfcFooting",
+   "industry_name": "Reinforced Soil Footing",
+   "ifc": "IfcFooting.USERDEFINED:REINFORCED_SOIL"
+  },
+  {
+   "tab": "IfcPile",
+   "industry_name": "Bell",
+   "ifc": "IfcPile.USERDEFINED:BELL"
+  },
+  {
+   "tab": "IfcPile",
+   "industry_name": "Pile Point / Shoe",
+   "ifc": "IfcPile.USERDEFINED:PILE_POINT"
+  },
+  {
+   "tab": "IfcCovering",
+   "industry_name": "Grout (Bonded)",
+   "ifc": "IfcCovering.USERDEFINED:GROUT_BONDED"
+  },
+  {
+   "tab": "IfcCovering",
+   "industry_name": "Grout (Unbonded)",
+   "ifc": "IfcCovering.USERDEFINED:GROUT_UNBONDED"
+  },
+  {
+   "tab": "IfcVirtualElement",
+   "industry_name": "Excavation Limits",
+   "ifc": "IfcVirtualElement.USERDEFINED:\nEXCAVATION"
+  },
+  {
+   "tab": "IfcEarthworksFill",
+   "industry_name": "Bedding",
+   "ifc": "IfcEarthworksFill.USERDEFINED:BEDDING"
+  },
+  {
+   "tab": "IfcCableCarrierFitting",
+   "industry_name": "Conduit Fitting",
+   "ifc": "IfcCableCarrierFitting.\nPredefined Type"
+  },
+  {
+   "tab": "IfcJunctionBox",
+   "industry_name": "Junction Box",
+   "ifc": "IfcJunctionBox.PredefinedType"
+  },
+  {
+   "tab": "IfcAnnotation",
+   "industry_name": "Project Control Point / / Benchmark",
+   "ifc": "IfcAnnotation.SURVEY"
+  },
+  {
+   "tab": "IfcGeomodel",
+   "industry_name": "Geotechnical Boring",
+   "ifc": "IfcGeomodel"
+  },
+  {
+   "tab": "IfcGeotechnicalStratum",
+   "industry_name": "Geotechncial Stratum",
+   "ifc": "IfcGeotechnicalStratum.PredefinedType"
+  },
+  {
+   "tab": "IfcElementAssembly_Anchoring",
+   "industry_name": "Ground Anchor",
+   "ifc": "IfcElementAssembly.USERDEFINED:\nGROUND_ANCHOR"
+  },
+  {
+   "tab": "IfcElementAssembly_Anchoring",
+   "industry_name": "Helical Anchor",
+   "ifc": "IfcElementAssembly.USERDEFINED:\nHELICAL_ANCHOR"
+  },
+  {
+   "tab": "IfcDiscreteAccessory_Rebar",
+   "industry_name": "Bar Terminator",
+   "ifc": "IfcDiscreteAccessory.USERDEFINED:BAR_TERMINATOR"
+  },
+  {
+   "tab": "IfcMechanicalFastener_Rebar",
+   "industry_name": "Reinforcing Coupler",
+   "ifc": "IfcMechanicalFastener\nUSERDEFINED:BAR_COUPLER"
+  },
+  {
+   "tab": "IfcMechanicalFastener_General",
+   "industry_name": "Coupler",
+   "ifc": "IfcMechanicalFastener.\nCOUPLER"
+  },
+  {
+   "tab": "IfcMechanicalFastener_General",
+   "industry_name": "Rivet",
+   "ifc": "IfcMechanicalFastener.\nRIVET"
+  },
+  {
+   "tab": "IfcMechanicalFastener_General",
+   "industry_name": "Screw",
+   "ifc": "IfcMechanicalFastener.\nSCREW"
+  },
+  {
+   "tab": "IfcMechanicalFastener_General",
+   "industry_name": "Coil Rod",
+   "ifc": "IfcMechanicalFastener.USERDEFINED:\nCOILROD"
+  },
+  {
+   "tab": "IfcMechanicalFastener_General",
+   "industry_name": "Coil Tie",
+   "ifc": "IfcMechanicalFastener.USERDEFINED:\nCOILTIE"
+  },
+  {
+   "tab": "IfcPlate",
+   "industry_name": "Cover Plate",
+   "ifc": "IfcPlate.COVER_PLATE"
+  },
+  {
+   "tab": "IfcPlate",
+   "industry_name": "Tapered Plate",
+   "ifc": "IfcPlate.TAPERED_PLATE"
+  },
+  {
+   "tab": "IfcDiscreteAccessory_AP",
+   "industry_name": "Embedded Plate",
+   "ifc": "IfcDiscreteAccessory.\nANCHORPLATE"
+  },
+  {
+   "tab": "IfcDiscreteAccessory_Misc",
+   "industry_name": "Bracket",
+   "ifc": "IfcDiscreteAccessory.BRACKET"
+  },
+  {
+   "tab": "IfcDiscreteAccessory_Misc",
+   "industry_name": "Filler",
+   "ifc": "IfcDiscreteAccessory.FILLER"
+  },
+  {
+   "tab": "IfcDiscreteAccessory_Misc",
+   "industry_name": "Shims",
+   "ifc": "IfcDiscreteAccessory.FILLER"
+  }
+ ],
+ "workbook_without_ids_spec": [
+  "Company Affiliation",
+  "Construction Specifications",
+  "Design Specifications",
+  "2D Details",
+  "Tabular Data",
+  "Shoring Layer",
+  "Structural Layer",
+  "Facing",
+  "Cross-Frame Member",
+  "Steel Diaphragm Member",
+  "Geotechncial Stratum"
+ ],
+ "ids_specs": 208,
+ "ids_specs_reached": 117,
+ "ids_specs_unreached": [
+  {
+   "spec_id": "usBrSpec_General#1",
+   "name": "Best Practices",
+   "applies_to": {
+    "entity": "IFCBUILDINGELEMENTPROXY"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_General#6",
+   "name": "Address",
+   "applies_to": {
+    "entity": "IFCADDRESS"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_General#9",
+   "name": "Material",
+   "applies_to": {
+    "entity": "IFCMATERIAL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_General#15",
+   "name": "Alignment - Cant",
+   "applies_to": {
+    "entity": "IFCALIGNMENTCANT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_General#16",
+   "name": "Alignment - Cant Segments",
+   "applies_to": {
+    "entity": "IFCALIGNMENTCANTSEGMENT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#1",
+   "name": "Site",
+   "applies_to": {
+    "entity": "IFCSITE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#2",
+   "name": "IfcBridge Predefined Types",
+   "applies_to": {
+    "entity": "IFCBRIDGE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#5",
+   "name": "IfcBridgePart Predefined Types",
+   "applies_to": {
+    "entity": "IFCBRIDGEPART"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#6",
+   "name": "Superstructure",
+   "applies_to": {
+    "entity": "IFCBRIDGEPART",
+    "predefinedType": "SUPERSTRUCTURE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#8",
+   "name": "DeckSegment",
+   "applies_to": {
+    "entity": "IFCBRIDGEPART",
+    "predefinedType": "DECK_SEGMENT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#9",
+   "name": "Substructure",
+   "applies_to": {
+    "entity": "IFCBRIDGEPART",
+    "predefinedType": "SUBSTRUCTURE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#12",
+   "name": "Foundation",
+   "applies_to": {
+    "entity": "RESTRICTION(enumeration=IFCBRIDGEPART,enumeration=IFCFACILITYPARTCOMMON)",
+    "predefinedType": "FOUNDATION"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#14",
+   "name": "IfcFacilityPartCommon Predefined Types",
+   "applies_to": {
+    "entity": "IFCFACILITYPARTCOMMON"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#15",
+   "name": "Approach",
+   "applies_to": {
+    "entity": "RESTRICTION(enumeration=IFCFACILITYPARTCOMMON,enumeration=IFCBRIDGEPART)",
+    "predefinedType": "APPROACH_STRUCTURE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#17",
+   "name": "Earth Retaining System",
+   "applies_to": {
+    "entity": "RESTRICTION(enumeration=IFCFACILITYPARTCOMMON,enumeration=IFCBRIDGEPART)",
+    "predefinedType": "RETAINING_STRUCTURE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#19",
+   "name": "Culvert Superstructure",
+   "applies_to": {
+    "entity": "IFCFACILITYPARTCOMMON",
+    "predefinedType": "SUPERSTRUCTURE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#21",
+   "name": "Culvert Inlet/Outlet",
+   "applies_to": {
+    "entity": "RESTRICTION(enumeration=IFCFACILITYPARTCOMMON,enumeration=IFCBRIDGEPART)",
+    "predefinedType": "CULVERT_LET"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#22",
+   "name": "Utilities",
+   "applies_to": {
+    "entity": "IFCFACILITYPARTCOMMON",
+    "predefinedType": "UTILITIES"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#23",
+   "name": "IfcElementAssembly Predefined Types",
+   "applies_to": {
+    "entity": "IFCELEMENTASSEMBLY"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#28",
+   "name": "Signage Base",
+   "applies_to": {
+    "entity": "IFCELEMENTASSEMBLY",
+    "predefinedType": "BASE_SIGNAGE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#29",
+   "name": "Lighting Base",
+   "applies_to": {
+    "entity": "IFCELEMENTASSEMBLY",
+    "predefinedType": "BASE_LIGHTING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#31",
+   "name": "Precast Tilt-up Wall",
+   "applies_to": {
+    "entity": "IFCELEMENTASSEMBLY",
+    "predefinedType": "RETAININGWALL_TILTUP"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#33",
+   "name": "Secant Pile Wall",
+   "applies_to": {
+    "entity": "IFCELEMENTASSEMBLY",
+    "predefinedType": "RETAININGWALL_SECANTPILE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#35",
+   "name": "Sheet Pile Wall",
+   "applies_to": {
+    "entity": "IFCELEMENTASSEMBLY",
+    "predefinedType": "RETAININGWALL_SHEETPILE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#39",
+   "name": "Ground Anchor",
+   "applies_to": {
+    "entity": "IFCELEMENTASSEMBLY",
+    "predefinedType": "GROUND_ANCHOR"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#41",
+   "name": "Helical Anchor",
+   "applies_to": {
+    "entity": "IFCELEMENTASSEMBLY",
+    "predefinedType": "HELICAL_ANCHOR"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#42",
+   "name": "IfcDistributionSystem Predefined Types",
+   "applies_to": {
+    "entity": "IFCDISTRIBUTIONSYSTEM"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_SpatialBreakdown#44",
+   "name": "GeotechnicalBoring",
+   "applies_to": {
+    "entity": "IFCGEOMODEL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#0",
+   "name": "IfcAnnotation Predefined Types",
+   "applies_to": {
+    "entity": "IFCANNOTATION"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#1",
+   "name": "IfcBeam Predefined Types",
+   "applies_to": {
+    "entity": "IFCBEAM"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#2",
+   "name": "IfcBearing Predefined Types",
+   "applies_to": {
+    "entity": "IFCBEARING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#3",
+   "name": "IfcBuiltElement Predefined Types",
+   "applies_to": {
+    "entity": "IFCBUILTELEMENT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#4",
+   "name": "IfcCableCarrierFitting Predefined Types",
+   "applies_to": {
+    "entity": "IFCCABLECARRIERFITTING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#5",
+   "name": "IfcCableCarrierSegment Predefined Types",
+   "applies_to": {
+    "entity": "IFCCABLECARRIERSEGMENT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#6",
+   "name": "IfcColumn Predefined Types",
+   "applies_to": {
+    "entity": "IFCCOLUMN"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#7",
+   "name": "IfcCovering Predefined Types",
+   "applies_to": {
+    "entity": "IFCCOVERING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#8",
+   "name": "IfcDiscreteAccessory Predefined Types",
+   "applies_to": {
+    "entity": "IFCDISCRETEACCESSORY"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#9",
+   "name": "IfcEarthworksFill Predefined Types",
+   "applies_to": {
+    "entity": "IFCEARTHWORKSFILL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#10",
+   "name": "IfcFooting Predefined Types",
+   "applies_to": {
+    "entity": "IFCFOOTING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#11",
+   "name": "IfcGeotechnicalStratum Predefined Types",
+   "applies_to": {
+    "entity": "IFCGEOTECHNICALSTRATUM"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#12",
+   "name": "IfcJunctionBox Predefined Types",
+   "applies_to": {
+    "entity": "IFCJUNCTIONBOX"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#13",
+   "name": "IfcKerb Predefined Types",
+   "applies_to": {
+    "entity": "IFCKERB"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#14",
+   "name": "IfcMechanicalFastener Predefined Types",
+   "applies_to": {
+    "entity": "IFCMECHANICALFASTENER"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#15",
+   "name": "IfcMember Predefined Types",
+   "applies_to": {
+    "entity": "IFCMEMBER"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#16",
+   "name": "IfcPile Predefined Types",
+   "applies_to": {
+    "entity": "IFCPILE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#17",
+   "name": "IfcPipeFitting Predefined Types",
+   "applies_to": {
+    "entity": "IFCPIPEFITTING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#18",
+   "name": "IfcPipeSegment Predefined Types",
+   "applies_to": {
+    "entity": "IFCPIPESEGMENT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#19",
+   "name": "IfcPlate Predefined Types",
+   "applies_to": {
+    "entity": "IFCPLATE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#20",
+   "name": "IfcProjectionElement Predefined Types",
+   "applies_to": {
+    "entity": "IFCPROJECTIONELEMENT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#21",
+   "name": "IfcRailing Predefined Types",
+   "applies_to": {
+    "entity": "IFCRAILING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#22",
+   "name": "IfcReinforcedSoil Predefined Types",
+   "applies_to": {
+    "entity": "IFCREINFORCEDSOIL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#23",
+   "name": "IfcReinforcingBar Predefined Types",
+   "applies_to": {
+    "entity": "IFCREINFORCINGBAR"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#24",
+   "name": "IfcReinforcingMesh Predefined Types",
+   "applies_to": {
+    "entity": "IFCREINFORCINGMESH"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#25",
+   "name": "IfcSlab Predefined Types",
+   "applies_to": {
+    "entity": "IFCSLAB"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#26",
+   "name": "IfcSurfaceFeature Predefined Types",
+   "applies_to": {
+    "entity": "IFCSURFACEFEATURE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#27",
+   "name": "IfcTendon Predefined Types",
+   "applies_to": {
+    "entity": "IFCTENDON"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#28",
+   "name": "IfcVirtualElement Predefined Types",
+   "applies_to": {
+    "entity": "IFCVIRTUALELEMENT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#29",
+   "name": "IfcWall Predefined Types",
+   "applies_to": {
+    "entity": "IFCWALL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#30",
+   "name": "IfcWasteTerminal Predefined Types",
+   "applies_to": {
+    "entity": "IFCWASTETERMINAL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#31",
+   "name": "Project Control Point / Benchmark",
+   "applies_to": {
+    "entity": "IFCANNOTATION",
+    "predefinedType": "SURVEY"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#36",
+   "name": "Cap Beam",
+   "applies_to": {
+    "entity": "IFCBEAM",
+    "predefinedType": "HATSTONE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#38",
+   "name": "Pier Stem",
+   "applies_to": {
+    "entity": "IFCCOLUMN",
+    "predefinedType": "PIERSTEM"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#41",
+   "name": "Grout (Bonded)",
+   "applies_to": {
+    "entity": "IFCCOVERING",
+    "predefinedType": "GROUT_BONDED"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#42",
+   "name": "Grout (Unbonded)",
+   "applies_to": {
+    "entity": "IFCCOVERING",
+    "predefinedType": "GROUT_UNBONDED"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#43",
+   "name": "Embedded Plate",
+   "applies_to": {
+    "entity": "IFCDISCRETEACCESSORY",
+    "predefinedType": "ANCHORPLATE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#45",
+   "name": "Bracket",
+   "applies_to": {
+    "entity": "IFCDISCRETEACCESSORY",
+    "predefinedType": "BRACKET"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#46",
+   "name": "Filler & Shims",
+   "applies_to": {
+    "entity": "IFCDISCRETEACCESSORY",
+    "predefinedType": "FILLER"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#47",
+   "name": "Bar Terminator",
+   "applies_to": {
+    "entity": "IFCDISCRETEACCESSORY",
+    "predefinedType": "BAR_TERMINATOR"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#49",
+   "name": "Bedding",
+   "applies_to": {
+    "entity": "IFCEARTHWORKSFILL",
+    "predefinedType": "BEDDING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#54",
+   "name": "Reinforced Soil Footing",
+   "applies_to": {
+    "entity": "IFCFOOTING",
+    "predefinedType": "REINFORCED_SOIL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#60",
+   "name": "Coupler",
+   "applies_to": {
+    "entity": "IFCMECHANICALFASTENER",
+    "predefinedType": "COUPLER"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#61",
+   "name": "Rivet",
+   "applies_to": {
+    "entity": "IFCMECHANICALFASTENER",
+    "predefinedType": "RIVET"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#62",
+   "name": "Screw",
+   "applies_to": {
+    "entity": "IFCMECHANICALFASTENER",
+    "predefinedType": "SCREW"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#65",
+   "name": "Coil Rod",
+   "applies_to": {
+    "entity": "IFCMECHANICALFASTENER",
+    "predefinedType": "COILROD"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#66",
+   "name": "Coil Tie",
+   "applies_to": {
+    "entity": "IFCMECHANICALFASTENER",
+    "predefinedType": "COILTIE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#67",
+   "name": "Reinforcing Coupler",
+   "applies_to": {
+    "entity": "IFCMECHANICALFASTENER",
+    "predefinedType": "BAR_COUPLER"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#69",
+   "name": "Ground Anchor Tendon",
+   "applies_to": {
+    "entity": "IFCMEMBER",
+    "predefinedType": "STRUCTURALCABLE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#80",
+   "name": "Bell",
+   "applies_to": {
+    "entity": "IFCPILE",
+    "predefinedType": "BELL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#81",
+   "name": "Pile Point / Shoe",
+   "applies_to": {
+    "entity": "IFCPILE",
+    "predefinedType": "PILE_POINT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#83",
+   "name": "Conduit Fitting",
+   "applies_to": {
+    "entity": "IFCCABLECARRIERFITTING"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#85",
+   "name": "Junction Box",
+   "applies_to": {
+    "entity": "IFCJUNCTIONBOX"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#90",
+   "name": "Cover Plate",
+   "applies_to": {
+    "entity": "IFCPLATE",
+    "predefinedType": "COVER_PLATE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#95",
+   "name": "Tapered Plate",
+   "applies_to": {
+    "entity": "IFCPLATE",
+    "predefinedType": "TAPERED_PLATE"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#110",
+   "name": "Sleeper Headwall",
+   "applies_to": {
+    "entity": "IFCSLAB",
+    "predefinedType": "HEADWALL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#113",
+   "name": "Culvert Apron",
+   "applies_to": {
+    "entity": "IFCSLAB",
+    "predefinedType": "APRON"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#127",
+   "name": "Excavation Limits",
+   "applies_to": {
+    "entity": "IFCVIRTUALELEMENT",
+    "predefinedType": "EXCAVATION"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#131",
+   "name": "Mask Wall",
+   "applies_to": {
+    "entity": "IFCWALL",
+    "predefinedType": "MASK_WALL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#135",
+   "name": "Counterfort",
+   "applies_to": {
+    "entity": "IFCWALL",
+    "predefinedType": "COUNTERFORT"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#136",
+   "name": "Buttress",
+   "applies_to": {
+    "entity": "IFCWALL",
+    "predefinedType": "BUTTRESS"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#139",
+   "name": "Toe Wall",
+   "applies_to": {
+    "entity": "IFCWALL",
+    "predefinedType": "TOEWALL"
+   }
+  },
+  {
+   "spec_id": "usBrSpec_Classes#144",
+   "name": "GeotechnicalStratum",
+   "applies_to": {
+    "entity": "IFCGEOTECHNICALSTRATUM"
+   }
+  }
+ ]
+}

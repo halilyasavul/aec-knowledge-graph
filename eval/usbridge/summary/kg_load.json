@@ -1,0 +1,51 @@
+{
+ "dictionary": "https://identifier.buildingsmart.org/uri/usTransportation/usBridge/1",
+ "loaded": {
+  "UsBridgeClass": 175,
+  "UsBridgePropertySet": 89,
+  "UsBridgeProperty": 399,
+  "HAS_PROPERTY_SET": 558,
+  "HAS_PROPERTY": 481
+ },
+ "class_properties_without_property_record": [],
+ "ifc_before": {
+  "nodes": {
+   "Class": 2047,
+   "PropertySet": 746,
+   "Property": 2501,
+   "Type": 132,
+   "Enumeration": 243,
+   "SelectType": 61,
+   "Attribute": 1809,
+   "EnumValue": 2117
+  },
+  "relationships": 45116,
+  "properties_sha256": "0e864f52bfa6439d"
+ },
+ "ifc_after": {
+  "nodes": {
+   "Class": 2047,
+   "PropertySet": 746,
+   "Property": 2501,
+   "Type": 132,
+   "Enumeration": 243,
+   "SelectType": 61,
+   "Attribute": 1809,
+   "EnumValue": 2117
+  },
+  "relationships": 45116,
+  "properties_sha256": "0e864f52bfa6439d"
+ },
+ "ifc_untouched": true,
+ "ifc_type_sources": {
+  "string_default": 142,
+  "omitted": 257
+ },
+ "workbook_property_definitions": {
+  "definitions": 479,
+  "with_ifc_type": 455,
+  "with_enumeration": 24,
+  "set_property_pairs_not_in_bsdd": 1,
+  "data_type_conflicts": []
+ }
+}

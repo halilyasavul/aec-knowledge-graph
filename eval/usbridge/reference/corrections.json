@@ -1,0 +1,44 @@
+{
+ "note": "Defects in the published usBridge 2.0 IDS (HDR, 2026-05-01). Applied when eval.usbridge.reference loads the files; the published files in source/ are not edited. Each correction replaces the whole value (propertySet) or one enumeration member (predefinedType) in the facets named by `occurrences`; the loader checks that exactly those occurrences change.",
+ "corrections": [
+  {
+   "id": "piercap-case",
+   "field": "propertySet",
+   "find": "usBrPset_Piercap",
+   "replace": "usBrPset_PierCap",
+   "reason": "no set of that name exists; usBrSpec_PropertySets.ids, the workbook (IfcBeam_Concrete tab) and bSDD all spell it usBrPset_PierCap. As published, Pier Cap never receives its set and the four prohibitions are void.",
+   "occurrences": [
+    {"file": "usBrSpec_Classes.ids", "spec": "Non-Spliced Prestressed Concrete Girder", "where": "requirements[8]"},
+    {"file": "usBrSpec_Classes.ids", "spec": "Precast Girder Segment, Girder (Rolled Steel) or Girder Closure Pour", "where": "requirements[7]"},
+    {"file": "usBrSpec_Classes.ids", "spec": "Concrete Diaphragm", "where": "requirements[9]"},
+    {"file": "usBrSpec_Classes.ids", "spec": "Pier Cap", "where": "requirements[6]"},
+    {"file": "usBrSpec_Classes.ids", "spec": "Cap Beam", "where": "requirements[7]"}
+   ]
+  },
+  {
+   "id": "expansion-joint-space",
+   "field": "propertySet",
+   "find": "usBrPset_Expansion Joint",
+   "replace": "usBrPset_ExpansionJoint",
+   "reason": "the only usBridge set name with a space; bSDD (usTransportation/usBridge/1) has usBrPset_ExpansionJoint.",
+   "occurrences": [
+    {"file": "usBrSpec_Classes.ids", "spec": "Expansion Joint", "where": "requirements[5]"},
+    {"file": "usBrSpec_PropertySets.ids", "spec": "usBrPset_Expansion Joint", "where": "applicability[0]"},
+    {"file": "usBrSpec_PropertySets.ids", "spec": "usBrPset_Expansion Joint", "where": "requirements[0..6]"}
+   ]
+  },
+  {
+   "id": "helical-anchor-typo",
+   "field": "predefinedType",
+   "find": "HELICAL_ANHCOR",
+   "replace": "HELICAL_ANCHOR",
+   "reason": "typo in the allowed predefined types of IfcElementAssembly; the Helical Anchor spec and the workbook use HELICAL_ANCHOR.",
+   "occurrences": [
+    {"file": "usBrSpec_SpatialBreakdown.ids", "spec": "IfcElementAssembly Predefined Types", "where": "requirements[0]"}
+   ]
+  }
+ ],
+ "not_corrected": [
+  {"file": "usBrSpec_Classes.ids", "spec": "Counterfort", "value": "usBrPset", "reason": "truncated set name; the intended set cannot be told from the IDS"}
+ ]
+}

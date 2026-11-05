@@ -1,0 +1,17 @@
+{
+ "workbook_dd_name_not_in_bsdd": 6,
+ "property_on_bsdd_class_not_in_workbook": 292,
+ "datatype_differs": 10,
+ "enumeration_differs": 15,
+ "name_differs": 18,
+ "property_in_workbook_not_on_bsdd_class": 267,
+ "ifc_class_differs": 1,
+ "bsdd_groupofproperties_records": 89,
+ "bsdd_class_not_in_workbook": 3,
+ "bsdd_classes": 264,
+ "bsdd_properties": 399,
+ "property_in_workbook_not_on_bsdd_class_distinct_pset_property": 94,
+ "property_on_bsdd_class_not_in_workbook_distinct_pset_property": 74,
+ "datatype_differs_distinct_pset_property": 7,
+ "enumeration_differs_distinct_pset_property": 8
+}

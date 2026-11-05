@@ -16,4 +16,12 @@ eval/models_src/
 eval/reports/*.docx
 eval/reports/*.json
 eval/reports/~$*
+# usBridge test set: sources and everything derived from them are rights-reserved (SOURCES.md);
+# rebuilt by `python -m eval.usbridge.build`. Committed: scripts, alignment.csv, summary/, corrections.json
 eval/usbridge/source/
+eval/usbridge/bsdd/
+eval/usbridge/reference/*
+!eval/usbridge/reference/corrections.json
+eval/usbridge/idm/
+eval/usbridge/items.jsonl
+eval/usbridge/annotations/

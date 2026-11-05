@@ -1,0 +1,174 @@
+{
+ "corrections_applied": {
+  "piercap-case": 5,
+  "expansion-joint-space": 9,
+  "helical-anchor-typo": 1
+ },
+ "before_after": {
+  "expanded_facets_total": {
+   "published": 4222,
+   "corrected": 4226
+  },
+  "expanded_property_facets_total": {
+   "published": 3397,
+   "corrected": 3402
+  },
+  "sets_without_spec": {
+   "published": {
+    "usBrPset_Piercap": 1,
+    "usBrPset": 1
+   },
+   "corrected": {
+    "usBrPset": 1
+   }
+  },
+  "pset_specs_used_by_no_class": {
+   "published": [
+    "usBrPset_Member",
+    "usBrPset_PierCap",
+    "usBrPset_PrecastUnit"
+   ],
+   "corrected": [
+    "usBrPset_Member",
+    "usBrPset_PrecastUnit"
+   ]
+  }
+ },
+ "corrected": {
+  "usBrSpec_General.ids": {
+   "specs": 17,
+   "requirement_facets": 22,
+   "by_kind_cardinality": {
+    "attribute/prohibited": 2,
+    "attribute/required": 15,
+    "entity/-": 2,
+    "property/optional": 2,
+    "property/required": 1
+   },
+   "whole_set_facets": 3,
+   "applicability_kinds": {
+    "entity": 17
+   },
+   "applicability_occurs": {
+    "1..unbounded": 11,
+    "0..0": 4,
+    "0..unbounded": 2
+   },
+   "expanded_requirement_facets": 39,
+   "expanded_property_facets": 20,
+   "whole_set_set_expanded": 3
+  },
+  "usBrSpec_SpatialBreakdown.ids": {
+   "specs": 45,
+   "requirement_facets": 285,
+   "by_kind_cardinality": {
+    "attribute/required": 92,
+    "classification/optional": 37,
+    "entity/-": 5,
+    "partOf/required": 37,
+    "property/optional": 41,
+    "property/required": 73
+   },
+   "whole_set_facets": 114,
+   "applicability_kinds": {
+    "entity": 45
+   },
+   "applicability_occurs": {
+    "1..unbounded": 2,
+    "0..unbounded": 43
+   },
+   "expanded_requirement_facets": 705,
+   "expanded_property_facets": 534,
+   "whole_set_set_expanded": 114
+  },
+  "usBrSpec_Classes.ids": {
+   "specs": 146,
+   "requirement_facets": 1206,
+   "by_kind_cardinality": {
+    "attribute/optional": 8,
+    "attribute/prohibited": 20,
+    "attribute/required": 147,
+    "classification/prohibited": 4,
+    "classification/required": 108,
+    "entity/-": 31,
+    "material/prohibited": 4,
+    "material/required": 102,
+    "partOf/required": 64,
+    "property/optional": 222,
+    "property/prohibited": 144,
+    "property/required": 352
+   },
+   "whole_set_facets": 717,
+   "applicability_kinds": {
+    "entity": 146
+   },
+   "applicability_occurs": {
+    "0..unbounded": 146
+   },
+   "expanded_requirement_facets": 3482,
+   "expanded_property_facets": 2848,
+   "whole_set_set_expanded": 572,
+   "whole_set_set_prohibited": 144,
+   "whole_set_set_without_spec": 1
+  },
+  "usBrSpec_PropertySets.ids": {
+   "specs": 130,
+   "requirement_facets": 646,
+   "by_kind_cardinality": {
+    "property/optional": 455,
+    "property/required": 191
+   },
+   "whole_set_facets": 0,
+   "applicability_kinds": {
+    "property": 130
+   },
+   "applicability_occurs": {
+    "0..unbounded": 130
+   }
+  },
+  "shared_applicability": {
+   "groups": 7,
+   "specs_in_groups": 14,
+   "largest": [
+    [
+     2,
+     "{\"entity\": \"IFCREINFORCINGMESH\"}"
+    ],
+    [
+     2,
+     "{\"entity\": \"IFCREINFORCINGBAR\"}"
+    ],
+    [
+     2,
+     "{\"entity\": \"IFCPIPEFITTING\"}"
+    ],
+    [
+     2,
+     "{\"entity\": \"IFCJUNCTIONBOX\"}"
+    ],
+    [
+     2,
+     "{\"entity\": \"IFCGEOTECHNICALSTRATUM\"}"
+    ],
+    [
+     2,
+     "{\"entity\": \"IFCDISTRIBUTIONSYSTEM\"}"
+    ],
+    [
+     2,
+     "{\"entity\": \"IFCCABLECARRIERFITTING\"}"
+    ]
+   ]
+  },
+  "pset_specs": 130,
+  "sets_without_spec": {
+   "usBrPset": 1
+  },
+  "pset_specs_used_by_no_class": [
+   "usBrPset_Member",
+   "usBrPset_PrecastUnit"
+  ],
+  "expanded_facets_total": 4226,
+  "expanded_property_facets_total": 3402
+ }
+}

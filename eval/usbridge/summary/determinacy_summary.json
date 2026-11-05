@@ -1,0 +1,100 @@
+{
+ "entity_items": {
+  "facets": 4537,
+  "determined": 476,
+  "undetermined": 4061,
+  "determined_but_ref_optional": 193,
+  "determined_value_undetermined": 2
+ },
+ "document_item": {
+  "facets": 4226,
+  "undetermined": 3223,
+  "determined": 1003,
+  "determined_but_ref_optional": 297,
+  "determined_value_undetermined": 2
+ },
+ "entity_items_by_kind": {
+  "attribute": {
+   "facets": 270,
+   "determined": 112,
+   "undetermined": 158,
+   "determined_but_ref_optional": 8
+  },
+  "classification": {
+   "facets": 136,
+   "undetermined": 136
+  },
+  "entity": {
+   "facets": 2,
+   "undetermined": 2
+  },
+  "material": {
+   "facets": 99,
+   "determined": 92,
+   "undetermined": 7,
+   "determined_but_ref_optional": 5
+  },
+  "partOf": {
+   "facets": 95,
+   "undetermined": 86,
+   "determined": 9
+  },
+  "property": {
+   "facets": 3935,
+   "undetermined": 3672,
+   "determined": 263,
+   "determined_but_ref_optional": 180,
+   "determined_value_undetermined": 2
+  }
+ },
+ "document_by_kind": {
+  "attribute": {
+   "facets": 284,
+   "undetermined": 187,
+   "determined": 97,
+   "determined_but_ref_optional": 6
+  },
+  "classification": {
+   "facets": 149,
+   "determined": 149,
+   "determined_but_ref_optional": 41
+  },
+  "entity": {
+   "facets": 38,
+   "undetermined": 38
+  },
+  "material": {
+   "facets": 106,
+   "determined": 74,
+   "undetermined": 32,
+   "determined_but_ref_optional": 3
+  },
+  "partOf": {
+   "facets": 101,
+   "undetermined": 94,
+   "determined": 7
+  },
+  "property": {
+   "facets": 3548,
+   "undetermined": 2872,
+   "determined": 676,
+   "determined_but_ref_optional": 247,
+   "determined_value_undetermined": 2
+  }
+ },
+ "entity_items_by_method": {
+  "attribute-rule": 112,
+  "none": 4061,
+  "lexical-exact": 64,
+  "lexical-cover": 130,
+  "reading": 69,
+  "material-rule": 92,
+  "section": 9
+ },
+ "entity_items_share_determined": {
+  "min": 0.0,
+  "median": 0.10975609756097561,
+  "max": 0.2647058823529412,
+  "items_with_none_determined": 5
+ }
+}

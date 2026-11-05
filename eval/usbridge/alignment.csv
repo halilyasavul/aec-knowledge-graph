@@ -1,0 +1,168 @@
+idm_id,idm_entity,idm_section,wb_tab,wb_industry_name,wb_dd_name,ifc_class,ifc_predefined_type,ifc_object_type,ids_spec_ids,ids_spec_names,idm_wb_match,wb_ids_match,reason
+idm1-001,Identification,4.1.1,IfcProject,Project,Project,IFCPROJECT,,,usBrSpec_SpatialBreakdown#0,Project,manual,name,contract/project numbers and project name live in usBrPset_ProjectCommon on IfcProject
+idm1-001,Identification,4.1.1,IfcBridge,Girder Bridge,GirderBridge,IFCBRIDGE,GIRDER,,usBrSpec_SpatialBreakdown#3,Girder Bridge,manual,name,"structure number/name, carried and crossed roadways live in usBrPset_BridgeIdentification, usBrPset_Roadway, usBrPset_FeatureIdentification on IfcBridge"
+idm1-001,Identification,4.1.1,IfcBridge,Slab Bridge,SlabBridge,IFCBRIDGE,USERDEFINED,SLAB_BRIDGE,usBrSpec_SpatialBreakdown#4,Slab Bridge,manual,name,"same as Girder Bridge, the other IfcBridge type"
+idm1-002,Location,4.1.1,IfcProject,Project,Project,IFCPROJECT,,,usBrSpec_SpatialBreakdown#0,Project,manual,name,city/county/district/state live in usBrPset_ProjectLocation on IfcProject
+idm1-002,Location,4.1.1,IfcBridge,Girder Bridge,GirderBridge,IFCBRIDGE,GIRDER,,usBrSpec_SpatialBreakdown#3,Girder Bridge,manual,name,latitude/longitude live in usBrPset_BridgeIdentification (RefLatitude/RefLongitude)
+idm1-002,Location,4.1.1,IfcBridge,Slab Bridge,SlabBridge,IFCBRIDGE,USERDEFINED,SLAB_BRIDGE,usBrSpec_SpatialBreakdown#4,Slab Bridge,manual,name,same as Girder Bridge
+idm1-003,Metadata,4.1.1,IfcProject,Project,Project,IFCPROJECT,,,usBrSpec_SpatialBreakdown#0,Project,manual,name,"model version, preparation date, approval status live in usBrPset_ProjectCommon"
+idm1-003,Metadata,4.1.1,,,,IFCPROJECTEDCRS,,,usBrSpec_General#0,Geospatial,manual,manual,coordinate systems and reference frames become IfcProjectedCRS (General spec)
+idm1-003,Metadata,4.1.1,IfcPersonAndOrganization,Designer / Checker / Engineer of Record / Project Manager,,IFCPERSON,,,usBrSpec_General#2,Person,manual,applicability,associated stakeholders become IfcPerson
+idm1-003,Metadata,4.1.1,IfcPersonAndOrganization,Owner Agency / Design Agency / Contractor,,IFCORGANIZATION,,,usBrSpec_General#5,Organization,manual,applicability,associated stakeholders become IfcOrganization
+idm1-003,Metadata,4.1.1,IfcPersonAndOrganization,Actor,,IFCACTOR,,,usBrSpec_General#3,Actor,manual,name,associated stakeholders are attached through IfcActor
+idm1-003,Metadata,4.1.1,IfcPersonAndOrganization,Project Role,,IFCACTORROLE,,,usBrSpec_General#4,Actor Role,manual,applicability,stakeholder roles become IfcActorRole
+idm1-004,Project Descriptions,4.1.1,IfcProject,Project,Project,IFCPROJECT,,,usBrSpec_SpatialBreakdown#0,Project,manual,name,letting date and project description live in usBrPset_ProjectCommon
+idm1-004,Project Descriptions,4.1.1,IfcBridge,Girder Bridge,GirderBridge,IFCBRIDGE,GIRDER,,usBrSpec_SpatialBreakdown#3,Girder Bridge,manual,name,"traffic (AADT/AADTT), hydraulic data, design loading live in usBridge psets on IfcBridge"
+idm1-004,Project Descriptions,4.1.1,IfcBridge,Slab Bridge,SlabBridge,IFCBRIDGE,USERDEFINED,SLAB_BRIDGE,usBrSpec_SpatialBreakdown#4,Slab Bridge,manual,name,same as Girder Bridge
+idm1-004,Project Descriptions,4.1.1,IfcDocumentReference,Construction Specifications,,IFCDOCUMENTREFERENCE,,,,,manual,none,construction specifications become an IfcDocumentReference
+idm1-004,Project Descriptions,4.1.1,IfcDocumentReference,Design Specifications,,IFCDOCUMENTREFERENCE,,,,,manual,none,design specifications become an IfcDocumentReference
+idm1-005,Contract Information,4.1.2,IfcClassification,Pay Item Specification,,IFCCLASSIFICATION,,,usBrSpec_General#7,Classification,manual,applicability,pay item information becomes an IfcClassification (pay item specification)
+idm1-005,Contract Information,4.1.2,IfcClassification,Pay Item,,IFCCLASSIFICATIONREFERENCE,,,usBrSpec_General#8,Classification Reference,manual,applicability,each pay item becomes an IfcClassificationReference
+idm1-006,Cross Section,4.1.3,,,,,,,,,unmatched,,"roadway cross-section (lanes, shoulders, slopes) has no usBridge entity or IDS spec"
+idm1-007,Horizontal Alignment,4.1.3,,,,IFCALIGNMENT,,,usBrSpec_General#10,Alignment,manual,manual,horizontal alignment is part of IfcAlignment (General spec)
+idm1-007,Horizontal Alignment,4.1.3,,,,IFCALIGNMENTHORIZONTAL,,,usBrSpec_General#11,Alignment - Horizontal,manual,manual,IfcAlignmentHorizontal
+idm1-007,Horizontal Alignment,4.1.3,,,,IFCALIGNMENTHORIZONTALSEGMENT,,,usBrSpec_General#12,Alignment - Horizontal Segments,manual,manual,IfcAlignmentHorizontalSegment
+idm1-008,Vertical Profile,4.1.3,,,,IFCALIGNMENT,,,usBrSpec_General#10,Alignment,manual,manual,vertical profile is part of IfcAlignment (General spec)
+idm1-008,Vertical Profile,4.1.3,,,,IFCALIGNMENTVERTICAL,,,usBrSpec_General#13,Alignment - Vertical,manual,manual,IfcAlignmentVertical
+idm1-008,Vertical Profile,4.1.3,,,,IFCALIGNMENTVERTICALSEGMENT,,,usBrSpec_General#14,Alignment - Vertical Segments,manual,manual,IfcAlignmentVerticalSegment
+idm1-009,Bridge Configuration,4.1.4,IfcBridge,Girder Bridge,GirderBridge,IFCBRIDGE,GIRDER,,usBrSpec_SpatialBreakdown#3,Girder Bridge,manual,name,"bridge length, number of spans, clearances live in usBrPset_BridgeGeometry / usBrPset_Roadway on IfcBridge"
+idm1-009,Bridge Configuration,4.1.4,IfcBridge,Slab Bridge,SlabBridge,IFCBRIDGE,USERDEFINED,SLAB_BRIDGE,usBrSpec_SpatialBreakdown#4,Slab Bridge,manual,name,same as Girder Bridge
+idm1-010,Bridge Control Information,4.1.4,IfcBridge,Girder Bridge,GirderBridge,IFCBRIDGE,GIRDER,,usBrSpec_SpatialBreakdown#3,Girder Bridge,manual,name,begin/end stations and skew live in usBrPset_BridgeGeometry
+idm1-010,Bridge Control Information,4.1.4,IfcBridge,Slab Bridge,SlabBridge,IFCBRIDGE,USERDEFINED,SLAB_BRIDGE,usBrSpec_SpatialBreakdown#4,Slab Bridge,manual,name,same as Girder Bridge
+idm1-010,Bridge Control Information,4.1.4,IfcBridgePart,Abutment,Abutment,IFCBRIDGEPART,ABUTMENT,,usBrSpec_SpatialBreakdown#10,Abutment,manual,name,stations/skew at abutment centerline live in usBrPset_SubstructureCommon
+idm1-010,Bridge Control Information,4.1.4,IfcBridgePart,Pier,Pier,IFCBRIDGEPART,PIER,,usBrSpec_SpatialBreakdown#11,Pier,manual,name,stations/skew at pier centerline live in usBrPset_SubstructureCommon
+idm1-011,Approach Slabs,4.1.5,IfcSlab,Approach Slab,ApproachSlab,IFCSLAB,APPROACH_SLAB,,usBrSpec_Classes#106,Approach Slab,normalised,name,case/plural/punctuation
+idm1-012,Sleeper Slabs,4.1.5,IfcFooting,Sleeper Slab,SleeperSlab,IFCFOOTING,STRIP_FOOTING,,usBrSpec_Classes#52,Strip Footing & Sleeper Slab,normalised,listed,case/plural/punctuation
+idm1-013,Bearing,4.1.6,IfcBearing,Bearing,Bearing,IFCBEARING,(any),,usBrSpec_Classes#75 usBrSpec_Classes#76,Bearing (Generic) | Elastomeric Bearing,exact,manual,IDM name = Industry Name
+idm1-013,Bearing,4.1.6,IfcPlate,Bearing Plate,BearingPlate,IFCPLATE,BASE_PLATE,,usBrSpec_Classes#94,Bearing Plate,manual,name,IDM bearing types Masonry/Sole/Top/Bottom Plate
+idm1-013,Bearing,4.1.6,IfcMechanicalFastener_General,Anchor Bolt,AnchorBoltAssembly,IFCMECHANICALFASTENER,ANCHORBOLT,,usBrSpec_Classes#58,Anchor Bolt,manual,name,IDM's Anchor Bolt group
+idm1-014,Curb,4.1.6,IfcKerb,Curb,Curb,IFCKERB,USERDEFINED,CURB,usBrSpec_Classes#56,Curb,exact,name,IDM name = Industry Name
+idm1-015,Deck,4.1.6,IfcBridgePart,Deck,Deck,IFCBRIDGEPART,DECK,,usBrSpec_SpatialBreakdown#7,Deck,exact,name,IDM name = Industry Name
+idm1-015,Deck,4.1.6,IfcSlab,Deck Slab,DeckSlab,IFCSLAB,FLOOR,,usBrSpec_Classes#104,Deck Slab,manual,name,"the deck's slab (IfcSlab.FLOOR) carries thickness, form type, pour data"
+idm1-015,Deck,4.1.6,IfcSlab,Closure Pour,ClosurePour,IFCSLAB,USERDEFINED,CLOSURE_POUR,usBrSpec_Classes#109,Closure Pour,manual,name,the IDM's Closure Pour group
+idm1-015,Deck,4.1.6,IfcSlab,Wearing Surface,WearingSurface,IFCSLAB,WEARING,,usBrSpec_Classes#105,Wearing Surface,manual,name,the IDM's Overlay/Wearing Surface group
+idm1-016,Deck Drain,4.1.6,IfcWasteTerminal,Drain / Inlet,DeckDrain,IFCWASTETERMINAL,USERDEFINED,DECK_DRAIN,usBrSpec_Classes#143,Drain / Inlet,normalised,name,IDM name = usBridge DD Name 'DeckDrain'
+idm1-017,Deck Joints,4.1.6,IfcDiscreteAccessory_EJ,Expansion Joint,ExpansionJoint,IFCDISCRETEACCESSORY,EXPANSION_JOINT_DEVICE,,usBrSpec_Classes#44,Expansion Joint,manual,name,"deck joint types (compression seal, modular, strip seal, finger) are expansion joint devices"
+idm1-018,Haunch,4.1.6,IfcSlab,Haunch,Haunch,IFCSLAB,USERDEFINED,HAUNCH,usBrSpec_Classes#108,Haunch,exact,name,IDM name = Industry Name
+idm1-019,Girder,4.1.6,IfcBeam_Concrete,Non-Spliced Prestressed Concrete Girder,GirderPrecastConcrete,IFCBEAM,BEAM,,usBrSpec_Classes#32,Non-Spliced Prestressed Concrete Girder,manual,name,IDM's Precast/Prestressed Concrete Girder group
+idm1-019,Girder,4.1.6,IfcBeam_Concrete,Precast Girder Segment,GirderSegmentConcrete,IFCBEAM,GIRDER_SEGMENT,,usBrSpec_Classes#33,"Precast Girder Segment, Girder (Rolled Steel) or Girder Closure Pour",manual,listed,precast girder segments (spliced concrete girders)
+idm1-019,Girder,4.1.6,IfcBeam_Concrete,Girder Closure Pour,GirderClosurePour,IFCBEAM,GIRDER_SEGMENT,,usBrSpec_Classes#33,"Precast Girder Segment, Girder (Rolled Steel) or Girder Closure Pour",manual,listed,closure pours of spliced concrete girders
+idm1-019,Girder,4.1.6,IfcBeam_Steel,Girder (Rolled Steel),GirderSegmentRolledSteel,IFCBEAM,GIRDER_SEGMENT,,usBrSpec_Classes#33,"Precast Girder Segment, Girder (Rolled Steel) or Girder Closure Pour",manual,listed,IDM's steel girder groups
+idm1-019,Girder,4.1.6,IfcElementAssembly,Girders (Rolled Steel),GirderSteelShape,IFCELEMENTASSEMBLY,GIRDER,,usBrSpec_SpatialBreakdown#24,Girder,manual,applicability,IDM's steel girder groups (assembly)
+idm1-019,Girder,4.1.6,IfcElementAssembly,Girders (Built-up Steel),GirderSteelBuiltup,IFCELEMENTASSEMBLY,GIRDER,,usBrSpec_SpatialBreakdown#24,Girder,manual,applicability,IDM's steel girder groups (assembly)
+idm1-019,Girder,4.1.6,IfcElementAssembly,Girder Segment (Built-up Steel),GirderSegmentSteel,IFCELEMENTASSEMBLY,USERDEFINED,GIRDER_SEGMENT,usBrSpec_SpatialBreakdown#25,Girder Segment (Built-Up Steel),manual,name,IDM's steel girder groups (segment)
+idm1-019,Girder,4.1.6,IfcElementAssembly,Girders (Post-Tensioned Spliced Concrete),GirderSplicedConcrete,IFCELEMENTASSEMBLY,GIRDER,,usBrSpec_SpatialBreakdown#24,Girder,manual,applicability,IDM's spliced concrete girders (assembly)
+idm1-019,Girder,4.1.6,IfcPlate,Flange Plate,FlangePlate,IFCPLATE,FLANGE_PLATE,,usBrSpec_Classes#88,Flange Plate,manual,name,IDM's Steel Girder Flange Properties group
+idm1-019,Girder,4.1.6,IfcPlate,Web Plate,WebPlate,IFCPLATE,WEB_PLATE,,usBrSpec_Classes#89,Web Plate,manual,name,IDM's Steel Girder Web Properties group
+idm1-020,Median,4.1.6,IfcKerb,Median,Median,IFCKERB,USERDEFINED,MEDIAN,usBrSpec_Classes#55,Median,exact,name,IDM name = Industry Name
+idm1-021,Parapet (Barrier),4.1.6,IfcWall,Barrier (Parapet),Barrier,IFCWALL,USERDEFINED,BARRIER,usBrSpec_Classes#129,Barrier (Parapet),normalised,name,"same words, other order"
+idm1-022,Railing,4.1.6,IfcRailing,Guardrail,Guardrail,IFCRAILING,GUARDRAIL,,usBrSpec_Classes#100,Guardrail,manual,name,railing types in IFC: IfcRailing.GUARDRAIL
+idm1-022,Railing,4.1.6,IfcRailing,Handrail,Handrail,IFCRAILING,HANDRAIL,,usBrSpec_Classes#101,Handrail,manual,name,IDM's Handrailing feature: IfcRailing.HANDRAIL
+idm1-022,Railing,4.1.6,IfcRailing,Fence,Fence,IFCRAILING,FENCE,,usBrSpec_Classes#102,Fence,manual,name,IfcRailing.FENCE
+idm1-023,Sidewalk,4.1.6,IfcKerb,Sidewalk,Sidewalk,IFCKERB,USERDEFINED,SIDEWALK,usBrSpec_Classes#57,Sidewalk,exact,name,IDM name = Industry Name
+idm1-024,Sound Wall (Barrier),4.1.6,IfcWall,Sound Barrier / Wall,SoundBarrier,IFCWALL,USERDEFINED,SOUND_BARRIER,usBrSpec_Classes#130,Sound Barrier / Wall,normalised,name,"same words, other order"
+idm1-025,Transverse Member,4.1.6,IfcElementAssembly,Cross-Frames,CrossFrame,IFCELEMENTASSEMBLY,CROSS_BRACING,,usBrSpec_SpatialBreakdown#26,Cross Frames,manual,name,IDM type Cross Frame
+idm1-025,Transverse Member,4.1.6,IfcMember,Cross-Frame Member,CrossFrameMember,IFCMEMBER,(any),,,,manual,none,members of a cross frame
+idm1-025,Transverse Member,4.1.6,IfcElementAssembly,Diaphragm (Steel),DiaphragmSteel,IFCELEMENTASSEMBLY,USERDEFINED,DIAPHRAGM,usBrSpec_SpatialBreakdown#27,Diaphragm (Steel),manual,name,IDM type Diaphragm (steel)
+idm1-025,Transverse Member,4.1.6,IfcMember,Steel Diaphragm Member,DiaphragmMember,IFCMEMBER,(any),,,,manual,none,members of a steel diaphragm
+idm1-025,Transverse Member,4.1.6,IfcBeam_Concrete,Concrete Diaphragm,DiaphragmConcrete,IFCBEAM,DIAPHRAGM,,usBrSpec_Classes#34,Concrete Diaphragm,manual,name,IDM type Diaphragm (concrete)
+idm1-026,Abutment/ End Bent,4.1.7,IfcBridgePart,Abutment,Abutment,IFCBRIDGEPART,ABUTMENT,,usBrSpec_SpatialBreakdown#10,Abutment,normalised,name,IDM alternative name 'Abutment'
+idm1-026,Abutment/ End Bent,4.1.7,IfcWall,Backwall,Backwall,IFCWALL,USERDEFINED,BACKWALL,usBrSpec_Classes#132,Backwall,manual,name,IDM feature Back Wall
+idm1-026,Abutment/ End Bent,4.1.7,IfcWall,Stem Wall,StemWall,IFCWALL,USERDEFINED,STEM_WALL,usBrSpec_Classes#133,Stem Wall,manual,name,IDM feature Stem Wall/Breast Wall
+idm1-027,Architectural Feature,4.1.7,,,,,,,,,unmatched,,no usBridge class for an architectural feature; aesthetics became usBrPset_Wall.AestheticType
+idm1-028,Drilled Shaft,4.1.7,IfcPile,Drilled Shaft,PileDrilledShaft,IFCPILE,BORED,,usBrSpec_Classes#77,Drilled Shaft,exact,name,IDM name = Industry Name
+idm1-028,Drilled Shaft,4.1.7,IfcPile,Rock Socket,PileRockSocket,IFCPILE,USERDEFINED,ROCK_SOCKET,usBrSpec_Classes#79,Rock Socket,manual,name,IDM's Rock Socket group
+idm1-029,Footing/Pile Cap/Drilled Shaft Cap,4.1.7,IfcFooting,Pile Cap,PileCap,IFCFOOTING,PILE_CAP,,usBrSpec_Classes#50,Pile Cap,normalised,name,IDM alternative name 'Pile Cap'
+idm1-029,Footing/Pile Cap/Drilled Shaft Cap,4.1.7,IfcFooting,Spread Footing,PadFooting,IFCFOOTING,PAD_FOOTING,,usBrSpec_Classes#51,Spread Footing,manual,name,IDM's Spread Footing Properties group
+idm1-029,Footing/Pile Cap/Drilled Shaft Cap,4.1.7,IfcFooting,Strip Footing,StripFooting,IFCFOOTING,STRIP_FOOTING,,usBrSpec_Classes#52,Strip Footing & Sleeper Slab,manual,listed,footing
+idm1-029,Footing/Pile Cap/Drilled Shaft Cap,4.1.7,IfcFooting,Drilled Footing,DrilledFooting,IFCFOOTING,USERDEFINED,DRILLED_FOOTING,usBrSpec_Classes#53,Drilled Footing,manual,name,drilled shaft cap / drilled footing
+idm1-030,Micro Pile,4.1.7,IfcElementAssembly,Micropile,Micropile,IFCELEMENTASSEMBLY,USERDEFINED,MICROPILE,usBrSpec_SpatialBreakdown#30,Micropile,normalised,name,IDM name = usBridge DD Name 'Micropile'
+idm1-031,Pedestal/ Riser,4.1.7,IfcProjectionElement,Pedestal,Pedestal,IFCPROJECTIONELEMENT,USERDEFINED,PEDESTAL,usBrSpec_Classes#99,Pedestal,normalised,name,IDM alternative name 'Pedestal'
+idm1-032,Pier/Bent,4.1.7,IfcBridgePart,Pier,Pier,IFCBRIDGEPART,PIER,,usBrSpec_SpatialBreakdown#11,Pier,normalised,name,IDM alternative name 'Pier'
+idm1-033,Pier Cap,4.1.7,IfcBeam_Concrete,Pier Cap,PierCap,IFCBEAM,PIERCAP,,usBrSpec_Classes#35,Pier Cap,exact,name,IDM name = Industry Name
+idm1-034,Pier Column,4.1.7,IfcColumn,Pier Column,PierColumn,IFCCOLUMN,COLUMN,,usBrSpec_Classes#37,Pier Column,exact,name,IDM name = Industry Name
+idm1-035,Pier Wall (Crash Wall),4.1.7,IfcWall,Pier Wall,PierWall,IFCWALL,USERDEFINED,PIER_WALL,usBrSpec_Classes#137,Pier Wall,normalised,name,IDM alternative name 'Pier Wall'
+idm1-035,Pier Wall (Crash Wall),4.1.7,IfcWall,Crash Wall,CrashWall,IFCWALL,USERDEFINED,CRASH_WALL,usBrSpec_Classes#138,Crash Wall,normalised,name,IDM alternative name 'Crash Wall'
+idm1-036,Pile,4.1.7,IfcPile,Driven Pile,PileDriven,IFCPILE,DRIVEN,,usBrSpec_Classes#78,Driven Pile,manual,name,the IDM's pile (drilled shafts are their own IDM entity)
+idm1-036,Pile,4.1.7,IfcCovering,Pile Sleeve,PileSleeve,IFCCOVERING,USERDEFINED,PILE_SLEEVE,usBrSpec_Classes#40,Pile Sleeve,manual,name,IDM's Pile Sleeve group
+idm1-036,Pile,4.1.7,IfcVirtualElement,Drilled Hole / Prebored Hole,DrilledHole,IFCVIRTUALELEMENT,USERDEFINED,BORING,usBrSpec_Classes#126,Drilled Hole Prebored Hole,manual,name,IDM's Prebore group
+idm1-036,Pile,4.1.7,IfcPile,Rock Socket,PileRockSocket,IFCPILE,USERDEFINED,ROCK_SOCKET,usBrSpec_Classes#79,Rock Socket,manual,name,IDM's Rock Socket group
+idm1-037,Seal Coat/ Tremie Seal/Seal Slab,4.1.7,,,,,,,,,unmatched,,no usBridge class for a seal coat
+idm1-038,Shear Key,4.1.7,IfcProjectionElement,Shear Key,ShearKey,IFCPROJECTIONELEMENT,USERDEFINED,SHEAR_KEY,usBrSpec_Classes#98,Shear Key,exact,name,IDM name = Industry Name
+idm1-039,Wingwall/ Stem Wall,4.1.7,IfcWall,Stem Wall,StemWall,IFCWALL,USERDEFINED,STEM_WALL,usBrSpec_Classes#133,Stem Wall,normalised,name,IDM alternative name 'Stem Wall'
+idm1-039,Wingwall/ Stem Wall,4.1.7,IfcWall,Wingwall,Wingwall,IFCWALL,USERDEFINED,WINGWALL,usBrSpec_Classes#134,Wingwall,normalised,name,IDM alternative name 'Wingwall'
+idm1-039,Wingwall/ Stem Wall,4.1.7,IfcEarthworksFill,Backfill,Backfill,IFCEARTHWORKSFILL,BACKFILL,,usBrSpec_Classes#48,Backfill,manual,name,IDM's Backfill Properties group
+idm1-040,Slope Protection,4.1.7,IfcBridgePart,Slope Protection,SlopeProtection,IFCBRIDGEPART,USERDEFINED,SLOPE_PROTECTION,usBrSpec_SpatialBreakdown#16,Slope Protection,exact,name,IDM name = Industry Name
+idm1-040,Slope Protection,4.1.7,IfcFacilityPartCommon,Slope Protection,SlopeProtectionFacility,IFCFACILITYPARTCOMMON,USERDEFINED,SLOPE_PROTECTION,usBrSpec_SpatialBreakdown#16,Slope Protection,exact,name,IDM name = Industry Name
+idm1-040,Slope Protection,4.1.7,IfcSlab,Slope Protection Surface,SlopeProtectionSurface,IFCSLAB,PAVING,,usBrSpec_Classes#107,Slope Protection Surface,manual,name,IDM type Concrete (slope paving)
+idm1-040,Slope Protection,4.1.7,IfcReinforcedSoil,Riprap,Riprap,IFCREINFORCEDSOIL,USERDEFINED,RIPRAP,usBrSpec_Classes#103,Riprap,manual,name,"IDM types Riprap, Grouted Riprap"
+idm1-041,Bent Plate,4.1.8,,,,,,,,,unmatched,,no bent-plate class; bending became usBrPset_PlateCommon on every plate
+idm1-042,Bolt Assembly,4.1.8,IfcMechanicalFastener_General,Bolt,BoltAssembly,IFCMECHANICALFASTENER,BOLT,,usBrSpec_Classes#59,Bolt,normalised,name,IDM name = usBridge DD Name 'BoltAssembly'
+idm1-043,Conduit,4.1.8,IfcCableCarrierSegment,Utility Conduit,Conduit,IFCCABLECARRIERSEGMENT,CONDUITSEGMENT,,usBrSpec_Classes#82,Utility Conduit,normalised,name,IDM name = usBridge DD Name 'Conduit'
+idm1-044,Drainage System,4.1.8,IfcDistributionSystem,Distribution System,DistributionSystem,IFCDISTRIBUTIONSYSTEM,(any),,usBrSpec_SpatialBreakdown#43,Distribution System,manual,name,drainage system = IfcDistributionSystem
+idm1-044,Drainage System,4.1.8,IfcPipeSegment,Rigid Pipe,RigidPipe,IFCPIPESEGMENT,RIGIDSEGMENT,,usBrSpec_Classes#84,Rigid Pipe,manual,name,drainage element
+idm1-044,Drainage System,4.1.8,IfcPipeSegment,Flexible Pipe,FlexiblePipe,IFCPIPESEGMENT,FLEXIBLESEGMENT,,usBrSpec_Classes#86,Flexible Pipe,manual,name,drainage element
+idm1-044,Drainage System,4.1.8,IfcPipeFitting,Pipe Fittings,PipeFitting,IFCPIPEFITTING,(any),,usBrSpec_Classes#87,Pipe Fitting,manual,name,drainage element
+idm1-044,Drainage System,4.1.8,IfcWasteTerminal,Drain / Inlet,DeckDrain,IFCWASTETERMINAL,USERDEFINED,DECK_DRAIN,usBrSpec_Classes#143,Drain / Inlet,manual,name,drainage element
+idm1-045,Feature,4.1.8,IfcVirtualElement,Hole,Hole,IFCVIRTUALELEMENT,PROVISIONFORVOID,,usBrSpec_Classes#125,Hole,manual,name,IDM's Bolt Hole / Slotted Hole / Opening groups
+idm1-045,Feature,4.1.8,IfcVirtualElement,Keyway,Keyway,IFCVIRTUALELEMENT,PROVISIONFORVOID,,usBrSpec_Classes#125,Hole,manual,applicability,IDM's Keyway group (void)
+idm1-045,Feature,4.1.8,IfcProjectionElement,Keyway,Keyway,IFCPROJECTIONELEMENT,USERDEFINED,KEYWAY,usBrSpec_Classes#97,Keyway,manual,name,IDM's Keyway group (projection)
+idm1-046,Field Splice,4.1.8,,,,,,,,,unmatched,,"no field-splice class; its components (bolts, fill and splice plates) are their own IDM entities"
+idm1-047,Fill Plate,4.1.8,IfcPlate,Fill Plate,FillPlate,IFCPLATE,USERDEFINED,FILL_PLATE,usBrSpec_Classes#96,Fill Plate,exact,name,IDM name = Industry Name
+idm1-048,Gusset,4.1.8,IfcPlate,Gusset Plate,GussetPlate,IFCPLATE,GUSSET_PLATE,,usBrSpec_Classes#93,Gusset Plate,manual,name,the IDM omits 'Plate'
+idm1-049,Shear Connector (Stud),4.1.8,IfcMechanicalFastener_Stud,Shear Connector,ShearConnector,IFCMECHANICALFASTENER,SHEARCONNECTOR,,usBrSpec_Classes#63,Shear Connector,normalised,name,IDM alternative name 'Shear Connector'
+idm1-049,Shear Connector (Stud),4.1.8,IfcMechanicalFastener_Stud,Shear Stud Connector,ShearStud,IFCMECHANICALFASTENER,STUDSHEARCONNECTOR,,usBrSpec_Classes#64,Shear Stud Connector,normalised,name,"same words, other order"
+idm1-050,Splice Plate,4.1.8,IfcPlate,Splice Plate,SplicePlate,IFCPLATE,SPLICE_PLATE,,usBrSpec_Classes#91,Splice Plate,exact,name,IDM name = Industry Name
+idm1-051,Stiffener,4.1.8,IfcPlate,Stiffener Plate,StiffenerPlate,IFCPLATE,STIFFENER_PLATE,,usBrSpec_Classes#92,Stiffener Plate,manual,name,the IDM omits 'Plate'
+idm1-052,Weld,4.1.8,,,,,,,,,unmatched,,no usBridge class for a weld
+idm1-053,Accessories,4.1.9,,,,,,,,,unmatched,,"no usBridge class for chairs, standees, support bars"
+idm1-054,Drill and Bond Chemical Adhesive Anchor,4.1.9,IfcMechanicalFastener_General,Anchor Bolt,AnchorBoltAssembly,IFCMECHANICALFASTENER,ANCHORBOLT,,usBrSpec_Classes#58,Anchor Bolt,manual,name,usBrPset_AnchorBolt.AnchorType covers Chemical_Epoxy
+idm1-055,Drill and Bond Dowel Bar,4.1.9,IfcReinforcingBar,Dowel Bar,DowelBar,IFCREINFORCINGBAR,USERDEFINED,DOWEL,usBrSpec_Classes#119 usBrSpec_Classes#120,Dowel Bar | Dowel Bar Type,manual,manual name,drilled-and-bonded dowel = IfcReinforcingBar.DOWEL
+idm1-056,Longitudinal Bar,4.1.9,IfcReinforcingBar,Reinforcing Bar,ReinforcingBar,IFCREINFORCINGBAR,(any),,usBrSpec_Classes#115 usBrSpec_Classes#116,Reinforcing Bar | Reinforcing Bar Type,manual,manual name,longitudinal bars are reinforcing bars
+idm1-057,Post-Tensioning,4.1.9,IfcTendon,Tendon,Tendon,IFCTENDON,BAR,,usBrSpec_Classes#121 usBrSpec_Classes#122,Tendon | Tendon Type,manual,manual name,post-tensioning tendons
+idm1-057,Post-Tensioning,4.1.9,IfcTendonConduit,Tendon Conduit & Accessories,TendonConduit,IFCTENDONCONDUIT,(any),,usBrSpec_Classes#123,Tendon Conduit,manual,manual,IDM's ducts and grout
+idm1-057,Post-Tensioning,4.1.9,IfcTendonAnchor,Tendon Anchorage,TendonAnchor,IFCTENDONANCHOR,(any),,usBrSpec_Classes#124,Tendon Anchorage,manual,name,IDM's Post-Tensioning Hardware (anchorage)
+idm1-057,Post-Tensioning,4.1.9,IfcElementAssembly,Prestressing / Post-tensioning Tendon Assembly,PrestressingTendonAssembly,IFCELEMENTASSEMBLY,USERDEFINED,TENDON_ASSEMBLY,usBrSpec_SpatialBreakdown#37,Prestressing / Post-Tensioning Tendon Assembly,manual,name,tendon assembly
+idm1-057,Post-Tensioning,4.1.9,IfcElementAssembly,Prestressing / Post-tensioning Tendon Assembly Bundle,TendonBundle,IFCELEMENTASSEMBLY,USERDEFINED,TENDON_BUNDLE,usBrSpec_SpatialBreakdown#38,Prestressing / Post-Tensioning Tendon Assembly Bundle,manual,name,tendon bundle
+idm1-058,Prestressing,4.1.9,IfcTendon,Tendon,Tendon,IFCTENDON,BAR,,usBrSpec_Classes#121 usBrSpec_Classes#122,Tendon | Tendon Type,manual,manual name,prestressing strands
+idm1-058,Prestressing,4.1.9,IfcElementAssembly,Prestressing / Post-tensioning Tendon Assembly,PrestressingTendonAssembly,IFCELEMENTASSEMBLY,USERDEFINED,TENDON_ASSEMBLY,usBrSpec_SpatialBreakdown#37,Prestressing / Post-Tensioning Tendon Assembly,manual,name,tendon assembly
+idm1-059,Structural Component Reinforcement,4.1.9,IfcReinforcingBar,Reinforcing Bar,ReinforcingBar,IFCREINFORCINGBAR,(any),,usBrSpec_Classes#115 usBrSpec_Classes#116,Reinforcing Bar | Reinforcing Bar Type,manual,manual name,"bar marks, shapes, cover"
+idm1-059,Structural Component Reinforcement,4.1.9,IfcElementAssembly,Reinforcement Cage,ReinforcementCage,IFCELEMENTASSEMBLY,REINFORCEMENT_UNIT,,usBrSpec_SpatialBreakdown#36,Reinforcement Cage,manual,name,assembled reinforcement
+idm1-059,Structural Component Reinforcement,4.1.9,IfcReinforcingMesh,Welded-Wire Reinforcement,ReinforcingMesh,IFCREINFORCINGMESH,(any),,usBrSpec_Classes#117 usBrSpec_Classes#118,Reinforcing Mesh | Reinforcing Mesh Type,manual,manual,mesh reinforcement
+idm1-060,Transverse Reinforcement,4.1.9,IfcReinforcingBar,Reinforcing Bar,ReinforcingBar,IFCREINFORCINGBAR,(any),,usBrSpec_Classes#115 usBrSpec_Classes#116,Reinforcing Bar | Reinforcing Bar Type,manual,manual name,transverse bars are reinforcing bars
+idm1-061,Coating,4.1.10,IfcSurfaceFeature,Surface Treatment,SurfaceFeature,IFCSURFACEFEATURE,TREATMENT,,usBrSpec_Classes#145,Surface Treatment,manual,name,coatings become IfcSurfaceFeature.TREATMENT with usBrPset_Coating
+idm1-062,Deck Placement,4.1.11,IfcSlab,Deck Slab,DeckSlab,IFCSLAB,FLOOR,,usBrSpec_Classes#104,Deck Slab,manual,name,pour stages and placements live in usBrPset_ConcretePour on the deck slab
+idm1-063,Environmental,4.1.11,,,,,,,,,unmatched,,noise and nesting/spawning restrictions have no usBridge property
+idm1-064,Miscellaneous,4.1.11,,,,,,,,,unmatched,,temporary shoring has no usBridge class
+idm1-065,Structure,4.1.12,IfcFacility,Structure,Structure,IFCFACILITY,,,usBrSpec_SpatialBreakdown#13,Structure,exact,name,IDM name = Industry Name
+idm1-065,Structure,4.1.12,IfcBridgePart,Culverts,Culvert,IFCBRIDGEPART,USERDEFINED,CULVERT_STRUCTURE,usBrSpec_SpatialBreakdown#18,Culvert,manual,name,buried structure = culvert (IfcBridgePart)
+idm1-065,Structure,4.1.12,IfcFacilityPartCommon,Culvert,CulvertFacility,IFCFACILITYPARTCOMMON,USERDEFINED,CULVERT_STRUCTURE,usBrSpec_SpatialBreakdown#18,Culvert,manual,name,buried structure = culvert (IfcFacilityPartCommon)
+idm1-065,Structure,4.1.12,IfcBridgePart,Culvert Barrel,CulvertBarrel,IFCBRIDGEPART,USERDEFINED,CULVERT_BARREL,usBrSpec_SpatialBreakdown#20,Culvert Barrel,manual,name,IDM types Box Culvert / Arch / Three-Sided
+idm1-065,Structure,4.1.12,IfcSlab,Culvert Top Slab,CulvertTopSlab,IFCSLAB,USERDEFINED,TOPSLAB,usBrSpec_Classes#111,Culvert Top Slab,manual,name,IDM feature Top Slab
+idm1-065,Structure,4.1.12,IfcSlab,Culvert Bottom Slab,CulvertBottomSlab,IFCSLAB,USERDEFINED,BASESLAB,usBrSpec_Classes#112,Culvert Bottom Slab,manual,name,IDM feature Bottom Slab
+idm1-065,Structure,4.1.12,IfcWall,Culvert Wall,CulvertWall,IFCWALL,USERDEFINED,CULVERT_WALL,usBrSpec_Classes#140,Culvert Wall,manual,name,IDM features Exterior/Interior Wall
+idm1-065,Structure,4.1.12,IfcWall,Headwall,CulvertHeadwall,IFCWALL,USERDEFINED,HEADWALL,usBrSpec_Classes#141,Headwall,manual,name,IDM feature Headwall/Parapet
+idm1-065,Structure,4.1.12,IfcBuiltElement,Precast Segments (Culvert),CulvertPrecastUnit,IFCBUILTELEMENT,USERDEFINED,CULVERT_UNIT,usBrSpec_Classes#114,Precast Segments (Culvert),manual,name,precast culvert units
+idm1-066,Mechanically Stabilized Earth (MSE) Walls,4.1.13,IfcElementAssembly,Mechanically Stabilized Earth (MSE) Wall,RetainingWallMSE,IFCELEMENTASSEMBLY,USERDEFINED,RETAININGWALL_MSE,usBrSpec_SpatialBreakdown#32,Mechanically Stabilized Earth (MSE) Wall,normalised,name,case/plural/punctuation
+idm1-066,Mechanically Stabilized Earth (MSE) Walls,4.1.13,IfcMember,Precast Wall Panel,PrecastWallPanel,IFCMEMBER,USERDEFINED,PRECASTWALLPANEL,usBrSpec_Classes#70,Precast Wall Panel,manual,name,IDM feature Facing (panels)
+idm1-066,Mechanically Stabilized Earth (MSE) Walls,4.1.13,IfcMember,Reinforcing Strap,MSEReinforcingStrap,IFCMEMBER,USERDEFINED,REINFORCING_STRAP,usBrSpec_Classes#72,Reinforcing Strap,manual,name,IDM feature Strap Zone
+idm1-066,Mechanically Stabilized Earth (MSE) Walls,4.1.13,IfcMember,Geosynthetic Reinforcement,GeosyntheticReinforcement,IFCMEMBER,USERDEFINED,GEOSYNTHETIC_REINFORCEMENT,usBrSpec_Classes#71,Geosynthetic Reinforcement,manual,name,MSE reinforcement
+idm1-066,Mechanically Stabilized Earth (MSE) Walls,4.1.13,IfcCovering,Coping,Coping,IFCCOVERING,COPING,,usBrSpec_Classes#39,Coping,manual,name,IDM feature Coping
+idm1-066,Mechanically Stabilized Earth (MSE) Walls,4.1.13,IfcWall,Facing,WallFacing,IFCWALL,USERDEFINED,FACING,usBrSpec_Classes#142,Facing,manual,name,IDM feature Facing
+idm1-066,Mechanically Stabilized Earth (MSE) Walls,4.1.13,IfcEarthworksFill,Backfill,Backfill,IFCEARTHWORKSFILL,BACKFILL,,usBrSpec_Classes#48,Backfill,manual,name,IDM's Backfill Properties group
+idm1-067,Reinforced Concrete Retaining Wall,4.1.13,IfcWall,Cast-In-Place Wall,RetainingWallCastInPlace,IFCWALL,RETAININGWALL,,usBrSpec_Classes#128,Retaining Walls,manual,applicability,"reinforced concrete retaining wall = IfcWall.RETAININGWALL, cast-in-place"
+idm1-067,Reinforced Concrete Retaining Wall,4.1.13,IfcWall,Precast Tilt-up Wall (Simple),RetainingWallPrecastTiltUpSimple,IFCWALL,RETAININGWALL,,usBrSpec_Classes#128,Retaining Walls,manual,applicability,IDM type Precast
+idm1-067,Reinforced Concrete Retaining Wall,4.1.13,IfcCovering,Coping,Coping,IFCCOVERING,COPING,,usBrSpec_Classes#39,Coping,manual,name,IDM's Coping group
+idm1-067,Reinforced Concrete Retaining Wall,4.1.13,IfcEarthworksFill,Backfill,Backfill,IFCEARTHWORKSFILL,BACKFILL,,usBrSpec_Classes#48,Backfill,manual,name,IDM's Backfill Properties group
+idm1-068,Soil Nail Wall,4.1.13,IfcElementAssembly_Anchoring,Soil Nail,SoilNailAssembly,IFCELEMENTASSEMBLY,USERDEFINED,SOIL_NAIL,usBrSpec_SpatialBreakdown#40,Soil Nail,manual,name,soil nail assembly
+idm1-068,Soil Nail Wall,4.1.13,IfcMember,Soil Nail,SoilNail,IFCMEMBER,TIEBAR,,usBrSpec_Classes#68,"Threaded Rod, Soil Nail, Helical Anchor or Ground Anchor Bar ",manual,listed,soil nail bar
+idm1-068,Soil Nail Wall,4.1.13,IfcWall,Facing,WallFacing,IFCWALL,USERDEFINED,FACING,usBrSpec_Classes#142,Facing,manual,name,IDM's Facing group
+idm1-068,Soil Nail Wall,4.1.13,IfcWall,Shotcrete Wall,RetainingWallShotcrete,IFCWALL,RETAININGWALL,,usBrSpec_Classes#128,Retaining Walls,manual,applicability,soil nail walls are faced with shotcrete
+idm1-068,Soil Nail Wall,4.1.13,IfcCovering,Coping,Coping,IFCCOVERING,COPING,,usBrSpec_Classes#39,Coping,manual,name,IDM's Coping group
+idm1-068,Soil Nail Wall,4.1.13,IfcEarthworksFill,Backfill,Backfill,IFCEARTHWORKSFILL,BACKFILL,,usBrSpec_Classes#48,Backfill,manual,name,IDM's Backfill Properties group
+idm1-069,Soldier Pile Wall,4.1.13,IfcElementAssembly,Soldier Pile Wall,RetainingWallSoldierPile,IFCELEMENTASSEMBLY,USERDEFINED,RETAININGWALL_SOLDIERPILE,usBrSpec_SpatialBreakdown#34,Soldier Pile Wall,exact,name,IDM name = Industry Name
+idm1-069,Soldier Pile Wall,4.1.13,IfcMember,Lagging,SoldierPileLagging,IFCMEMBER,USERDEFINED,LAGGING,usBrSpec_Classes#73,Lagging,manual,name,soldier pile wall lagging
+idm1-069,Soldier Pile Wall,4.1.13,IfcMember,Waler,RetainingWallWaler,IFCMEMBER,USERDEFINED,WALER,usBrSpec_Classes#74,Waler,manual,name,soldier pile wall waler
+idm1-069,Soldier Pile Wall,4.1.13,IfcCovering,Coping,Coping,IFCCOVERING,COPING,,usBrSpec_Classes#39,Coping,manual,name,IDM feature Coping
+idm1-069,Soldier Pile Wall,4.1.13,IfcPile,Driven Pile,PileDriven,IFCPILE,DRIVEN,,usBrSpec_Classes#78,Driven Pile,manual,name,IDM's Pile group (the soldier piles)
+idm1-069,Soldier Pile Wall,4.1.13,IfcEarthworksFill,Backfill,Backfill,IFCEARTHWORKSFILL,BACKFILL,,usBrSpec_Classes#48,Backfill,manual,name,IDM's Backfill Properties group
