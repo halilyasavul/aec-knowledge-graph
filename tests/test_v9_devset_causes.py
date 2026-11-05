@@ -321,3 +321,81 @@ def test_applicability_selects_by_attribute_and_property():
     assert [etree.QName(c).localname for c in apps[0]] == ["entity", "attribute"]
     assert [etree.QName(c).localname for c in apps[1]] == ["entity", "partOf", "property"]
     assert all("cardinality" not in c.attrib for a in apps for c in a)     # the XSD has none here
+
+
+# --------------------------------------------------------------------------- audit: serializer defaults
+import os
+import shutil
+import subprocess
+
+from aec_kg.ids.serializer import xsd_base
+
+
+def _app_and_value(doc: dict) -> tuple:
+    root = etree.fromstring(serialize_ids(IdsDocument.model_validate(doc)).encode())
+    app = root.find(".//{*}applicability")
+    r = root.find(".//{*}requirements//{*}value/{*}restriction")       # the value's, not the pset's
+    return dict(app.attrib), (r.get("base") if r is not None else None)
+
+
+@pytest.mark.parametrize("app_extra, expect", [
+    ({}, {"minOccurs": "0", "maxOccurs": "unbounded"}),                     # unstated: optional, not [1..1]
+    ({"minOccurs": 1}, {"minOccurs": "1", "maxOccurs": "unbounded"}),       # required
+    ({"minOccurs": 0, "maxOccurs": "0"}, {"minOccurs": "0", "maxOccurs": "0"}),   # prohibited
+])
+def test_applicability_occurs(app_extra, expect):
+    doc = _doc({"attributes": [{"name": {"simpleValue": "Name"}}]})
+    doc["specifications"][0]["applicability"].update(app_extra)
+    assert _app_and_value(doc)[0] == expect
+
+
+@pytest.mark.parametrize("dtype, value, base", [
+    ("IFCLENGTHMEASURE", {"minInclusive": "2.0"}, "xs:double"),
+    ("IFCCOUNTMEASURE", {"enumerations": ["1", "2"]}, "xs:integer"),     # INTEGER in IFC 4.3
+    ("IFCLABEL", {"enumerations": ["Tile", "Carpet"]}, "xs:string"),
+    ("IFCDATE", {"minInclusive": "2029-03-31"}, "xs:date"),
+    ("IFCBOOLEAN", {"enumerations": ["true", "false"]}, "xs:boolean"),
+    (None, {"maxInclusive": "0.02"}, "xs:double"),                        # bounds without a dataType
+    (None, {"pattern": "[A-Z]+"}, "xs:string"),
+    ("IFCLENGTHMEASURE", {"base": "xs:decimal", "minInclusive": "1"}, "xs:decimal"),   # a stated base wins
+])
+def test_restriction_base_follows_the_datatype(dtype, value, base):
+    p = {"propertySet": USERPSET, "baseName": {"simpleValue": "x"}, "value": {"restriction": value}}
+    if dtype:
+        p["dataType"] = dtype
+    assert _app_and_value(_doc({"properties": [p]}))[1] == base
+
+
+_IDS_TOOL = shutil.which("ids-tool") or os.path.expandvars(r"$USERPROFILE\.dotnet\tools\ids-tool.exe")
+needs_ids_tool = pytest.mark.skipif(not os.path.exists(_IDS_TOOL), reason="buildingSMART ids-tool not installed")
+
+
+@needs_ids_tool
+def test_xsd_base_is_what_the_official_audit_expects(tmp_path):
+    """Every IFC 4.3 defined type, with the base xsd_base gives it: ids-tool reports no error 303."""
+    schema = W.schema_by_name("IFC4X3_ADD2")
+    types = sorted(d.name().upper() for d in schema.declarations() if isinstance(d, W.type_declaration))
+    specs = [{"name": t, "ifcVersion": "IFC4X3_ADD2",
+              "applicability": {"entity": {"name": {"simpleValue": "IFCWALL"}}},
+              "requirements": {"properties": [{"propertySet": {"simpleValue": "P"}, "baseName": {"simpleValue": "B"},
+                                               "dataType": t, "value": {"restriction": {"pattern": ".+"}}}]}}
+             for t in types]
+    f = tmp_path / "all_types.ids"
+    f.write_text(serialize_ids(IdsDocument.model_validate({"info": {"title": "t"}, "specifications": specs})),
+                 encoding="utf-8")
+    out = subprocess.run([_IDS_TOOL, "audit", str(f)], capture_output=True, text=True, encoding="utf-8").stdout
+    assert "Error 303" not in out, [l for l in out.splitlines() if "Error 303" in l][:5]
+
+
+@needs_ids_tool
+def test_a_typical_document_passes_the_official_audit(tmp_path):
+    p = [{"propertySet": USERPSET, "baseName": {"simpleValue": "effective width"}, "dataType": "IFCLENGTHMEASURE",
+          "value": {"restriction": {"minInclusive": "2.0"}}},
+         {"propertySet": {"simpleValue": "Pset_WallCommon"}, "baseName": {"simpleValue": "FireRating"},
+          "dataType": "IFCLABEL", "value": {"restriction": {"enumerations": ["REI 30", "REI 60"]}}}]
+    doc = _doc({"properties": p})
+    doc["specifications"][0]["applicability"]["entity"]["name"]["simpleValue"] = "IFCWALL"   # Pset_WallCommon's class
+    f = tmp_path / "doc.ids"
+    f.write_text(serialize_ids(IdsDocument.model_validate(doc)), encoding="utf-8")
+    r = subprocess.run([_IDS_TOOL, "audit", str(f)], capture_output=True, text=True, encoding="utf-8")
+    assert r.returncode == 0, r.stdout[-800:]

@@ -1,0 +1,7 @@
+model,stage,files,full_audit_pass,structure_audit_pass,full_audit_rate,structure_audit_rate
+Sonnet 5.5,stage 1,41,36,41,0.878,1.0
+Sonnet 5.5,stage 2,20,18,20,0.9,1.0
+Opus,stage 1,41,31,41,0.7561,1.0
+Opus,stage 2,20,16,20,0.8,1.0
+"Sonnet 5.5, Run 10 (+applicability facets)",stage 1,41,38,41,0.9268,1.0
+"Sonnet 5.5, Run 10 (+applicability facets)",stage 2,20,19,20,0.95,1.0

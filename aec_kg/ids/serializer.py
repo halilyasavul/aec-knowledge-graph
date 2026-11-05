@@ -7,6 +7,7 @@ No LLM involvement — pure code.
 
 from __future__ import annotations
 
+import functools
 import xml.etree.ElementTree as ET
 
 from aec_kg.ids.models import (
@@ -51,7 +52,40 @@ def _xs(tag: str) -> str:
 # Value builders
 # ---------------------------------------------------------------------------
 
-def _build_ids_value(parent: ET.Element, tag: str, value: IdsValue) -> None:
+# The XSD base of a restriction on a property value follows the property's dataType: the EXPRESS
+# underlying type (REAL/NUMBER -> xs:double, INTEGER -> xs:integer, BOOLEAN -> xs:boolean, else
+# xs:string), except the date/time and URI types, which IDS gives their own XSD types. This is the
+# table buildingSMART's ids-tool audits against (error 303), for all 132 IFC 4.3 defined types.
+_XSD_OF_EXPRESS = {"real": "xs:double", "number": "xs:double", "integer": "xs:integer", "boolean": "xs:boolean"}
+_XSD_OWN_TYPE = {"IFCDATE": "xs:date", "IFCDATETIME": "xs:dateTime", "IFCDURATION": "xs:duration",
+                 "IFCTIME": "xs:time", "IFCURIREFERENCE": "xs:anyURI"}
+_BOUNDS = ("minInclusive", "maxInclusive", "minExclusive", "maxExclusive")
+
+
+@functools.lru_cache(maxsize=None)
+def xsd_base(data_type: str | None) -> str | None:
+    """XSD base type for values of an IFC data type (e.g. IFCLENGTHMEASURE -> xs:double);
+    None when the name is not an IFC defined type."""
+    if not data_type:
+        return None
+    t = data_type.upper()
+    if t in _XSD_OWN_TYPE:
+        return _XSD_OWN_TYPE[t]
+    import ifcopenshell.ifcopenshell_wrapper as W
+    for schema in ("IFC4X3_ADD2", "IFC4", "IFC2X3"):
+        try:
+            d = W.schema_by_name(schema).declaration_by_name(t)
+        except RuntimeError:
+            continue
+        if not isinstance(d, W.type_declaration):
+            return None
+        while isinstance(d, (W.type_declaration, W.named_type)):
+            d = d.declared_type()
+        return _XSD_OF_EXPRESS.get(d.declared_type(), "xs:string") if isinstance(d, W.simple_type) else "xs:string"
+    return None
+
+
+def _build_ids_value(parent: ET.Element, tag: str, value: IdsValue, data_type: str | None = None) -> None:
     """Append an IDS value element (simpleValue or xs:restriction) under *parent*."""
     wrapper = ET.SubElement(parent, _ids(tag))
 
@@ -59,13 +93,21 @@ def _build_ids_value(parent: ET.Element, tag: str, value: IdsValue) -> None:
         sv = ET.SubElement(wrapper, _ids("simpleValue"))
         sv.text = value.simpleValue
     elif value.restriction is not None:
-        _build_restriction(wrapper, value.restriction)
+        _build_restriction(wrapper, value.restriction, data_type)
 
 
-def _build_restriction(parent: ET.Element, r: IdsRestriction) -> None:
+def _restriction_base(r: IdsRestriction, data_type: str | None) -> str:
+    """A base the document states wins; otherwise the dataType's XSD type; otherwise xs:double
+    for numeric bounds, which an xs:string restriction cannot carry; otherwise xs:string."""
+    if "base" in r.model_fields_set:
+        return r.base
+    return xsd_base(data_type) or ("xs:double" if any(getattr(r, b) is not None for b in _BOUNDS) else r.base)
+
+
+def _build_restriction(parent: ET.Element, r: IdsRestriction, data_type: str | None = None) -> None:
     """Build an ``<xs:restriction base="...">`` element."""
     restriction = ET.SubElement(parent, _xs("restriction"))
-    restriction.set("base", r.base)
+    restriction.set("base", _restriction_base(r, data_type))
 
     if r.enumerations:
         for val in r.enumerations:
@@ -118,7 +160,7 @@ def _build_property(
     _build_ids_value(prop, "propertySet", facet.propertySet)
     _build_ids_value(prop, "baseName", facet.baseName)
     if facet.value is not None:
-        _build_ids_value(prop, "value", facet.value)
+        _build_ids_value(prop, "value", facet.value, facet.dataType)
 
 
 def _build_attribute(
@@ -173,10 +215,11 @@ def _build_material(parent: ET.Element, facet: MaterialFacet, is_requirement: bo
 
 def _build_applicability(parent: ET.Element, app: Applicability) -> None:
     el = ET.SubElement(parent, _ids("applicability"))
-    if app.minOccurs is not None:
-        el.set("minOccurs", str(app.minOccurs))
-    if app.maxOccurs is not None:
-        el.set("maxOccurs", app.maxOccurs)
+    # Unstated, the XSD default is exactly one element [1..1], which the IDS implementation
+    # agreements do not allow (ids-tool error 301). Default to optional [0..unbounded]; a stated
+    # minOccurs keeps maxOccurs unbounded (required is [1..unbounded]).
+    el.set("minOccurs", str(app.minOccurs if app.minOccurs is not None else 0))
+    el.set("maxOccurs", str(app.maxOccurs if app.maxOccurs is not None else "unbounded"))
 
     # XSD order: entity, partOf, classification, attribute, property, material
     if app.entity is not None:

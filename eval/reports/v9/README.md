@@ -112,5 +112,9 @@ is compared like for like.
 relationship); `partOf` / `classifications` / `materials` requirement facets; the whitespace check
 limited to standard sets and the prose/placeholder guards limited to values (`IdsName`); and, for
 Run 10 only, attribute/property (and partOf/classification/material) facets in applicability.
+After the official audit: the serializer writes applicability `minOccurs="0" maxOccurs="unbounded"`
+unless the document states otherwise, and a property value's restriction base follows its
+dataType (`serializer.xsd_base`, matching ids-tool's table on all 132 IFC 4.3 defined types).
+Measured by re-serializing the logged documents (`eval.ishigaki_bench.reserialize`): S1 unchanged.
 Ishigaki tables: `h1`–`h7` (`eval.ishigaki_bench.analysis`, `.failures`, `.check_firings`,
 `.audit` — the last needs buildingSMART's `ids-tool`, NuGet package `ids-tool.commandline`).
