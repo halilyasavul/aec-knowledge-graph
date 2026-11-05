@@ -1,0 +1,26 @@
+{
+ "a": {
+  "items": 61,
+  "f1_1": 61,
+  "spec_match_1": 61,
+  "not_perfect": []
+ },
+ "b": {
+  "s1": 56,
+  "s1_scored": 56,
+  "witness_unverified": 0,
+  "facet_f1_mean": 1.0,
+  "facet_tp": 1479,
+  "facet_fp": 0,
+  "facet_fn": 0,
+  "facet_f1_micro": 1.0,
+  "items_without_determined_facets": [
+   "usb-idm1-005",
+   "usb-idm1-007",
+   "usb-idm1-008",
+   "usb-idm1-054",
+   "usb-idm1-062"
+  ],
+  "not_perfect": []
+ }
+}
