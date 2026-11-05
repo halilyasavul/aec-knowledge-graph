@@ -20,7 +20,12 @@ from eval.common import EVAL_DIR, RUNS_DIR
 OUT = EVAL_DIR / "reports" / "v8"
 GROUPS = {"Run 5 (2.5 Flash, 47 items x 3)": [f"run5-rep{r}" for r in (1, 2, 3)],
           "Run 6 (3.8 Flash, 47 items x 2)": ["run6-flash-rep1", "run6-flash-rep2"],
-          "Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)": [f"run7-claude-rep{r}" for r in (1, 2, 3)]}
+          "Run 7 (Claude Sonnet 5.5 via Claude Code, 47 items x 3)": [f"run7-claude-rep{r}" for r in (1, 2, 3)],
+          # handover 2: the same Run 7 files under the v9b scorer (cardinality annotation), then Run 8
+          "Run 7 rescored (Sonnet 5.5, v9b scorer, 47 items x 3)": [f"run7-claude-rep{r}-rescored-v9b" for r in (1, 2, 3)],
+          "Run 8 (Sonnet 5.5, dev fixes, 47 items x 1)": ["run8-claude-rep1"],
+          "Run 8 (Opus 5.5, dev fixes, 47 items x 1)": ["run8-opus-rep1"],
+          "Run 10 (Sonnet 5.5, + applicability facets, 47 items x 1)": ["run10-claude-rep1"]}
 B = 2000
 RNG = np.random.default_rng(20261007)
 

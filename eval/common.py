@@ -65,15 +65,17 @@ def ifc_only(item: dict, psets: dict) -> bool:
 def graph_property_types(run_dir) -> dict | None:
     """{pset: {property: [ifc_type, source]}} from the graph, cached in the run dir.
 
-    `source` is how ingestion resolved the type: bsdd_text | qto_kind | string_default | omitted.
+    `source` is how ingestion resolved the type: bsdd_text | qto_kind | string_default |
+    pset_template (per set, on the relationship) | omitted.
     """
     snap = Path(run_dir) / "graph_ptypes.json"
     if not snap.exists():
         try:
             from aec_kg.main_orchestrator import _run_cypher_safe
             res = _run_cypher_safe(
-                "MATCH (ps:PropertySet)-[:HAS_PROPERTY]->(p:Property) "
-                "RETURN ps.code AS ps, p.code AS prop, p.ifc_type AS t, p.ifc_type_source AS src")
+                "MATCH (ps:PropertySet)-[hp:HAS_PROPERTY]->(p:Property) "
+                "RETURN ps.code AS ps, p.code AS prop, coalesce(hp.ifc_type, p.ifc_type) AS t, "
+                "coalesce(hp.ifc_type_source, p.ifc_type_source) AS src")
             if "error" in res:
                 raise RuntimeError(res["error"])
             out: dict = {}

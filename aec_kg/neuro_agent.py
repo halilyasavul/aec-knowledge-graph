@@ -68,7 +68,7 @@ def get_class_requirements(class_code: str) -> dict:
 
     query = """
     MATCH (c:Class {code: $class_code})
-    OPTIONAL MATCH (c)-[:HAS_PROPERTY_SET]->(pset:PropertySet)-[:HAS_PROPERTY]->(prop:Property)
+    OPTIONAL MATCH (c)-[:HAS_PROPERTY_SET]->(pset:PropertySet)-[hp:HAS_PROPERTY]->(prop:Property)
     OPTIONAL MATCH (c)-[:INHERITS_FROM]->(parent:Class)
     RETURN c.code              AS class_code,
            c.name              AS class_name,
@@ -81,8 +81,8 @@ def get_class_requirements(class_code: str) -> dict:
            prop.name           AS prop_name,
            prop.definition     AS prop_definition,
            prop.data_type      AS prop_data_type,
-           prop.ifc_type       AS prop_ifc_type,
-           prop.ifc_type_source AS prop_ifc_type_source,
+           coalesce(hp.ifc_type, prop.ifc_type)               AS prop_ifc_type,
+           coalesce(hp.ifc_type_source, prop.ifc_type_source) AS prop_ifc_type_source,
            prop.property_value_kind AS prop_value_kind,
            prop.allowed_values AS prop_allowed_values
     """
@@ -363,12 +363,12 @@ def get_pset_detail(pset_code: str) -> dict:
     driver = _get_driver()
     query = """
     MATCH (pset:PropertySet {code: $pset_code})
-    OPTIONAL MATCH (pset)-[:HAS_PROPERTY]->(prop:Property)
+    OPTIONAL MATCH (pset)-[hp:HAS_PROPERTY]->(prop:Property)
     OPTIONAL MATCH (c:Class)-[:HAS_PROPERTY_SET]->(pset)
     RETURN pset.code AS pset_code, pset.name AS pset_name, pset.definition AS pset_definition,
            collect(DISTINCT c.code) AS applies_to,
            prop.code AS prop_code, prop.name AS prop_name, prop.definition AS prop_definition,
-           prop.data_type AS prop_data_type, prop.ifc_type AS prop_ifc_type,
+           prop.data_type AS prop_data_type, coalesce(hp.ifc_type, prop.ifc_type) AS prop_ifc_type,
            prop.property_value_kind AS prop_value_kind, prop.allowed_values AS prop_allowed_values
     ORDER BY prop.code
     """

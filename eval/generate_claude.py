@@ -86,13 +86,13 @@ def cli_flags(claude: str) -> set[str]:
 
 
 def build_command(claude: str, flags: set[str], model: str, mcp_cfg: Path, max_turns: int,
-                  extra_disallowed: list[str] | None = None) -> list[str]:
+                  extra_disallowed: list[str] | None = None, system_prompt: Path = SYSTEM_PROMPT_FILE) -> list[str]:
     cmd = [claude, "-p", "--output-format", "stream-json", "--verbose",
            "--mcp-config", str(mcp_cfg), "--strict-mcp-config",
            "--allowedTools", f"mcp__{SERVER_NAME}__*",
            "--disallowedTools", *BUILTIN_TOOLS, *(extra_disallowed or []),
            "--permission-mode", "dontAsk",
-           "--system-prompt-file", str(SYSTEM_PROMPT_FILE),
+           "--system-prompt-file", str(system_prompt),
            "--model", model, "--max-turns", str(max_turns), "--no-session-persistence"]
     if "--tools" in flags:
         cmd += ["--tools", ""]
@@ -216,6 +216,8 @@ def main(argv=None):
     ap.add_argument("--max-turns", type=int, default=14)
     ap.add_argument("--timeout", type=int, default=600, help="seconds per item")
     ap.add_argument("--probe", action="store_true", help="one trivial prompt; print tools/servers/auth and stop")
+    ap.add_argument("--system-prompt-file", default=str(SYSTEM_PROMPT_FILE),
+                    help="system prompt for the generator (default: the dev-set prompt); its sha goes in run.json")
     args = ap.parse_args(argv)
 
     claude = find_claude()
@@ -267,10 +269,12 @@ def main(argv=None):
         print("probe ok")
         return
 
-    sys_sha = hashlib.sha256(SYSTEM_PROMPT_FILE.read_bytes()).hexdigest()
+    system_prompt = Path(args.system_prompt_file).resolve()
+    sys_sha = hashlib.sha256(system_prompt.read_bytes()).hexdigest()
     import aec_kg.mcp_server as srv
     instr_sha = hashlib.sha256(srv.INSTRUCTIONS.encode()).hexdigest()
-    meta = {"generator": "claude-code", "model": args.model, "system_prompt_sha256": sys_sha,
+    meta = {"generator": "claude-code", "model": args.model, "system_prompt_file": str(system_prompt),
+            "system_prompt_sha256": sys_sha,
             "server_instructions_sha256": instr_sha, "max_turns": args.max_turns,
             "builtin_tools_disallowed": BUILTIN_TOOLS, "cli_flags_present": sorted(flags),
             "message_template": build_message({"applies_to": {"entity": "X"}, "requirements": ["R"]}),
@@ -317,7 +321,7 @@ def main(argv=None):
         req.write_text(message, encoding="utf-8")
         cfg = run_dir / "requests" / f"{name}.mcp.json"
         cfg.write_text(json.dumps(mcp_config(req, gen_dir, f"{name}.ids", env_extra), indent=1))
-        cmd = build_command(claude, flags, args.model, cfg, args.max_turns)
+        cmd = build_command(claude, flags, args.model, cfg, args.max_turns, system_prompt=system_prompt)
         entry = {"id": item["id"], "file": name, "model": args.model, "model_api_version": None,
                  "temperature": None, "prompt_sent": message, "prompt_chars": len(message),
                  "started": dt.datetime.now().isoformat(timespec="seconds")}

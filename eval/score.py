@@ -86,6 +86,9 @@ def canon(f: dict) -> tuple:
     for fld in extract.FIELDS.get(kind, ()):
         out.append((fld, canon_value(kind, fld, f.get(fld))))
     out.append(("dataType", (f.get("dataType") or "").strip().upper() or None))
+    if kind == "partOf":                       # the whole's predefinedType and the relation
+        out.append(("entityPredefinedType", canon_value("entity", "predefinedType", f.get("entityPredefinedType"))))
+        out.append(("relation", " ".join((f.get("relation") or "").upper().split()) or None))
     if kind != "entity":                       # entity-in-requirements has no cardinality
         out.append(("cardinality", (f.get("cardinality") or "required").strip().lower()))
     return tuple(out)
@@ -115,26 +118,43 @@ def parse_candidate(path: Path) -> dict:
     """Flatten a generated IDS with the same facet_target() used to build the targets."""
     tree = etree.parse(str(path))
     specs = tree.findall(".//" + I("specification"))
-    reqs, apps, versions = [], [], []
+    reqs, apps, versions, per_spec = [], [], [], []
     for sp in specs:
         versions.append(sp.get("ifcVersion") or "")
         app = sp.find(I("applicability"))
         ent = app.find(I("entity")) if app is not None else None
         apps.append(extract.facet_target(ent) if ent is not None else {"facet": "entity"})
         req = sp.find(I("requirements"))
-        if req is not None:
-            reqs += [extract.facet_target(c) for c in children(req)]
-    return {"n_specs": len(specs), "requirements": reqs, "applicability": apps, "versions": versions}
+        sp_reqs = [extract.facet_target(c) for c in children(req)] if req is not None else []
+        reqs += sp_reqs
+        per_spec.append({"applicability_facets": [extract.facet_target(c) for c in children(app)] if app is not None else [],
+                         "target": sp_reqs})
+    return {"n_specs": len(specs), "requirements": reqs, "applicability": apps, "versions": versions,
+            "specs": per_spec}
+
+
+def spec_view(item: dict) -> list[dict] | None:
+    """The per-specification view of an item whose reference needs one (several
+    specifications, or applicability beyond the entity, as in Ishigaki stage 2); None for an
+    item the single-spec path describes completely (every dev item)."""
+    specs = item.get("specs") or []
+    if len(specs) > 1 or any(f["facet"] != "entity" for s in specs for f in s.get("applicability_facets", [])):
+        return specs
+    return None
 
 
 def relax(item: dict, ann: list) -> dict:
     """Drop what the request cannot determine: unmentioned requirements go, and value
     constraints nobody could recover are removed while the requirement itself stays.
     `scope=value_extend` goes the other way: the request explicitly permits values the
-    reference enumeration lacks, so they are added (`add`: list of values)."""
+    reference enumeration lacks, so they are added (`add`: list of values).
+    `scope=cardinality` (eval/annotations/cardinality.jsonl): the reference's cardinality is not
+    what the request says, so it leaves the comparison — `adopt_cardinality` gives the facet the
+    candidate's cardinality once the candidate is known."""
     drop = {a["facet_index"] for a in ann if a["scope"] == "facet"}
     devalue = {a["facet_index"] for a in ann if a["scope"] == "value"}
     extend = {a["facet_index"]: a["add"] for a in ann if a["scope"] == "value_extend"}
+    free_card = {a["facet_index"] for a in ann if a["scope"] == "cardinality"}
     target = []
     for i, f in enumerate(item["target"]):
         if i in drop:
@@ -147,6 +167,26 @@ def relax(item: dict, ann: list) -> dict:
             have = {v for k, v in members if k == "enumeration"}
             members += [("enumeration", v) for v in extend[i] if v not in have]
             g["value"] = "RESTRICTION(" + ",".join(f"{k}={v}" for k, v in members) + ")"
+        if i in free_card:
+            g["cardinality_free"] = True
+        target.append(g)
+    return {**item, "target": target}
+
+
+def adopt_cardinality(item: dict, cand: dict | None) -> dict:
+    """Give each `cardinality_free` reference facet the cardinality of the candidate facet with
+    the same identity (loose_key). Without such a facet the reference keeps its own."""
+    if cand is None or not any(f.get("cardinality_free") for f in item["target"]):
+        return item
+    by_key = {loose_key(c): c for c in cand["requirements"]}
+    target = []
+    for f in item["target"]:
+        g = dict(f)
+        c = by_key.get(loose_key(f)) if f.get("cardinality_free") else None
+        if c is not None:
+            g.pop("cardinality", None)
+            if c.get("cardinality"):
+                g["cardinality"] = c["cardinality"]
         target.append(g)
     return {**item, "target": target}
 
@@ -282,13 +322,13 @@ def _value(parent, tag, v: str):
 def _facet(parent, f: dict):
     kind = f["facet"]
     el = etree.SubElement(parent, I(kind))
-    for a in ("dataType", "cardinality", "uri"):
+    for a in ("dataType", "cardinality", "uri", "relation"):
         if f.get(a):
             el.set(a, f[a])
     for fld in extract.FIELDS.get(kind, ()):
         if f.get(fld) is not None:
             if kind == "partOf":                     # partOf wraps an entity facet
-                _facet(el, {"facet": "entity", "name": f[fld]})
+                _facet(el, {"facet": "entity", "name": f[fld], "predefinedType": f.get("entityPredefinedType")})
             else:
                 _value(el, fld, f[fld])
     return el
@@ -296,12 +336,26 @@ def _facet(parent, f: dict):
 
 def build_reference(item: dict) -> bytes:
     """Reference IDS = task applicability (entity/predefinedType) + target requirement facets.
-    ifcVersion lists all three versions so the reference itself is never version-filtered."""
+    ifcVersion lists all three versions so the reference itself is never version-filtered.
+    An item with a per-specification view (spec_view) gets one specification each, with its
+    full applicability (entity, attribute, property, ... facets)."""
     root = etree.Element(I("ids"), nsmap={"ids": NS_IDS, "xs": NS_XS, "xsi": NS_XSI})
     root.set(f"{{{NS_XSI}}}schemaLocation", f"{NS_IDS} http://standards.buildingsmart.org/IDS/1.0/ids.xsd")
     info = etree.SubElement(root, I("info"))
     etree.SubElement(info, I("title")).text = f"reference {item['id']}"
     specs = etree.SubElement(root, I("specifications"))
+    view = spec_view(item)
+    if view is not None:
+        for k, spec in enumerate(view):
+            sp = etree.SubElement(specs, I("specification"), name=spec.get("spec_name") or f"{item['id']} {k}",
+                                  ifcVersion=ALL_VERSIONS)
+            app = etree.SubElement(sp, I("applicability"), minOccurs="0", maxOccurs="unbounded")
+            for f in spec["applicability_facets"]:
+                _facet(app, {k_: v for k_, v in f.items() if k_ not in ("cardinality", "uri")})
+            req = etree.SubElement(sp, I("requirements"))
+            for f in spec["target"]:
+                _facet(req, f)
+        return etree.tostring(root, xml_declaration=True, encoding="UTF-8", pretty_print=True)
     sp = etree.SubElement(specs, I("specification"), name=item.get("spec_name") or item["id"], ifcVersion=ALL_VERSIONS)
     app = etree.SubElement(sp, I("applicability"), minOccurs="0", maxOccurs="unbounded")
     a = item["applicability"]
@@ -323,6 +377,27 @@ def xsd_check(path: Path) -> tuple[bool, str]:
 
 
 # =========================================================================== execution
+# Ishigaki-IDS-Bench writes "any user-defined property set" as ^(?!(Pset_|Qto_)).+, a lookahead
+# that XSD regex does not have; ifctester 0.8.5 raises on it as soon as an applicable element has
+# a property set (the .NET audit tool accepts it). A pattern XSD regex rejects is read as a Python
+# regex instead; every pattern XSD accepts is translated exactly as before.
+import ifctester.facet as _ift_facet
+from types import SimpleNamespace
+
+_xsd_translate = _ift_facet.identities.translate_pattern
+
+
+def _translate_pattern(pattern: str, *a, **kw) -> str:
+    try:
+        return _xsd_translate(pattern, *a, **kw)
+    except Exception:
+        re.compile(pattern)                      # neither dialect reads it: let that error stand
+        return pattern
+
+
+_ift_facet.identities = SimpleNamespace(translate_pattern=_translate_pattern)
+
+
 def execute(ids_path: Path, model, filter_version: bool) -> dict:
     """harness.run() with a version-filter switch and failure reasons harvested.
     Specs are unioned: an element failing any applicable spec fails."""
@@ -503,6 +578,9 @@ def main(argv=None):
                          "candidate before scoring (writes scores*_excused.csv)")
     ap.add_argument("--tag", default="", help="suffix for the output files, so annotation variants "
                                              "do not overwrite each other (e.g. --tag _passA)")
+    ap.add_argument("--cardinality", default="eval/annotations/cardinality.jsonl",
+                    help="with --relaxed: facets whose reference cardinality the request does not "
+                         "support (scope=cardinality); '' to ignore")
     args = ap.parse_args(argv if argv is not None else sys.argv[1:])
     run_dir, tasks_path, models_dir = Path(args.run_dir), Path(args.tasks), Path(args.models_dir)
     out_dir = Path(args.out) if args.out else run_dir
@@ -514,6 +592,12 @@ def main(argv=None):
         ann = load_annotations(Path(args.annotations))
         if not ann:
             sys.exit(f"no annotations at {args.annotations}; run python -m eval.determinacy first")
+        card = load_annotations(Path(args.cardinality)) if args.cardinality else {}
+        for i, rows_ in card.items():
+            ann.setdefault(i, []).extend(rows_)
+        if card:
+            print(f"cardinality left to the candidate on {sum(len(v) for v in card.values())} facets "
+                  f"({args.cardinality})")
         n_before = sum(len(t["target"]) for t in tasks.values())
         tasks = {i: (relax(t, ann[i]) if i in ann else t) for i, t in tasks.items()}
         n_after = sum(len(t["target"]) for t in tasks.values())
@@ -554,6 +638,8 @@ def main(argv=None):
             not_generated += 1
             continue
         ref_path = ref_dir / f"{name}.ids"
+        if cand_path.exists() and any(f.get("cardinality_free") for f in item["target"]):
+            item = adopt_cardinality(item, parse_candidate(cand_path))
         ref_path.write_bytes(build_reference(item))
         ref_ok, ref_err = xsd_check(ref_path)
 
@@ -650,7 +736,7 @@ def main(argv=None):
         if wit["path"]:
             wm = ifcopenshell.open(wit["path"])
             ref_w = execute(ref_path, wm, False)
-            probs = witness.verify(wit["labels"], ref_w, item["target"])
+            probs = witness.verify(wit["labels"], ref_w, item["target"], wit.get("spec_targets"))
             row["wit_n_elements"], row["wit_verified"] = len(wit["labels"]), int(not probs)
             row["wit_problems"] = " | ".join(probs)[:400]
             cand_w, err = {"applicable": set(), "passed": set(), "failed": set(), "reasons": []}, ""

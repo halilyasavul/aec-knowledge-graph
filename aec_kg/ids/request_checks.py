@@ -148,8 +148,9 @@ def check_document(doc, ctx: RequestContext | None) -> list[str]:
             pset, name = _sv(p.propertySet), _sv(p.baseName)
             label = f"{pset or '<pattern>'}.{name or '<pattern>'}"
 
-            # 1. the name itself
-            if name is not None and re.search(r"\s", name):
+            # 1. the name itself: standard property names are single tokens; a user-defined set
+            #    (custom name, or a pattern such as ^(?!(Pset_|Qto_)).+) may use the request's words
+            if name is not None and re.search(r"\s", name) and pset and STANDARD_PSET.match(pset):
                 GUARDS["property_name_whitespace"] += 1
                 problems.append(
                     f"{where}: baseName {name!r} contains whitespace. IFC property names are single "

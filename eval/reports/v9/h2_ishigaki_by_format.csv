@@ -1,0 +1,13 @@
+model,stage,input_format,items,ok,no_file,S1_standard,S1_standard_ci_low,S1_standard_ci_high,S1_standard_exact,S1_standard_verified,S1_probe,S1_probe_ci_low,S1_probe_ci_high,S1_probe_exact,S1_probe_verified,unverified,facet_f1_ours,FacetF1_theirs,FacetF1_theirs_noversion,xsd_valid_rate
+Sonnet 5.5,stage 1,csv,12,12,0,0.3636,0.0909,0.6364,4,11,0.3636,0.0909,0.6364,4,11,1,0.5694,0.5759,0.6905,1.0
+Sonnet 5.5,stage 1,natural_language,29,29,0,0.2963,0.1481,0.4815,8,27,0.2963,0.1481,0.4815,8,27,2,0.546,0.596,0.6337,1.0
+Sonnet 5.5,stage 2,csv,9,9,0,0.0,0.0,0.0,0,9,0.0,0.0,0.0,0,9,0,0.5852,0.5964,0.5971,1.0
+Sonnet 5.5,stage 2,natural_language,11,11,0,0.1,0.0,0.3,1,10,0.1,0.0,0.3,1,10,1,0.4048,0.501,0.5362,1.0
+Opus,stage 1,csv,12,12,0,0.1818,0.0,0.4545,2,11,0.1818,0.0,0.4545,2,11,1,0.2708,0.405,0.4738,1.0
+Opus,stage 1,natural_language,29,29,0,0.1852,0.037,0.3333,5,27,0.1852,0.037,0.3333,5,27,2,0.3172,0.4745,0.4795,1.0
+Opus,stage 2,csv,9,9,0,0.0,0.0,0.0,0,9,0.0,0.0,0.0,0,9,0,0.4693,0.5052,0.5023,1.0
+Opus,stage 2,natural_language,11,11,0,0.1,0.0,0.3,1,10,0.1,0.0,0.3,1,10,1,0.3162,0.4391,0.4696,1.0
+"Sonnet 5.5, Run 10 (+applicability facets)",stage 1,csv,12,12,0,0.3636,0.0909,0.6364,4,11,0.3636,0.0909,0.6364,4,11,1,0.5694,0.5759,0.6905,1.0
+"Sonnet 5.5, Run 10 (+applicability facets)",stage 1,natural_language,29,29,0,0.2963,0.1111,0.4815,8,27,0.2963,0.1481,0.4815,8,27,2,0.5494,0.5968,0.6345,1.0
+"Sonnet 5.5, Run 10 (+applicability facets)",stage 2,csv,9,9,0,0.4444,0.1111,0.7778,4,9,0.4444,0.1111,0.7778,4,9,0,0.7185,0.7247,0.7431,1.0
+"Sonnet 5.5, Run 10 (+applicability facets)",stage 2,natural_language,11,11,0,0.3,0.1,0.6,3,10,0.3,0.0,0.6,3,10,1,0.4381,0.5226,0.5593,1.0

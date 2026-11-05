@@ -47,10 +47,19 @@ FIELDS = {
 def facet_target(fac) -> dict:
     kind = etree.QName(fac).localname
     out = {"facet": kind}
-    for f in FIELDS.get(kind, ()):
-        v = _simple(fac, f)
-        if v is not None: out[f] = v
-    for a in ("dataType", "cardinality", "uri"):
+    if kind == "partOf":
+        # partOf wraps an entity facet: "entity" is the whole's name (its value sits under
+        # <entity><name>, not directly under <entity>), plus its predefinedType if given
+        ent = fac.find(Q("entity"))
+        if ent is not None:
+            for f, key in (("name", "entity"), ("predefinedType", "entityPredefinedType")):
+                v = _simple(ent, f)
+                if v is not None: out[key] = v
+    else:
+        for f in FIELDS.get(kind, ()):
+            v = _simple(fac, f)
+            if v is not None: out[f] = v
+    for a in ("dataType", "cardinality", "uri", "relation"):
         if fac.get(a): out[a] = fac.get(a)
     return out
 

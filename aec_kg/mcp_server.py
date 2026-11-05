@@ -66,7 +66,9 @@ Authoring an IDS from a request:
    <...>Enum"), use the COMPLETE allowed_values list, plus any further values it names.
 5. Coverage: every requirement sentence gets a facet; sentences that only explain what the
    element is get none. Applicability holds the entity (UPPERCASE, e.g. IFCWALL) and, when the
-   request restricts it, its predefinedType.
+   request restricts it, its predefinedType. When the request selects elements by a value
+   (rooms named "Room A", slabs whose slope is under 0.05), that attribute or property goes in
+   applicability too, one specification per selection.
 6. Call generate_ids with the structured document. It rejects shapes that mean nothing
    (validation_errors), content the request does not support (request_errors) and XSD problems
    (xsd_errors): fix exactly what it names and call again. After its fourth failure it stops;
@@ -83,6 +85,16 @@ generate_ids document shape:
                                        "dataType": "IFCLABEL",
                                        "value": {"restriction": {"enumerations": ["REI 30", "REI 60"]}}}],
                        "attributes": [{"name": {"simpleValue": "Name"}}]}}]}
+  Also in "requirements", only when the request asks for them:
+    "partOf": [{"entity": {"name": {"simpleValue": "IFCBUILDINGSTOREY"}},
+                "relation": "IFCRELCONTAINEDINSPATIALSTRUCTURE"}]   (relation optional: also
+       IFCRELAGGREGATES, IFCRELASSIGNSTOGROUP, IFCRELNESTS; cardinality required|prohibited)
+    "classifications": [{"system": {"simpleValue": "..."}, "value": {...}}]   (value optional)
+    "materials": [{"value": {...}}]   (value optional: any material)
+  "applicability" may also hold "attributes" / "properties" (and partOf, classifications,
+  materials) in the same shapes, without cardinality, to select the elements, e.g.
+    "applicability": {"entity": {"name": {"simpleValue": "IFCSPACE"}},
+                      "attributes": [{"name": {"simpleValue": "Name"}, "value": {"simpleValue": "Room A"}}]}
   A value is {"simpleValue": "EXACT"} or {"restriction": {"enumerations": [...]}} or
   {"restriction": {"pattern": "regex"}} or {"restriction": {"minInclusive": "0.45"}} (also
   maxInclusive / minExclusive / maxExclusive). Omit "value" to require presence only.
@@ -195,7 +207,18 @@ def generate_ids(ids: dict | str, request_text: str | None = None) -> dict:
         props = [f"{(p.get('propertySet') or {}).get('simpleValue', '?')}.{(p.get('baseName') or {}).get('simpleValue', '?')}"
                  for p in req.get("properties") or []]
         attrs = [(a.get("name") or {}).get("simpleValue", "?") for a in req.get("attributes") or []]
-        summary.append({"applies_to": ent, "properties": props, "attributes": attrs})
+        item = {"applies_to": ent, "properties": props, "attributes": attrs}
+        part_of = [((p.get("entity") or {}).get("name") or {}).get("simpleValue", "?")
+                   for p in req.get("partOf") or req.get("partOfs") or []]
+        n_cls = len(req.get("classifications") or req.get("classification") or [])
+        n_mat = len(req.get("materials") or req.get("material") or [])
+        if part_of:
+            item["part_of"] = part_of
+        if n_cls:
+            item["classifications"] = n_cls
+        if n_mat:
+            item["materials"] = n_mat
+        summary.append(item)
     return {"success": True, "path": str(path), "spec_count": result["spec_count"], "summary": summary}
 
 

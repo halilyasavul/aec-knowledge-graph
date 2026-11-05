@@ -12,10 +12,13 @@ import xml.etree.ElementTree as ET
 from aec_kg.ids.models import (
     Applicability,
     AttributeFacet,
+    ClassificationFacet,
     EntityFacet,
     IdsDocument,
     IdsRestriction,
     IdsValue,
+    MaterialFacet,
+    PartOfFacet,
     PropertyFacet,
     Requirements,
 )
@@ -132,6 +135,38 @@ def _build_attribute(
         _build_ids_value(attr, "value", facet.value)
 
 
+def _set_requirement_attrs(el: ET.Element, facet, is_requirement: bool = True) -> None:
+    if not is_requirement:                            # applicability facets have neither attribute
+        return
+    if facet.cardinality != "required":
+        el.set("cardinality", facet.cardinality)
+    if facet.instructions:
+        el.set("instructions", facet.instructions)
+
+
+def _build_part_of(parent: ET.Element, facet: PartOfFacet, is_requirement: bool = True) -> None:
+    el = ET.SubElement(parent, _ids("partOf"))
+    if facet.relation:
+        el.set("relation", facet.relation)
+    _set_requirement_attrs(el, facet, is_requirement)
+    _build_entity(el, facet.entity)
+
+
+def _build_classification(parent: ET.Element, facet: ClassificationFacet, is_requirement: bool = True) -> None:
+    el = ET.SubElement(parent, _ids("classification"))
+    _set_requirement_attrs(el, facet, is_requirement)
+    if facet.value is not None:                       # the XSD orders value before system
+        _build_ids_value(el, "value", facet.value)
+    _build_ids_value(el, "system", facet.system)
+
+
+def _build_material(parent: ET.Element, facet: MaterialFacet, is_requirement: bool = True) -> None:
+    el = ET.SubElement(parent, _ids("material"))
+    _set_requirement_attrs(el, facet, is_requirement)
+    if facet.value is not None:
+        _build_ids_value(el, "value", facet.value)
+
+
 # ---------------------------------------------------------------------------
 # Section builders
 # ---------------------------------------------------------------------------
@@ -143,12 +178,30 @@ def _build_applicability(parent: ET.Element, app: Applicability) -> None:
     if app.maxOccurs is not None:
         el.set("maxOccurs", app.maxOccurs)
 
+    # XSD order: entity, partOf, classification, attribute, property, material
     if app.entity is not None:
         _build_entity(el, app.entity)
+    for part in app.partOf or ():
+        _build_part_of(el, part, is_requirement=False)
+    for cls in app.classifications or ():
+        _build_classification(el, cls, is_requirement=False)
+    for attr in app.attributes or ():
+        _build_attribute(el, attr, is_requirement=False)
+    for prop in app.properties or ():
+        _build_property(el, prop, is_requirement=False)
+    for mat in app.materials or ():
+        _build_material(el, mat, is_requirement=False)
 
 
 def _build_requirements(parent: ET.Element, req: Requirements) -> None:
     el = ET.SubElement(parent, _ids("requirements"))
+
+    # XSD order: entity, partOf, classification, attribute, property, material
+    for part in req.partOf or ():
+        _build_part_of(el, part)
+
+    for cls in req.classifications or ():
+        _build_classification(el, cls)
 
     if req.attributes:
         for attr in req.attributes:
@@ -157,6 +210,9 @@ def _build_requirements(parent: ET.Element, req: Requirements) -> None:
     if req.properties:
         for prop in req.properties:
             _build_property(el, prop, is_requirement=True)
+
+    for mat in req.materials or ():
+        _build_material(el, mat)
 
 
 # ---------------------------------------------------------------------------

@@ -18,8 +18,8 @@ The candidate never influences the model, so running reference and candidate on 
 fair differential test. `verify()` checks that the reference behaves as labelled above; a
 witness it can't fully verify is still used but flagged.
 
-No geometry, no spatial tree: IDS facets used here don't need them (partOf excepted, which
-is flagged as unsupported).
+No geometry. A spatial tree only where a partOf facet asks for one: the object is placed in
+a fresh, unlabelled whole through the facet's relation (Builder.part_of).
 """
 from __future__ import annotations
 
@@ -325,6 +325,42 @@ class Builder:
         self.f.create_entity("IfcRelAssociatesMaterial", GlobalId=self.guid("mat"), RelatedObjects=[el],
                              RelatingMaterial=m)
 
+    def part_of(self, el, whole: str, relation: str | None, ptype: str | None = None) -> bool:
+        """Make el part of a new, unlabelled `whole` through `relation`; with no relation, the one
+        IFC uses for the pair (element in a spatial structure: containment; group: assignment;
+        otherwise aggregation)."""
+        f = self.f
+        try:
+            w = f.create_entity(S.declaration_by_name(whole).name(), GlobalId=self.guid("whole"),
+                                Name="witness whole")
+        except Exception as e:
+            self.unsupported.append(f"partOf {whole}: {e}"[:160])
+            return False
+        if ptype:
+            self.set_ptype(w, ptype)
+        rel = " ".join((relation or "").upper().split()) or None
+        if rel is None:
+            rel = ("IFCRELCONTAINEDINSPATIALSTRUCTURE" if w.is_a("IfcSpatialElement") and not el.is_a("IfcSpatialElement")
+                   else "IFCRELASSIGNSTOGROUP" if w.is_a("IfcGroup") else "IFCRELAGGREGATES")
+        g = self.guid("partof")
+        if rel == "IFCRELAGGREGATES":
+            f.create_entity("IfcRelAggregates", GlobalId=g, RelatingObject=w, RelatedObjects=[el])
+        elif rel == "IFCRELCONTAINEDINSPATIALSTRUCTURE":
+            f.create_entity("IfcRelContainedInSpatialStructure", GlobalId=g, RelatingStructure=w, RelatedElements=[el])
+        elif rel == "IFCRELASSIGNSTOGROUP":
+            f.create_entity("IfcRelAssignsToGroup", GlobalId=g, RelatingGroup=w, RelatedObjects=[el])
+        elif rel == "IFCRELNESTS":
+            f.create_entity("IfcRelNests", GlobalId=g, RelatingObject=w, RelatedObjects=[el])
+        elif rel == "IFCRELVOIDSELEMENT IFCRELFILLSELEMENT":
+            opening = f.create_entity("IfcOpeningElement", GlobalId=self.guid("opening"))
+            f.create_entity("IfcRelVoidsElement", GlobalId=g, RelatingBuildingElement=w, RelatedOpeningElement=opening)
+            f.create_entity("IfcRelFillsElement", GlobalId=self.guid("fills"), RelatingOpeningElement=opening,
+                            RelatedBuildingElement=el)
+        else:
+            self.unsupported.append(f"partOf relation {relation!r}")
+            return False
+        return True
+
     def classification(self, el, system: str, value: str | None):
         f = self.f
         c = f.create_entity("IfcClassification", Name=system)
@@ -404,6 +440,11 @@ def _apply_facet(b: Builder, el, f: dict, mode: str = "ok", r_override: dict | N
             b.classification(el, first(f.get("system")) or "Witness", first(f.get("value")))
             return True
         return False
+    if kind_ == "partOf":                            # a "missing" variant is simply not part of anything
+        whole = first(f.get("entity"))
+        if mode != "ok" or not whole:
+            return False
+        return b.part_of(el, whole, f.get("relation"), first(f.get("entityPredefinedType")))
     if kind_ == "entity":                            # class is satisfied by the element itself
         pr = parse(f.get("predefinedType"))
         if pr is None:
@@ -425,10 +466,26 @@ def _apply_facet(b: Builder, el, f: dict, mode: str = "ok", r_override: dict | N
     return False
 
 
+# For an entity name given as a pattern (Ishigaki's "any entity" is IFC.*): objects are built
+# for the first classes of this list the pattern matches, in this order.
+PATTERN_CLASSES = ["IFCWALL", "IFCSLAB", "IFCBUILDINGELEMENTPROXY", "IFCDOOR", "IFCBEAM", "IFCCOLUMN",
+                   "IFCSPACE", "IFCBUILDINGSTOREY", "IFCPIPESEGMENT", "IFCFLOWTERMINAL"]
+
+
 def _classes(app: dict) -> list[str]:
     r = parse(app["entity"])
     names = r.get("enumeration") or ([r["simple"]] if "simple" in r else [])
+    if not names and "pattern" in r:
+        names = [c for c in PATTERN_CLASSES if xsd_match(r["pattern"], c)][:2]
     return [n for n in names if _exists(n)]
+
+
+def _in_scope(app: dict, cls: str) -> bool:
+    """Whether the applicability's entity name admits class `cls` (case as IDS writes it)."""
+    r = parse(app.get("entity")) or {}
+    if "pattern" in r:
+        return xsd_match(r["pattern"], cls.upper())
+    return cls.upper() in [c.upper() for c in (r.get("enumeration") or ([r["simple"]] if "simple" in r else []))]
 
 
 def _exists(cls: str) -> bool:
@@ -466,11 +523,15 @@ def _loose(f: dict) -> tuple:
 
 
 def _emit(b, app: dict, target: list, side: str, mutate: set | None = None,
-          with_decoys: bool = True) -> None:
+          with_decoys: bool = True, suffix: str = "", app_facets: list | None = None) -> None:
     """Add one side's objects to the model. Labels are '<side>:<kind>[:index]'.
 
     mutate: requirement indices to build violating objects for (None = all).
+    suffix: appended to every label ('@k' for specification k of a multi-spec reference).
+    app_facets: applicability facets beyond the entity (attribute/property values the objects
+    must carry to be in scope); each also gets a 'decoy:app<j>' object that lacks its value.
     """
+    app_facets = app_facets or []
     classes = _classes(app)
     if not classes:
         b.unsupported.append(f"{side}: entity {app.get('entity')!r} not a concrete IfcRoot")
@@ -486,8 +547,17 @@ def _emit(b, app: dict, target: list, side: str, mutate: set | None = None,
     reqs = [f for f in target if (f.get("cardinality") or "required") != "prohibited"]
     prohibited = [f for f in target if f.get("cardinality") == "prohibited"]
 
-    def full(cls, label, pt, skip=None, override=None, decoy=False):
-        el = b.element(cls, f"{side}:{label}", pt)
+    def full(cls, label, pt, skip=None, override=None, decoy=False, app_skip=None):
+        el = b.element(cls, f"{side}:{label}{suffix}", pt)
+        for j, a in enumerate(app_facets):           # put the object in scope (or, for app_skip, not)
+            if j == app_skip:                        # absent, not violated: a violating value can fall
+                if a["facet"] == "attribute":        # in another specification's scope (Slope < / >= 0.05)
+                    try:
+                        setattr(el, first(a.get("name")), None)
+                    except Exception:
+                        pass
+                continue
+            apply_facet(b, el, a, "ok")
         for i, f in enumerate(reqs):
             if decoy and f["facet"] == "entity":     # keep the decoy's class / predefined type
                 continue
@@ -530,8 +600,10 @@ def _emit(b, app: dict, target: list, side: str, mutate: set | None = None,
             apply_facet(b, el, f, "ok")
     if not with_decoys:
         return
+    for j, _ in enumerate(app_facets):               # same class, applicability value missing/violated
+        full(cls, f"decoy:app{j}", ptype, decoy=True, app_skip=j)
     decoy_cls = "IFCWALL" if cls.upper() == "IFCBUILDINGELEMENTPROXY" else "IFCBUILDINGELEMENTPROXY"
-    if decoy_cls not in [c.upper() for c in classes]:
+    if decoy_cls not in [c.upper() for c in classes] and not _in_scope(app, decoy_cls):
         full(decoy_cls, "decoy:class", None, decoy=True)
     if ptype:
         kind, items = _attr_kind(cls, "PredefinedType")
@@ -631,7 +703,12 @@ def build(item: dict, out_path: Path, candidate: dict | None = None, probe: bool
     requirement the reference does not have. Labels carry the side ('ref:' / 'cand:').
     """
     b = Builder(item["id"])
-    _emit(b, item["applicability"], item["target"], "ref")
+    specs = _ref_specs(item)
+    if specs is None:
+        _emit(b, item["applicability"], item["target"], "ref")
+    else:
+        for k, sp in enumerate(specs):
+            _emit(b, sp["app"], sp["target"], "ref", suffix=f"@{k}", app_facets=sp["app_facets"])
     if not b.labels:
         return {"labels": {}, "unsupported": sorted(set(b.unsupported)) or
                 [f"entity {item['applicability'].get('entity')!r} not a concrete IfcRoot in {SCHEMA_NAME}"],
@@ -643,10 +720,29 @@ def build(item: dict, out_path: Path, candidate: dict | None = None, probe: bool
                      if (f.get("cardinality") or "required") != "prohibited"]
         extra = {i for i, f in enumerate(cand_reqs) if _loose(f) not in ref_keys}
         app = candidate["applicability"][0] if candidate.get("applicability") else {}
-        cand_app = {"entity": first(app.get("name")) or item["applicability"].get("entity"),
+        name = app.get("name")
+        name = name if "pattern" in (parse(name) or {}) else first(name)     # a pattern picks its own classes
+        cand_app = {"entity": name or item["applicability"].get("entity"),
                     "predefinedType": app.get("predefinedType")}
         before = len(b.labels)
-        _emit(b, cand_app, candidate["requirements"], "cand", mutate=extra, with_decoys=False)
+        if specs is not None and len(candidate.get("specs") or []) > 1:
+            # per candidate specification, each with its own applicability values
+            for k, cs in enumerate(candidate["specs"]):
+                c_ent = next((f for f in cs["applicability_facets"] if f["facet"] == "entity"), {})
+                c_name = c_ent.get("name")
+                c_name = c_name if "pattern" in (parse(c_name) or {}) else first(c_name)
+                c_app = {"entity": c_name or item["applicability"].get("entity"),
+                         "predefinedType": c_ent.get("predefinedType")}
+                c_reqs = [f for f in cs["target"] if (f.get("cardinality") or "required") != "prohibited"]
+                c_extra = {i for i, f in enumerate(c_reqs) if _loose(f) not in ref_keys}
+                _emit(b, c_app, cs["target"], "cand", mutate=c_extra, with_decoys=False, suffix=f"@c{k}",
+                      app_facets=[f for f in cs["applicability_facets"] if f["facet"] != "entity"])
+        elif specs is not None and candidate.get("specs"):
+            cs = candidate["specs"][0]
+            _emit(b, cand_app, candidate["requirements"], "cand", mutate=extra, with_decoys=False,
+                  app_facets=[f for f in cs["applicability_facets"] if f["facet"] != "entity"])
+        else:
+            _emit(b, cand_app, candidate["requirements"], "cand", mutate=extra, with_decoys=False)
         if len(b.labels) == before:
             cand_note = "candidate produced no objects (unsatisfiable or unbuildable applicability)"
             b.unsupported.append("cand: " + cand_note)
@@ -657,10 +753,30 @@ def build(item: dict, out_path: Path, candidate: dict | None = None, probe: bool
     b.f.write(str(out_path))
     meta = {"labels": b.labels, "unsupported": sorted(set(b.unsupported)), "path": str(out_path),
             "candidate_note": cand_note,
+            "spec_targets": {str(k): sp["target"] for k, sp in enumerate(specs)} if specs is not None else None,
             "sides": {s: sum(1 for v in b.labels.values() if v.startswith(s + ":"))
                       for s in ("ref", "cand", "probe")}}
     out_path.with_suffix(".json").write_text(json.dumps(meta, indent=1))
     return meta
+
+
+def _ref_specs(item: dict) -> list[dict] | None:
+    """The reference's specifications for the witness, or None for the single-spec path (every
+    dev item). Specifications with the same applicability are merged: an object in scope of
+    both must meet both sets of requirements, so one combined set is what it has to pass."""
+    specs = item.get("specs") or []
+    if not (len(specs) > 1 or any(f["facet"] != "entity" for s in specs for f in s.get("applicability_facets", []))):
+        return None
+    merged: dict = {}
+    for s in specs:
+        key = json.dumps(sorted(json.dumps(f, sort_keys=True) for f in s["applicability_facets"]))
+        if key not in merged:
+            ent = next((f for f in s["applicability_facets"] if f["facet"] == "entity"), {})
+            merged[key] = {"app": {"entity": ent.get("name"), "predefinedType": ent.get("predefinedType")},
+                           "app_facets": [f for f in s["applicability_facets"] if f["facet"] != "entity"],
+                           "target": []}
+        merged[key]["target"] += s["target"]
+    return list(merged.values())
 
 
 def _try(b: Builder, fn):
@@ -694,13 +810,20 @@ def expected(label: str, target: list, reqs_opt: dict) -> str:
     return "either"
 
 
-def verify(labels: dict, ref_exec: dict, target: list) -> list[str]:
-    """Check the reference behaves as labelled on its own witness; return problems."""
-    reqs = [f for f in target if (f.get("cardinality") or "required") != "prohibited"]
-    opt = {i: (f.get("cardinality") == "optional") for i, f in enumerate(reqs)}
+def verify(labels: dict, ref_exec: dict, target: list, spec_targets: dict | None = None) -> list[str]:
+    """Check the reference behaves as labelled on its own witness; return problems.
+    spec_targets: {k: target} for labels carrying a '@k' specification suffix."""
+    def options(t):
+        reqs = [f for f in t if (f.get("cardinality") or "required") != "prohibited"]
+        return {i: (f.get("cardinality") == "optional") for i, f in enumerate(reqs)}
+    opt = options(target)
     probs = []
     for g, label in labels.items():
-        exp = expected(label, target, opt)
+        base, _, k = label.partition("@")
+        if k and spec_targets and k in spec_targets:
+            exp = expected(base, spec_targets[k], options(spec_targets[k]))
+        else:
+            exp = expected(label, target, opt)
         if exp == "n/a":
             got = "n/a" if g not in ref_exec["applicable"] else "applicable"
         elif g not in ref_exec["applicable"]:

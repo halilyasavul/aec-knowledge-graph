@@ -78,3 +78,38 @@ item-run would have been sent back. They reach 33 of Run 5's 51 failing item-run
 pins, 7 `Fire Rating`, 4 invented bounds) and 2 of Run 6's 15. What they do not reach: the
 no-file item-runs, the 4-of-7 `Status` truncation (the request names the four), and missing
 requirements. Whether the model repairs a rejected document correctly is what the rerun measures.
+
+## C. Handover 2: the three Run 7 causes, and what the scorer gained for Ishigaki
+
+Results: `run7_summary.md` (Run 7), `heldout_summary.md` (Run 8, Ishigaki, Opus).
+
+**Cardinality annotation.** `eval/annotations/cardinality.jsonl` holds facets whose reference
+*cardinality* the request does not support — the same kind of correction as `value_extend`, for
+cardinality instead of values. Its only rows: `IDS_oma_input.ids#10` facets 2 and 4
+(`HandicapAccessible`, `FireExit`), where the request says "Indication that / whether ..." and
+the reference says `optional`; required is the faithful reading (server rule 3). With
+`--relaxed`, `eval.score` loads the file (`--cardinality`, default this path; `''` ignores it):
+`relax()` marks those facets and `adopt_cardinality()` gives each the cardinality of the
+candidate facet with the same identity, so cardinality leaves the comparison for them. Every
+`--relaxed` scoring uses it from now on; Run 7 was rescored under it into
+`eval/runs/run7-claude-rep{1,2,3}-rescored-v9b/` (the run directories are untouched) so Run 8
+is compared like for like.
+
+**Scorer additions** (no change for any dev item; each has a test in
+`tests/test_v9_devset_causes.py`):
+
+| where | what | why |
+| --- | --- | --- |
+| `extract_testset.facet_target` | `partOf`: the whole's name and predefinedType are read from `<entity><name>`, `relation` kept | it read a `simpleValue` directly under `<entity>`, so a partOf's whole was never extracted; no dev reference or Run 5–7 file has a partOf |
+| `score.canon`, `score._facet` | `partOf` relation and the whole's predefinedType are part of the facet | so two partOf facets that differ only there are different |
+| `witness.Builder.part_of` | builds the spatial / aggregation / group / nest / void-fill relation a partOf asks for | it was flagged unsupported, so a candidate's partOf could never be met |
+| `score._translate_pattern` | a pattern XSD regex rejects is read as a Python regex | Ishigaki's `^(?!(Pset_|Qto_)).+` is a lookahead; ifctester 0.8.5 raised on it mid-validation |
+| `witness._classes`, `_in_scope` | an entity-name pattern (Ishigaki's `IFC.*`) builds objects for the first matching classes of a fixed list; no class decoy the pattern admits | the witness built nothing for a pattern entity |
+| `score.spec_view`, `build_reference`, `witness.build`, `verify` | several specifications, and attribute/property facets in applicability: per-spec objects labelled `@k`, applicability values set, `decoy:app<j>` objects that lack them; identical applicabilities merged | Ishigaki stage 2; dev items take the old single-spec path unchanged |
+
+**Generator changes in handover 2** (details in `heldout_summary.md` §1 and §3): per-set
+`ifc_type` from the property set templates (`ingest_graph --only-ifc-type`, on the `HAS_PROPERTY`
+relationship); `partOf` / `classifications` / `materials` requirement facets; the whitespace check
+limited to standard sets and the prose/placeholder guards limited to values (`IdsName`); and, for
+Run 10 only, attribute/property (and partOf/classification/material) facets in applicability.
+Ishigaki tables: `h1`–`h6` (`eval.ishigaki_bench.analysis`, `.failures`, `.check_firings`).
