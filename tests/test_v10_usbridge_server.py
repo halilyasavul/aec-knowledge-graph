@@ -75,6 +75,20 @@ def test_runner_passes_the_flag_only_when_not_default(tmp_path):
     assert b["mcpServers"]["ifc"]["args"] == ["-m", "aec_kg.mcp_server", "--dictionaries", "ifc,usbridge"]
 
 
+def test_long_messages_go_through_stdin(monkeypatch, tmp_path):
+    import eval.generate_claude as gc
+    seen = []
+
+    class P:
+        stdout, stderr, returncode = '{"type": "result"}\n', "", 0
+
+    monkeypatch.setattr(gc.subprocess, "run", lambda args, **kw: seen.append((args, kw.get("input"))) or P())
+    gc.run_claude(["claude", "-p"], "short", tmp_path, 10)
+    gc.run_claude(["claude", "-p"], "x" * (gc.STDIN_ABOVE + 1), tmp_path, 10)
+    assert seen[0] == (["claude", "-p", "short"], None)
+    assert seen[1][0] == ["claude", "-p"] and len(seen[1][1]) == gc.STDIN_ABOVE + 1
+
+
 def test_request_text_items_are_sent_verbatim_and_checked():
     item = {"id": "usb-idm1-033", "request_text": "Entity: Pier Cap\n  Property Set: Dimensions\n    - Cap Beam Depth",
             "reference_spec_ids": ["usBrSpec_Classes#35"]}

@@ -146,10 +146,20 @@ def neo4j_env() -> dict:
 
 
 # --------------------------------------------------------------------------- stream parsing
+STDIN_ABOVE = 20000
+
+
 def run_claude(cmd: list[str], message: str, cwd: Path, timeout_s: int) -> tuple[list[dict], str, int]:
-    """Run one item; return (events, stderr, returncode). Events are the parsed stream-json lines."""
-    proc = subprocess.run(cmd + [message], cwd=str(cwd), capture_output=True, text=True,
-                          encoding="utf-8", errors="replace", timeout=timeout_s, env=child_env())
+    """Run one item; return (events, stderr, returncode). Events are the parsed stream-json lines.
+    A message longer than STDIN_ABOVE characters goes through stdin (`claude -p` reads its prompt
+    there when none is given): Windows refuses command lines over ~32k characters (the usBridge
+    whole-document item is 53k). Shorter messages are passed as before."""
+    if len(message) > STDIN_ABOVE:
+        proc = subprocess.run(cmd, input=message, cwd=str(cwd), capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=timeout_s, env=child_env())
+    else:
+        proc = subprocess.run(cmd + [message], cwd=str(cwd), capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=timeout_s, env=child_env())
     events = []
     for line in proc.stdout.splitlines():
         line = line.strip()
