@@ -16,3 +16,4 @@ eval/models_src/
 eval/reports/*.docx
 eval/reports/*.json
 eval/reports/~$*
+eval/usbridge/source/
